@@ -4,7 +4,13 @@
 
 - Ensure Git is configured to commit line endings Unix-style:
 
-    `git config --local core.autocrlf true`
+    On Windows: `git config --local core.autocrlf true`
+    
+    On Unix: `git config --local core.autocrlf input`
+
+- You can change the external script editor for Unity in:
+
+    `Edit -> Preferences -> External Tools -> External Script Editor`
 
 ## Pivotal Tracker integration
 
