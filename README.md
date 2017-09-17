@@ -19,3 +19,4 @@ For commits that finish a story, add a message with the following syntax to the 
 `[(Finishes|Fixes|Delivers) #TRACKER_STORY_ID]`
 
 The auto-commit bot should mark the story as finished and link the story back to the commit.
+
