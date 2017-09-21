@@ -10,26 +10,19 @@ namespace Assets.Scripts.UI
     /// </summary>
     public class UIToolboxPanelEntry : UIToolboxEntry
     {
+        private const string NAME_PREFIX = "UIToolboxPanelEntry_";
+
         private UIToolboxPanel ReferencedPanel;
 
-        private string _Name;
-
-        public string Name
+        public string SimpleName
         {
             get
             {
-                return this._Name;
+                return this.name.Substring(NAME_PREFIX.Length);
             }
             set
             {
-                this._Name = value;
-            }
-        }
-        public string FullName
-        {
-            get
-            {
-                return "UIToolboxPanelEntry_" + this._Name;
+                this.name = NAME_PREFIX + value;
             }
         }
 
@@ -43,8 +36,8 @@ namespace Assets.Scripts.UI
             // There's probably a better way to do this
             UIToolboxContainer toolboxContainer = GameObject.FindObjectOfType<UIToolboxContainer>();
             Assert.IsNotNull(toolboxContainer);
-            string referencedName = "UIToolboxPanel_" + this.Name;
-            if (toolboxContainer.MainPanel.Name == referencedName)
+            string referencedName = "UIToolboxPanel_" + this.SimpleName;
+            if (toolboxContainer.MainPanel.name == referencedName)
             {
                 this.ReferencedPanel = toolboxContainer.MainPanel;
             }
@@ -52,7 +45,7 @@ namespace Assets.Scripts.UI
             {
                 foreach (var subpanel in toolboxContainer.SubPanels)
                 {
-                    if (subpanel.Name == referencedName)
+                    if (subpanel.name == referencedName)
                     {
                         this.ReferencedPanel = subpanel;
                         break;

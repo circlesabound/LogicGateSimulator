@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Assertions;
 
@@ -17,11 +18,13 @@ namespace Assets.Scripts.UI
             get;
             private set;
         }
+
         public IList<UIToolboxPanel> SubPanels
         {
             get;
             private set;
         }
+
         public UIToolboxPanel CurrentPanel
         {
             get
@@ -48,6 +51,14 @@ namespace Assets.Scripts.UI
             }
         }
 
+        public IList<UIToolboxPanel> AllPanels
+        {
+            get
+            {
+                throw new NotImplementedException();//TODO
+            }
+        }
+
         private void Awake()
         {
             // Sanity checks
@@ -60,7 +71,6 @@ namespace Assets.Scripts.UI
             TextAsset toolboxConfigAsset = Resources.Load<TextAsset>(TOOLBOX_CONFIG_RESOURCE);
             Assert.IsNotNull(toolboxConfigAsset);
             UIToolboxConfig toolboxConfig = JsonUtility.FromJson<UIToolboxConfig>(toolboxConfigAsset.text);
-            Debug.Log(toolboxConfig.panels.Count + " panel configs read");
 
             // Instantiate and build sub panels
             foreach (var subpanelConfig in toolboxConfig.panels)
