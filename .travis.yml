@@ -4,6 +4,8 @@ language: objective-c
 osx_image: xcode61
 rvm:
 - 2.1.2
+before_install:
+- chmod +x ./travis-scripts/*.sh
 install:
 - ./travis-scripts/install.sh
 script:
