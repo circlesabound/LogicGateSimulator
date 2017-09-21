@@ -7,17 +7,20 @@ namespace Assets.Scripts.UI
     /// </summary>
     public class UIToolboxComponent : UIToolboxEntry
     {
-        public string Name
+        public const string NAME_PREFIX = "UIToolboxComponent_";
+
+        public string SimpleName
         {
             get
             {
-                return this.Name;
+                return this.name.Substring(NAME_PREFIX.Length);
             }
             set
             {
-                this.name = "UIToolboxComponent_" + value;
+                this.name = NAME_PREFIX + value;
             }
         }
+
         public UILogicComponent LogicComponentPrefab;
 
         public override void OnPointerClick(PointerEventData eventData)

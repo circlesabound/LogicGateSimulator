@@ -10,7 +10,7 @@ namespace Assets.Scripts.UI
     /// </summary>
     public class UIToolboxPanelEntry : UIToolboxEntry
     {
-        private const string NAME_PREFIX = "UIToolboxPanelEntry_";
+        public const string NAME_PREFIX = "UIToolboxPanelEntry_";
 
         private UIToolboxPanel ReferencedPanel;
 
@@ -36,27 +36,14 @@ namespace Assets.Scripts.UI
             // There's probably a better way to do this
             UIToolboxContainer toolboxContainer = GameObject.FindObjectOfType<UIToolboxContainer>();
             Assert.IsNotNull(toolboxContainer);
-            string referencedName = "UIToolboxPanel_" + this.SimpleName;
-            if (toolboxContainer.MainPanel.name == referencedName)
-            {
-                this.ReferencedPanel = toolboxContainer.MainPanel;
-            }
-            else
-            {
-                foreach (var subpanel in toolboxContainer.SubPanels)
-                {
-                    if (subpanel.name == referencedName)
-                    {
-                        this.ReferencedPanel = subpanel;
-                        break;
-                    }
-                }
-            }
+            string referencedName = UIToolboxPanel.NAME_PREFIX + this.SimpleName;
+            this.ReferencedPanel = toolboxContainer.Panels.Find(p => p.name == referencedName);
             Assert.IsNotNull(this.ReferencedPanel);
         }
 
         public override void OnPointerClick(PointerEventData eventData)
         {
+            Debug.Log("Switching current panel to '" + this.ReferencedPanel.name + "'");
             GameObject.FindObjectOfType<UIToolboxContainer>().CurrentPanel = this.ReferencedPanel;
         }
     }

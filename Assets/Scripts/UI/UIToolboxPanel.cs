@@ -10,7 +10,7 @@ namespace Assets.Scripts.UI
     /// </summary>
     public class UIToolboxPanel : MonoBehaviour
     {
-        private const string NAME_PREFIX = "UIToolboxPanel_";
+        public const string NAME_PREFIX = "UIToolboxPanel_";
 
         public UIToolboxPanelEntry UIToolboxPanelEntryPrefab;
         public UIToolboxComponent UIToolboxComponentPrefab;
@@ -64,7 +64,7 @@ namespace Assets.Scripts.UI
         }
 
         /// <summary>
-        /// Build this panel as the main panel, populated with sub panel entries
+        /// Build this panel as a main panel, populated with sub panel entries
         /// </summary>
         /// <param name="mainPanelConfig"></param>
         public void Build(UIToolboxConfig mainPanelConfig)
@@ -77,7 +77,6 @@ namespace Assets.Scripts.UI
             // Set name
             this.SimpleName = "Main";
 
-            Debug.Log("Building " + this.name + " as the main panel");
             foreach (var panelEntryConfig in mainPanelConfig.panels)
             {
                 // Load sprites
@@ -89,6 +88,7 @@ namespace Assets.Scripts.UI
                 // Instantiate panel entry
                 UIToolboxPanelEntry newPanelEntry = Instantiate(this.UIToolboxPanelEntryPrefab, this.transform);
                 Assert.IsNotNull(newPanelEntry);
+                this.Entries.Add(newPanelEntry);
 
                 // Set up panel entry
                 newPanelEntry.SimpleName = panelEntryConfig.panel_name;
@@ -97,6 +97,7 @@ namespace Assets.Scripts.UI
 
             // Finalise panel
             this.Built = true;
+            Debug.Log("Built '" + this.name + "' as a main panel with " + this.Entries.Count + " entries");
         }
 
         /// <summary>
@@ -113,7 +114,6 @@ namespace Assets.Scripts.UI
             // Set name
             this.SimpleName = subPanelConfig.panel_name;
 
-            Debug.Log("Building " + this.SimpleName + " as a sub panel");
             foreach (var componentEntryConfig in subPanelConfig.components)
             {
                 // Load component prefab
@@ -129,27 +129,35 @@ namespace Assets.Scripts.UI
                 // Instantiate component entry
                 UIToolboxComponent newComponentEntry = Instantiate(this.UIToolboxComponentPrefab, this.transform);
                 Assert.IsNotNull(newComponentEntry);
+                this.Entries.Add(newComponentEntry);
 
                 // Set up component entry
-                newComponentEntry.Name = componentEntryConfig.component_name;
+                newComponentEntry.SimpleName = componentEntryConfig.component_name;
                 newComponentEntry.SetSprites(activeSprite, inactiveSprite);
                 newComponentEntry.LogicComponentPrefab = componentPrefab;
             }
 
             // Finalise panel
             this.Built = true;
+            Debug.Log("Built '" + this.name + "' as a sub panel with " + this.Entries.Count + " entries");
         }
 
         public void Show()
         {
-            this.gameObject.SetActive(true);
-            foreach (var entry in this.Entries) entry.gameObject.SetActive(true);
+            CanvasGroup canvasGroup = this.GetComponent<CanvasGroup>();
+            Assert.IsNotNull(canvasGroup);
+            canvasGroup.interactable = true;
+            canvasGroup.alpha = 1;
+            canvasGroup.blocksRaycasts = true;
         }
 
         public void Hide()
         {
-            this.gameObject.SetActive(false);
-            foreach (var entry in this.Entries) entry.gameObject.SetActive(false);
+            CanvasGroup canvasGroup = this.GetComponent<CanvasGroup>();
+            Assert.IsNotNull(canvasGroup);
+            canvasGroup.interactable = false;
+            canvasGroup.alpha = 0;
+            canvasGroup.blocksRaycasts = false;
         }
 
         public void ToggleSelectedEntry(UIToolboxEntry entrySelection)
