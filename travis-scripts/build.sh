@@ -22,7 +22,7 @@ echo "Attempting to build $project for Mac OS"
   -silent-crashes \
   -logFile $(pwd)/MacBuild.log \
   -projectPath $(pwd) \
-  -buildMac OSUniversalPlayer "$(pwd)/Build/mac/$project.app" \
+  -buildOSXUniversalPlayer "$(pwd)/Build/mac/$project.app" \
   -quit
 
 echo "Attempting to build $project for Linux"
@@ -57,7 +57,7 @@ else
   windows=1
 fi
 
-if grep -Fq "Completed 'Build.Player'" $(pwd)/MacBuild.log # i dunno the string lol
+if grep -Fq "Completed 'Build.Player.OSXStandaloneSupport'" $(pwd)/MacBuild.log
 then
   echo 'Mac OS build completed successfully'
   mac=0
@@ -75,4 +75,4 @@ else
   linux=1
 fi
 
-return `expr $windows + $mac + $linux`
+exit `expr $windows + $mac + $linux`
