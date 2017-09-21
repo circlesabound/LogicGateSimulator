@@ -8,7 +8,7 @@ namespace Assets.Scripts.UI
     /// <summary>
     /// An entry for a sub-panel in a toolbox panel
     /// </summary>
-    public class UIToolboxPanelEntry : UIToolboxEntry
+    public class UIToolboxSubpanelEntry : UIToolboxEntry
     {
         public const string NAME_PREFIX = "UIToolboxPanelEntry_";
 
@@ -26,6 +26,13 @@ namespace Assets.Scripts.UI
             }
         }
 
+        public override void OnPointerClick(PointerEventData eventData)
+        {
+            base.OnPointerClick(eventData);
+            Debug.Log("Switching current panel to '" + this.ReferencedPanel.name + "'");
+            GameObject.FindObjectOfType<UIToolboxContainer>().CurrentPanel = this.ReferencedPanel;
+        }
+
         /// <summary>
         /// Assume referenced panel has been built at this stage
         /// </summary>
@@ -39,12 +46,6 @@ namespace Assets.Scripts.UI
             string referencedName = UIToolboxPanel.NAME_PREFIX + this.SimpleName;
             this.ReferencedPanel = toolboxContainer.Panels.Find(p => p.name == referencedName);
             Assert.IsNotNull(this.ReferencedPanel);
-        }
-
-        public override void OnPointerClick(PointerEventData eventData)
-        {
-            Debug.Log("Switching current panel to '" + this.ReferencedPanel.name + "'");
-            GameObject.FindObjectOfType<UIToolboxContainer>().CurrentPanel = this.ReferencedPanel;
         }
     }
 }

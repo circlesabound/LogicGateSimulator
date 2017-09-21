@@ -23,7 +23,7 @@ GameObject:
   - component: {fileID: 114948183430517260}
   - component: {fileID: 114322063365683968}
   m_Layer: 5
-  m_Name: UIToolboxComponent
+  m_Name: UIToolboxComponentEntry
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

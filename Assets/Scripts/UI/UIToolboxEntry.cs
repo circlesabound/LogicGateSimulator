@@ -7,24 +7,35 @@ namespace Assets.Scripts.UI
     /// <summary>
     /// An entry in a toolbox panel
     /// </summary>
-    public abstract class UIToolboxEntry : MonoBehaviour, IPointerClickHandler
+    public abstract class UIToolboxEntry : MonoBehaviour, IPointerClickHandler, IPointerDownHandler, IPointerUpHandler
     {
         protected UIToolboxPanel ToolboxPanel;
+
         public Sprite ActiveSprite
         {
             get;
             private set;
         }
+
         public Sprite InactiveSprite
         {
             get;
             private set;
         }
 
-        protected void Start()
+        public virtual void OnPointerClick(PointerEventData eventData)
         {
-            this.ToolboxPanel = this.GetComponentInParent<UIToolboxPanel>();
-            Assert.IsNotNull(this.ToolboxPanel);
+            this.ToolboxPanel.ToggleSelectedEntry(this);
+        }
+
+        public virtual void OnPointerDown(PointerEventData eventData)
+        {
+            this.ToolboxPanel.ToggleSelectedEntry(this);
+        }
+
+        public virtual void OnPointerUp(PointerEventData eventData)
+        {
+            this.ToolboxPanel.ToggleSelectedEntry(this);
         }
 
         public void SetSprites(Sprite activeSprite, Sprite inactiveSprite)
@@ -33,6 +44,10 @@ namespace Assets.Scripts.UI
             this.InactiveSprite = inactiveSprite;
         }
 
-        public abstract void OnPointerClick(PointerEventData eventData);
+        protected void Start()
+        {
+            this.ToolboxPanel = this.GetComponentInParent<UIToolboxPanel>();
+            Assert.IsNotNull(this.ToolboxPanel);
+        }
     }
 }

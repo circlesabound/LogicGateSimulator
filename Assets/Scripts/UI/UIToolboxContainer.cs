@@ -8,33 +8,9 @@ namespace Assets.Scripts.UI
 {
     public class UIToolboxContainer : MonoBehaviour
     {
-        private const string TOOLBOX_CONFIG_RESOURCE = "Configs/toolbox";
-
         public UIToolboxPanel UIToolboxPanelPrefab;
-
+        private const string TOOLBOX_CONFIG_RESOURCE = "Configs/toolbox";
         private UIToolboxPanel _CurrentPanel;
-
-        public List<UIToolboxPanel> Panels
-        {
-            get;
-            private set;
-        }
-
-        public UIToolboxPanel MainPanel
-        {
-            get
-            {
-                return this.Panels.Find(p => p.IsMainPanel);
-            }
-        }
-
-        public ReadOnlyCollection<UIToolboxPanel> SubPanels
-        {
-            get
-            {
-                return this.Panels.FindAll(p => !p.IsMainPanel).AsReadOnly();
-            }
-        }
 
         public UIToolboxPanel CurrentPanel
         {
@@ -58,12 +34,35 @@ namespace Assets.Scripts.UI
             }
         }
 
+        public UIToolboxPanel MainPanel
+        {
+            get
+            {
+                return this.Panels.Find(p => p.IsMainPanel);
+            }
+        }
+
+        public List<UIToolboxPanel> Panels
+        {
+            get;
+            private set;
+        }
+
+        public ReadOnlyCollection<UIToolboxPanel> SubPanels
+        {
+            get
+            {
+                return this.Panels.FindAll(p => !p.IsMainPanel).AsReadOnly();
+            }
+        }
+
         private void Awake()
         {
             // Sanity checks
             Assert.IsNotNull(this.UIToolboxPanelPrefab);
 
             // Initialise internal state
+            this.name = "UIToolboxContainer";
             this.Panels = new List<UIToolboxPanel>();
 
             // Load toolbox configuration from JSON
@@ -94,7 +93,7 @@ namespace Assets.Scripts.UI
         // Use this for initialization
         private void Start()
         {
-            this.gameObject.name = "UIToolboxContainer";
+            //
         }
 
         // Update is called once per frame
