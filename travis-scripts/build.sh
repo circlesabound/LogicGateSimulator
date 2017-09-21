@@ -10,30 +10,69 @@ echo "Attempting to build $project for Windows"
   -batchmode \
   -nographics \
   -silent-crashes \
-  -logFile $(pwd)/unity.log \
+  -logFile $(pwd)/WindowsBuild.log \
   -projectPath $(pwd) \
   -buildWindowsPlayer "$(pwd)/Build/windows/$project.exe" \
   -quit
 
-# echo "Attempting to build $project for OS X"
-# /Applications/Unity/Unity.app/Contents/MacOS/Unity \
-#   -batchmode \
-#   -nographics \
-#   -silent-crashes \
-#   -logFile $(pwd)/unity.log \
-#   -projectPath $(pwd) \
-#   -buildOSXUniversalPlayer "$(pwd)/Build/osx/$project.app" \
-#   -quit
+echo "Attempting to build $project for Mac OS"
+/Applications/Unity/Unity.app/Contents/MacOS/Unity \
+  -batchmode \
+  -nographics \
+  -silent-crashes \
+  -logFile $(pwd)/MacBuild.log \
+  -projectPath $(pwd) \
+  -buildMac OSUniversalPlayer "$(pwd)/Build/mac/$project.app" \
+  -quit
 
-# echo "Attempting to build $project for Linux"
-# /Applications/Unity/Unity.app/Contents/MacOS/Unity \
-#   -batchmode \
-#   -nographics \
-#   -silent-crashes \
-#   -logFile $(pwd)/unity.log \
-#   -projectPath $(pwd) \
-#   -buildLinuxUniversalPlayer "$(pwd)/Build/linux/$project.exe" \
-#   -quit
+echo "Attempting to build $project for Linux"
+/Applications/Unity/Unity.app/Contents/MacOS/Unity \
+  -batchmode \
+  -nographics \
+  -silent-crashes \
+  -logFile $(pwd)/LinuxBuild.log \
+  -projectPath $(pwd) \
+  -buildLinuxUniversalPlayer "$(pwd)/Build/linux/$project.exe" \
+  -quit
 
-echo 'Logs from build'
-cat $(pwd)/unity.log
+echo 'Logs from Windows build'
+cat $(pwd)/WindowsBuild.log
+
+echo 'Logs from Mac OS build'
+cat $(pwd)/MacBuild.log
+
+echo 'Logs from Linux build'
+cat $(pwd)/LinuxBuild.log
+
+echo ''
+echo '###############################'
+echo ''
+
+if grep -Fq "Completed 'Build.Player.WindowsStandaloneSupport'" $(pwd)/WindowsBuild.log
+then
+  echo 'Windows build completed successfully'
+  windows=0
+else
+  echo 'Windows build failed'
+  windows=1
+fi
+
+if grep -Fq "Completed 'Build.Player'" $(pwd)/MacBuild.log # i dunno the string lol
+then
+  echo 'Mac OS build completed successfully'
+  mac=0
+else
+  echo 'Mac OS build failed'
+  mac=1
+fi
+
+if grep -Fq "Completed 'Build.Player.LinuxStandaloneSupport'" $(pwd)/LinuxBuild.log
+then
+  echo 'Linux build completed successfully'
+  linux=0
+else
+  echo 'Linux build failed'
+  linux=1
+fi
+
+return `expr $windows + $mac + $linux`

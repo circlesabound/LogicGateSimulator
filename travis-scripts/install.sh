@@ -18,7 +18,7 @@ do
     export ec=$?
 done
 
-echo 'Downloading OSX module from http://netstorage.unity3d.com/unity/5d30cf096e79/MacEditorTargetInstaller/UnitySetup-Mac-Support-for-Editor-2017.1.1f1.pkg: '
+echo 'Downloading Mac OS module from http://netstorage.unity3d.com/unity/5d30cf096e79/MacEditorTargetInstaller/UnitySetup-Mac-Support-for-Editor-2017.1.1f1.pkg: '
 export ec=56 # connection reset by peer happens occasionally
 while [ $ec -eq 56 ]
 do
