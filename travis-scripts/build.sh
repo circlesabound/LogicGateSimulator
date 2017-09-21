@@ -57,7 +57,7 @@ else
   windows=1
 fi
 
-if grep -Fq "Completed 'Build.Player.OSXStandaloneSupport'" $(pwd)/MacBuild.log
+if grep -Fq "Completed 'Build.Player.MacStandaloneSupport'" $(pwd)/MacBuild.log
 then
   echo 'Mac OS build completed successfully'
   mac=0
