@@ -20,15 +20,14 @@ namespace Assets.Scripts.UI
         }
 
         // Use this for initialisation
-        void Start()
+        private void Start()
         {
             //TODO: attach a backend representation to this object
         }
 
         // Update is called once per frame
-        void Update()
+        private void Update()
         {
-
         }
 
         public void OnBeginDrag(PointerEventData eventData)

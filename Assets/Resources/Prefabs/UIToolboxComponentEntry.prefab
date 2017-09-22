@@ -21,15 +21,15 @@ GameObject:
   - component: {fileID: 224170740892420432}
   - component: {fileID: 222421788746209052}
   - component: {fileID: 114948183430517260}
-  - component: {fileID: 114727410601479820}
+  - component: {fileID: 114322063365683968}
   m_Layer: 5
-  m_Name: UILogicComponentSelection
+  m_Name: UIToolboxComponentEntry
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &114727410601479820
+--- !u!114 &114322063365683968
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -37,7 +37,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1880661960338630}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 041d3164c2d96de43a8eb7f3d0e2b2a7, type: 3}
+  m_Script: {fileID: 11500000, guid: 535ab975960d27244b5e52710a0f1dba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   LogicComponentPrefab: {fileID: 0}
