@@ -1,5 +1,11 @@
 # LogicGateSimulator
 
+## Build status
+
+Master:  [![Build Status](https://travis-ci.com/circlesabound/LogicGateSimulator.svg?token=jbnKArqd77syS7PRG6Fd&branch=master)](https://travis-ci.com/circlesabound/LogicGateSimulator)
+
+Develop: [![Build Status](https://travis-ci.com/circlesabound/LogicGateSimulator.svg?token=jbnKArqd77syS7PRG6Fd&branch=develop)](https://travis-ci.com/circlesabound/LogicGateSimulator)
+
 ## Dev environment setup
 
 - Ensure Git is configured to commit line endings Unix-style:
