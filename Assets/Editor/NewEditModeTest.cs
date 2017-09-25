@@ -17,6 +17,8 @@ public class NewEditModeTest {
         // Try removing:
         Assert.IsTrue(circuit.RemoveComponent(true_constant));
         Assert.IsFalse(circuit.RemoveComponent(true_constant));
+        // Try re-adding again:
+        Assert.IsTrue(circuit.AddComponent(true_constant));
     }
 
 	// A UnityTest behaves like a coroutine in PlayMode
