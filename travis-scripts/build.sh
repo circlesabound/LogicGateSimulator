@@ -5,6 +5,26 @@
 # Change this the name of your project. This will be the name of the final executables as well.
 project="LogicDoodler"
 
+echo "Building and running editor unit tests"
+/Applications/Unity/Unity.app/Contents/MacOS/Unity \
+  -batchmode \
+  -nographics \
+  -silent-crashes \
+  -logFile $(pwd)/UnitTests.log \
+  -projectPath $(pwd) \
+  -runEditorTests \
+  -editorTestsResultFile $(pwd)/UnitTests.xml \
+  -quit
+
+unitTests=$?
+echo 'Logs from editor unit tests'
+cat $(pwd)/UnitTests.xml
+if [ $unitTests -ne 0 ]
+then
+  echo 'Failed unit tests, stopping build'
+  exit $unitTests
+fi
+
 echo "Attempting to build $project for Windows"
 /Applications/Unity/Unity.app/Contents/MacOS/Unity \
   -batchmode \
