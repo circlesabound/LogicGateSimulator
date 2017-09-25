@@ -95,6 +95,26 @@ public class NewEditModeTest {
     }
 
     [Test]
+    public void Test_XorGateSimulate()
+    {
+        LogicComponent xor_gate = new XorGate();
+        LogicComponent true_constant = new TrueConstant();
+        LogicComponent false_constant = new FalseConstant();
+
+        // Check default behaviour and behaviour with only 1 input is sane:
+        Assert.AreEqual(xor_gate.Simulate(), new List<bool> { false });
+        xor_gate.AddInput(0, false_constant, 0);
+        Assert.AreEqual(xor_gate.Simulate(), new List<bool> { false });
+        xor_gate.RemoveInput(0);
+        xor_gate.AddInput(0, true_constant, 0);
+        Assert.AreEqual(xor_gate.Simulate(), new List<bool> { true });
+        xor_gate.RemoveInput(0);
+        Assert.AreEqual(xor_gate.Simulate(), new List<bool> { false });
+
+        Test_TruthTable(xor_gate, new bool[2, 2] { { false, true }, { true, false } });
+    }
+
+    [Test]
     public void Test_NotGateSimulate()
     {
         LogicComponent not_gate = new NotGate();
