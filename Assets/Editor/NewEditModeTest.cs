@@ -94,6 +94,23 @@ public class NewEditModeTest {
         Test_TruthTable(or_gate, new bool[2, 2] { { false, true }, { true, true } });
     }
 
+    [Test]
+    public void Test_NotGateSimulate()
+    {
+        LogicComponent not_gate = new NotGate();
+        LogicComponent true_constant = new TrueConstant();
+        LogicComponent false_constant = new FalseConstant();
+
+        // Check default behaviour is sane:
+        Assert.AreEqual(not_gate.Simulate(), new List<bool> { true });
+
+        // Check truth table:
+        not_gate.AddInput(0, true_constant, 0);
+        Assert.AreEqual(not_gate.Simulate(), new List<bool> { false });
+        not_gate.RemoveInput(0);
+        not_gate.AddInput(0, false_constant, 0);
+        Assert.AreEqual(not_gate.Simulate(), new List<bool> { true });
+    }
     public void Test_CircuitSimulate()
     {
 
