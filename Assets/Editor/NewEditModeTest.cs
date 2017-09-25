@@ -74,6 +74,26 @@ public class NewEditModeTest {
         Test_TruthTable(and_gate, new bool[2,2]{ { false, false}, { false, true} });
     }
 
+    [Test]
+    public void Test_OrGateSimulate()
+    {
+        LogicComponent or_gate = new OrGate();
+        LogicComponent true_constant = new TrueConstant();
+        LogicComponent false_constant = new FalseConstant();
+
+        // Check default behaviour and behaviour with only 1 input is sane:
+        Assert.AreEqual(or_gate.Simulate(), new List<bool> { false });
+        or_gate.AddInput(0, false_constant, 0);
+        Assert.AreEqual(or_gate.Simulate(), new List<bool> { false });
+        or_gate.RemoveInput(0);
+        or_gate.AddInput(0, true_constant, 0);
+        Assert.AreEqual(or_gate.Simulate(), new List<bool> { true });
+        or_gate.RemoveInput(0);
+        Assert.AreEqual(or_gate.Simulate(), new List<bool> { false });
+
+        Test_TruthTable(or_gate, new bool[2, 2] { { false, true }, { true, true } });
+    }
+
     public void Test_CircuitSimulate()
     {
 
