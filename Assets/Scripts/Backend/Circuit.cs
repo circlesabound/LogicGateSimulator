@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 
 public class Circuit {
-	private List<LogicComponent> components;
+    private List<LogicComponent> components;
 
     public Circuit()
     {
