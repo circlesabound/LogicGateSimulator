@@ -4,6 +4,10 @@ using System.Collections.Generic;
 public class Circuit {
 	private List<LogicComponent> components;
 
+    public Circuit()
+    {
+        components = new List<LogicComponent>();
+    }
     /// <summary>
     /// Adds a component to the circuit.
     /// The same component can't be added more than once.
