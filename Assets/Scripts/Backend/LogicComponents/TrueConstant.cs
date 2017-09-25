@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 
 public class TrueConstant : LogicComponent {
-    public TrueConstant() : base(0, 1) { }
+    public TrueConstant() : base(0, 1) {
+        this.Outputs[0] = true;
+    }
 
     public override List<bool> Simulate() => new List<bool> { true };
 }

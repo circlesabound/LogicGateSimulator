@@ -8,8 +8,11 @@ public abstract class LogicComponent {
 
 	public LogicComponent(int n_inputs, int n_outputs)
 	{
-		this.Inputs = new List<ConnectionEndpoint>(
-			Enumerable.Repeat<ConnectionEndpoint>(null, n_inputs));
+        Inputs = Enumerable.Range(0, n_inputs)
+            .Select(i => new ConnectionEndpoint())
+            .ToList();
+		//this.Inputs = new List<ConnectionEndpoint>(
+		//	Enumerable.Repeat<ConnectionEndpoint>(null, n_inputs));
 		this.Outputs = new List<bool>(Enumerable.Repeat(false, n_outputs));
 	}
 
@@ -20,7 +23,7 @@ public abstract class LogicComponent {
 
 	public void RemoveInput(int input_id)
 	{
-		this.Inputs[input_id] = null;
+        this.Inputs[input_id] = new ConnectionEndpoint();
 	}
 
 	public abstract List<bool> Simulate();
