@@ -11,8 +11,6 @@ public abstract class LogicComponent {
         Inputs = Enumerable.Range(0, n_inputs)
             .Select(i => new ConnectionEndpoint())
             .ToList();
-		//this.Inputs = new List<ConnectionEndpoint>(
-		//	Enumerable.Repeat<ConnectionEndpoint>(null, n_inputs));
 		this.Outputs = new List<bool>(Enumerable.Repeat(false, n_outputs));
 	}
 
