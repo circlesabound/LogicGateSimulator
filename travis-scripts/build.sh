@@ -13,7 +13,7 @@ echo "Building and running editor unit tests"
   -logFile $(pwd)/UnitTests.log \
   -projectPath $(pwd) \
   -runEditorTests \
-  -editorTestsResultFile $(pwd)/UnitTests.xml \
+  -testResults $(pwd)/UnitTests.xml \
   -quit
 
 unitTests=$?
@@ -67,6 +67,8 @@ cat $(pwd)/LinuxBuild.log
 echo ''
 echo '###############################'
 echo ''
+
+echo 'Editor unit tests passed'
 
 if grep -Fq "Completed 'Build.Player.WindowsStandaloneSupport'" $(pwd)/WindowsBuild.log
 then
