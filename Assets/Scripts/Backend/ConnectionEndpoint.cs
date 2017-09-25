@@ -10,7 +10,8 @@ public class ConnectionEndpoint {
             if (Component == null)
             {
                 return false;
-            } else
+            }
+            else
             {
                 return this.Component.Outputs[this.OutputId];
             }

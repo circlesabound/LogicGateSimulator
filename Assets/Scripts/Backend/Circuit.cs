@@ -19,7 +19,8 @@ public class Circuit {
         if (components.Exists(item => item == component))
         {
             return false;
-        } else
+        }
+        else
         {
             components.Add(component);
             return true;
