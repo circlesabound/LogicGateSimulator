@@ -131,6 +131,17 @@ public class NewEditModeTest {
         not_gate.AddInput(0, false_constant, 0);
         Assert.AreEqual(not_gate.Simulate(), new List<bool> { true });
     }
+
+    [Test]
+    public void Test_InputComponent()
+    {
+        InputComponent input_component = new InputComponent();
+
+        input_component.SetValue(true);
+        Assert.AreEqual(input_component.Simulate(), new List<bool> { true });
+        input_component.SetValue(false);
+        Assert.AreEqual(input_component.Simulate(), new List<bool> { false });
+    }
     public void Test_CircuitSimulate()
     {
 
