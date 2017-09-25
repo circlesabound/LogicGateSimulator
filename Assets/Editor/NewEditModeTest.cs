@@ -142,6 +142,25 @@ public class NewEditModeTest {
         input_component.SetValue(false);
         Assert.AreEqual(input_component.Simulate(), new List<bool> { false });
     }
+
+    [Test]
+    public void Test_Connection()
+    {
+        LogicComponent connection = new Connection();
+        LogicComponent true_constant = new TrueConstant();
+        LogicComponent false_constant = new FalseConstant();
+
+        // Check default behaviour is sane:
+        Assert.AreEqual(connection.Simulate(), new List<bool> { false });
+
+        // Check truth table:
+        connection.AddInput(0, true_constant, 0);
+        Assert.AreEqual(connection.Simulate(), new List<bool> { true });
+        connection.RemoveInput(0);
+        connection.AddInput(0, false_constant, 0);
+        Assert.AreEqual(connection.Simulate(), new List<bool> { false });
+    }
+
     public void Test_CircuitSimulate()
     {
 
