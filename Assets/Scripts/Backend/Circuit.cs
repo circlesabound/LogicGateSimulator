@@ -1,58 +1,83 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 public class Circuit {
-    private List<LogicComponent> components;
+    private CircuitGraph graph;
 
     public Circuit()
     {
-        components = new List<LogicComponent>();
+        graph = new CircuitGraph();
     }
     /// <summary>
     /// Adds a component to the circuit.
     /// The same component can't be added more than once.
     /// </summary>
     /// <param name="component">The component to add.</param>
-    /// <returns>True if the component was added successfully(was not in the circuit before). False otherwise</returns>
-    public bool AddComponent(LogicComponent component)
+    /// <exception cref="System.ArgumentException">Thrown if the component has already been added</exception>
+    public void AddComponent(LogicComponent component)
     {
-        if (components.Exists(item => item == component))
-        {
-            return false;
-        }
-        else
-        {
-            components.Add(component);
-            return true;
-        }
+        this.graph.AddNode(component);
     }
 
     /// <summary>
     /// Removes a component.
     /// </summary>
     /// <param name="component">The component to remove.</param>
-    /// <returns>True if the component was removed successfully, False otherwise.</returns>
-    public bool RemoveComponent(LogicComponent component)
+    /// <exception cref="System.Collections.Generic.KeyNotFoundException">Thrown if component does not exist</exception>
+    public void RemoveComponent(LogicComponent component)
     {
-        return components.Remove(component);
+        this.graph.RemoveNode(component);
+    }
+
+    /// <summary>
+    /// Connects an output of a component to the input of another component
+    /// </summary>
+    /// <param name="out_component">The output component</param>
+    /// <param name="out_id">The id of the output to connect from</param>
+    /// <param name="in_component">The input component</param>
+    /// <param name="in_id">The id of the input to connect to</param>
+    /// <exception cref="System.Collections.Generic.KeyNotFoundException">Thrown if either component does not exist</exception>
+    /// <exception cref="System.ArgumentOutOfRangeException">Thrown if either ids are out of range for the component</exception>
+    public void Connect(LogicComponent out_component, int out_id,
+        LogicComponent in_component, int in_id)
+    {
+        this.graph.AddEdge(out_component, out_id, in_component, in_id);
+    }
+
+    /// <summary>
+    /// Disconnects an output of a component to the input of another component
+    /// </summary>
+    /// <param name="out_component">The output component</param>
+    /// <param name="out_id">The id of the output to connect from</param>
+    /// <param name="in_component">The input component</param>
+    /// <param name="in_id">The id of the input to connect to</param>
+    /// <exception cref="System.Collections.Generic.KeyNotFoundException">Thrown if either component does not exist</exception>
+    /// <exception cref="System.ArgumentOutOfRangeException">Thrown if either ids are out of range for the component</exception>
+    public void Disconnect(LogicComponent out_component, int out_id,
+        LogicComponent in_component, int in_id)
+    {
+        this.graph.RemoveEdge(out_component, out_id, in_component, in_id);
     }
 
     /// <summary>
     /// Simulates one step of the circuit.
     /// </summary>
-    /// <returns>True if the simulate step succeeded, False otherwise.</returns>
-    public bool Simulate()
+    public void Simulate()
     {
-        var ResultMap = new Dictionary<LogicComponent, List<bool>>();
+        var result_map = new Dictionary<LogicComponent, List<bool>>();
+        var components = this.graph.Components;
         foreach (LogicComponent component in components)
         {
-            List<bool> simulation_results = component.Simulate();
-            ResultMap[component] = simulation_results;
+            var inputs = this.graph.GetInputs(component).Select(
+                output => output.Value
+            ).ToList();
+            List<bool> simulation_results = component.Simulate(inputs);
+            result_map[component] = simulation_results;
         }
         foreach (LogicComponent component in components)
         {
-            component.Outputs = ResultMap[component];
+            component.Outputs = result_map[component];
         }
-        return true;
     }
 }

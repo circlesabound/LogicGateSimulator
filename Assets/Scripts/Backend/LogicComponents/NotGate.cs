@@ -5,8 +5,8 @@ public class NotGate : LogicComponent
 {
     public NotGate() : base(1, 1) { }
 
-    public override List<bool> Simulate()
+    public override List<bool> Simulate(IList<bool> inputs)
     {
-        return new List<bool> { !this.Inputs[0].Value };
+        return new List<bool> { !inputs[0] };
     }
 }

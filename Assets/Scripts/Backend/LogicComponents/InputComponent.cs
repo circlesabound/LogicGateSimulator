@@ -15,7 +15,7 @@ public class InputComponent : LogicComponent
         this.Outputs[0] = value;
     }
 
-    public override List<bool> Simulate()
+    public override List<bool> Simulate(IList<bool> inputs)
     {
         return new List<bool> { value };
     }

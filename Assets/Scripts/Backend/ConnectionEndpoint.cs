@@ -28,4 +28,13 @@ public class ConnectionEndpoint {
         this.Component = component;
         this.OutputId = outputId;
     }
+
+    public ConnectionEndpoint(CircuitEdge edge)
+    {
+        if (edge != null)
+        {
+            this.Component = edge.OutNode.Component;
+            this.OutputId = edge.OutId;
+        }
+    }
 }
