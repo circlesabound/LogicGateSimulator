@@ -20,6 +20,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4302141880207988}
   - component: {fileID: 212256150004401064}
+  - component: {fileID: 65108022391019708}
   m_Layer: 0
   m_Name: CanvasElement
   m_TagString: Untagged
@@ -34,12 +35,24 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1514631668813102}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 382.3982, y: 342.83286, z: 0}
-  m_LocalScale: {x: 2.3558185, y: 2.3558185, z: 2.3558185}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &65108022391019708
+BoxCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1514631668813102}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 20.479998, y: 20.479998, z: 0.19999999}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!212 &212256150004401064
 SpriteRenderer:
   m_ObjectHideFlags: 1
