@@ -63,6 +63,7 @@ namespace Assets.Scripts.UI
 
             // Initialise internal state
             this.name = "UIToolboxContainer";
+            this.tag = "UIToolboxContainer";
             this.Panels = new List<UIToolboxPanel>();
 
             // Load toolbox configuration from JSON
