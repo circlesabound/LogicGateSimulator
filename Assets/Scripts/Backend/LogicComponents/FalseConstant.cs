@@ -6,7 +6,7 @@ public class FalseConstant : LogicComponent{
         this.Outputs[0] = false;
     }
 
-    public override List<bool> Simulate(IList<bool> inputs)
+    protected override List<bool> CoreSimulate(IList<bool> inputs)
     {
         return new List<bool> { false };
     }

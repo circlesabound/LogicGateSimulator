@@ -71,5 +71,23 @@ namespace Assets.Editor.Tests
 
             TestUtil.Test_TruthTable(xor_gate, new bool[2, 2] { { false, true }, { true, false } });
         }
+
+        [Test]
+        public void Test_InputOutputSanityCheck()
+        {
+            LogicComponent xor_gate = new XorGate();
+
+            // Assert input constraints are checked
+            Assert.That(() => xor_gate.Simulate(new [] { true }), Throws.ArgumentException);
+            Assert.That(() => xor_gate.Simulate(new [] { true, false }), Throws.Nothing);
+            Assert.That(() => xor_gate.Simulate(new [] { true, false, true }),
+                Throws.ArgumentException);
+
+            // Assert output constraints are checked
+            Assert.That(() => xor_gate.Outputs = new List<bool> { }, Throws.ArgumentException);
+            Assert.That(() => xor_gate.Outputs = new List<bool> { true }, Throws.Nothing);
+            Assert.That(() => xor_gate.Outputs = new List<bool> { true, false },
+                Throws.ArgumentException);
+        }
     }
 }

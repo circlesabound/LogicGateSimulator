@@ -5,7 +5,7 @@ public class XorGate : LogicComponent
 {
     public XorGate() : base(2, 1) { }
 
-    public override List<bool> Simulate(IList<bool> inputs)
+    protected override List<bool> CoreSimulate(IList<bool> inputs)
     {
         return new List<bool> { inputs[0] ^ inputs[1] };
     }
