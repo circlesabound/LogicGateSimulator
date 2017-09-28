@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Assertions;
 using UnityEngine.EventSystems;
 
 namespace Assets.Scripts.ScratchPad
@@ -10,6 +11,9 @@ namespace Assets.Scripts.ScratchPad
     /// </summary>
     public abstract class SPLogicComponent : MonoBehaviour, IPointerClickHandler, IBeginDragHandler, IDragHandler, IEndDragHandler
     {
+        public SPInConnector SPInConnectorPrefab;
+        public SPOutConnector SPOutConnectorPrefab;
+
         //TODO: add a reference to the backend representation as an instance member
         protected object LogicComponent;
 
@@ -19,14 +23,23 @@ namespace Assets.Scripts.ScratchPad
             // Initialisation happens in Start()
         }
 
+        protected virtual void Awake()
+        {
+            // Sanity checks, make sure prefabs are linked
+            Assert.raiseExceptions = true;
+            Assert.IsNotNull(SPInConnectorPrefab);
+            Assert.IsNotNull(SPOutConnectorPrefab);
+            Assert.raiseExceptions = false;
+        }
+
         // Use this for initialisation
-        private void Start()
+        protected virtual void Start()
         {
             //TODO: attach a backend representation to this object
         }
 
         // Update is called once per frame
-        private void Update()
+        protected virtual void Update()
         {
         }
 

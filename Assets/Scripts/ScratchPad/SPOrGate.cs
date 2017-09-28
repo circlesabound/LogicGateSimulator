@@ -5,23 +5,21 @@ using System.Text;
 
 namespace Assets.Scripts.ScratchPad
 {
-    public class SPOrGate : SPLogicComponent
+    public class SPOrGate : SPBinaryLogicComponent
     {
         protected SPOrGate() : base()
         {
-
         }
 
         // Use this for initialisation
-        void Start()
+        protected override void Start()
         {
             //TODO: attach a backend representation to this object
         }
 
         // Update is called once per frame
-        void Update()
+        protected override void Update()
         {
-
         }
     }
 }

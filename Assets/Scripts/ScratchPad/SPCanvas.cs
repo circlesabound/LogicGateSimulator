@@ -1,8 +1,7 @@
 ﻿using Assets.Scripts.UI;
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Assertions;
 using UnityEngine.EventSystems;
 
 namespace Assets.Scripts.ScratchPad
@@ -10,12 +9,12 @@ namespace Assets.Scripts.ScratchPad
     public class SPCanvas : MonoBehaviour, IPointerClickHandler
     {
         public GameObject foreground;
-        public Stack<GameObject> children;
+        public List<GameObject> Components;
 
         public void OnPointerClick(PointerEventData eventData)
         {
-            UIToolboxComponentEntry chosenTool = GameObject.FindObjectOfType<UIToolboxContainer>().CurrentPanel.CurrentlySelectedEntry as UIToolboxComponentEntry;
-            if (chosenTool == null)
+            UIToolboxComponentEntry chosenComponentEntry = GameObject.FindObjectOfType<UIToolboxContainer>().CurrentPanel.CurrentlySelectedEntry as UIToolboxComponentEntry;
+            if (chosenComponentEntry == null)
             {
                 return;
             }
@@ -23,47 +22,41 @@ namespace Assets.Scripts.ScratchPad
             if (eventData.button == PointerEventData.InputButton.Left)
             {
                 Debug.Log("Canvas| Left click");
-                GameObject prefab = Resources.Load(chosenTool.Prefab) as GameObject;
-                GameObject newElem = GameObject.Instantiate(prefab, eventData.pointerCurrentRaycast.worldPosition, Quaternion.identity);
+                GameObject prefab = Resources.Load(chosenComponentEntry.Prefab) as GameObject;
+                Assert.IsNotNull(prefab);
+                GameObject newElem = GameObject.Instantiate(
+                    prefab,
+                    new Vector3(
+                        eventData.pointerCurrentRaycast.worldPosition.x,
+                        eventData.pointerCurrentRaycast.worldPosition.y),
+                    Quaternion.identity,
+                    foreground.transform);
+                Assert.IsNotNull(newElem);
                 newElem.tag = "SPElement";
 
-                // do this for now
-                newElem.transform.SetParent(foreground.transform);
-                Vector3 newPos = newElem.transform.localPosition;
-                newPos.z = 0;
-                newElem.transform.localPosition = newPos;
-
                 // will this memory leak?
-                children.Push(newElem);
+                Components.Add(newElem);
             }
             else if (eventData.button == PointerEventData.InputButton.Right)
             {
                 Debug.Log("Canvas| Right click");
-
-                try
-                {
-                    GameObject oldElem = children.Pop();
-                    Destroy(oldElem);
-                } catch (InvalidOperationException e)
-                {
-                    Debug.Log("No children: " + e);
-                }
             }
         }
 
         // Use this for initialization
-        void Awake()
+        private void Awake()
         {
-            children = new Stack<GameObject>();
+            Components = new List<GameObject>();
         }
 
-        void Start()
+        private void Start()
         {
             foreground = GameObject.Find("Foreground");
+            Assert.IsNotNull(foreground);
         }
 
         // Update is called once per frame
-        void Update()
+        private void Update()
         {
         }
     }

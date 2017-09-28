@@ -500,9 +500,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5924b41833434254d9a29af4908cb39a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  elementPrefab: {fileID: 1514631668813102, guid: 736172c0b3124dc4abce5d02c5c8a2be,
-    type: 2}
   foreground: {fileID: 0}
+  Components: []
 --- !u!23 &1475706230
 MeshRenderer:
   m_ObjectHideFlags: 0
