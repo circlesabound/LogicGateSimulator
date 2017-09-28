@@ -9,7 +9,7 @@ namespace Assets.Editor.Tests
         public void Test_AddAndRemoveComponentsToCircuit()
         {
             Circuit circuit = new Circuit();
-            TrueConstant true_constant = new TrueConstant();
+            TrueConst true_constant = new TrueConst();
             Assert.That(() => circuit.AddComponent(true_constant), Throws.Nothing);
             // Check we can't add the same component twice:
             Assert.That(() => circuit.AddComponent(true_constant), Throws.ArgumentException);
@@ -60,9 +60,9 @@ namespace Assets.Editor.Tests
         [Test]
         public void Test_CircuitSimulate_SmallTree()
         {
-            LogicComponent true_constant1 = new TrueConstant();
-            LogicComponent true_constant2 = new TrueConstant();
-            LogicComponent false_constant = new FalseConstant();
+            LogicComponent true_constant1 = new TrueConst();
+            LogicComponent true_constant2 = new TrueConst();
+            LogicComponent false_constant = new FalseConst();
             LogicComponent and_gate = new AndGate();
             LogicComponent or_gate = new OrGate();
 

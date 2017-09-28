@@ -1,8 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 
-public class TrueConstant : LogicComponent {
-    public TrueConstant() : base(0, 1) {
+public class TrueConst : LogicComponent {
+    public TrueConst() : base(0, 1) {
         this.Outputs[0] = true;
     }
 

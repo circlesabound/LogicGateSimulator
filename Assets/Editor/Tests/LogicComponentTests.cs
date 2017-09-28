@@ -26,11 +26,11 @@ namespace Assets.Editor.Tests
         [Test]
         public void Test_ConstantComponents()
         {
-            LogicComponent true_constant = new TrueConstant();
+            LogicComponent true_constant = new TrueConst();
             Assert.AreEqual(true_constant.Outputs, new List<bool>() { true });
             Assert.AreEqual(true_constant.Simulate(new bool[] {}), new List<bool> { true });
 
-            LogicComponent false_constant = new FalseConstant();
+            LogicComponent false_constant = new FalseConst();
             Assert.AreEqual(false_constant.Outputs, new List<bool>() { false });
             Assert.AreEqual(false_constant.Simulate(new bool[] {}), new List<bool> { false });
         }
