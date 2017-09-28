@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 namespace Assets.Scripts.UI
 {
@@ -47,6 +48,7 @@ namespace Assets.Scripts.UI
         protected void Start()
         {
             this.ToolboxPanel = this.GetComponentInParent<UIToolboxPanel>();
+            this.gameObject.GetComponent<Image>().sprite = this.InactiveSprite;
             Assert.IsNotNull(this.ToolboxPanel);
         }
     }
