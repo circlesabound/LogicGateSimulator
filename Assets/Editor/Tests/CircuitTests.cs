@@ -43,16 +43,16 @@ namespace Assets.Editor.Tests
             for (int i = 0; i < 100; i++)
             {
                 // After first step, not gate should have true output:
-                Assert.DoesNotThrow(() => circuit.Simulate());
+                circuit.Simulate();
                 Assert.AreEqual(not_gate.Outputs, new List<bool>() { true });
                 // After second step, connection should have true output too:
-                Assert.DoesNotThrow(() => circuit.Simulate());
+                circuit.Simulate();
                 Assert.AreEqual(connection.Outputs, new List<bool>() { true });
                 // After third step, not gate should have false output again:
-                Assert.DoesNotThrow(() => circuit.Simulate());
+                circuit.Simulate();
                 Assert.AreEqual(not_gate.Outputs, new List<bool>() { false });
                 // After fourth step, connection should have false output again:
-                Assert.DoesNotThrow(() => circuit.Simulate());
+                circuit.Simulate();
                 Assert.AreEqual(connection.Outputs, new List<bool>() { false });
             }
         }
@@ -76,15 +76,15 @@ namespace Assets.Editor.Tests
             /* Test will be 2 TRUEs connected to an AND gate.
              * This AND gate and a FALSE will then be connected to the OR gate.
              */
-            Assert.That(() => circuit.AddComponent(true_constant1), Throws.Nothing);
-            Assert.That(() => circuit.AddComponent(true_constant2), Throws.Nothing);
-            Assert.That(() => circuit.AddComponent(false_constant), Throws.Nothing);
-            Assert.That(() => circuit.AddComponent(and_gate), Throws.Nothing);
-            Assert.That(() => circuit.AddComponent(or_gate), Throws.Nothing);
-            Assert.That(() => circuit.AddComponent(true_constant1_connection), Throws.Nothing);
-            Assert.That(() => circuit.AddComponent(true_constant2_connection), Throws.Nothing);
-            Assert.That(() => circuit.AddComponent(false_constant_connection), Throws.Nothing);
-            Assert.That(() => circuit.AddComponent(and_gate_connection), Throws.Nothing);
+            circuit.AddComponent(true_constant1);
+            circuit.AddComponent(true_constant2);
+            circuit.AddComponent(false_constant);
+            circuit.AddComponent(and_gate);
+            circuit.AddComponent(or_gate);
+            circuit.AddComponent(true_constant1_connection);
+            circuit.AddComponent(true_constant2_connection);
+            circuit.AddComponent(false_constant_connection);
+            circuit.AddComponent(and_gate_connection);
 
             circuit.Connect(true_constant1, 0, true_constant1_connection, 0);
             circuit.Connect(true_constant2, 0, true_constant2_connection, 0);
@@ -96,23 +96,23 @@ namespace Assets.Editor.Tests
             circuit.Connect(false_constant_connection, 0, or_gate, 1);
 
             // Try first step: the output of the connections from the constants should change.
-            Assert.DoesNotThrow(() => circuit.Simulate());
+            circuit.Simulate();
             Assert.AreEqual(true_constant1_connection.Outputs, new List<bool>() { true });
             Assert.AreEqual(true_constant2_connection.Outputs, new List<bool>() { true });
             // Try second step: the output from the and gate should change.
-            Assert.DoesNotThrow(() => circuit.Simulate());
+            circuit.Simulate();
             Assert.AreEqual(and_gate.Outputs, new List<bool>() { true });
             // Try third step: the output of the connections from the and gate should change.
-            Assert.DoesNotThrow(() => circuit.Simulate());
+            circuit.Simulate();
             Assert.AreEqual(and_gate_connection.Outputs, new List<bool>() { true });
             // Try fourth step: the output of the or gate should change.
-            Assert.DoesNotThrow(() => circuit.Simulate());
+            circuit.Simulate();
             Assert.AreEqual(or_gate.Outputs, new List<bool>() { true });
 
             // Ensure the state has stabilized into the expected state:
             for (int i = 0; i < 100; i++)
             {
-                Assert.DoesNotThrow(() => circuit.Simulate());
+                circuit.Simulate();
                 Assert.AreEqual(true_constant1_connection.Outputs, new List<bool>() { true });
                 Assert.AreEqual(true_constant2_connection.Outputs, new List<bool>() { true });
                 Assert.AreEqual(and_gate.Outputs, new List<bool>() { true });
