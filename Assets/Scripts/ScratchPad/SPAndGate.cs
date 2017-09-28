@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Assets.Scripts.UI
+namespace Assets.Scripts.ScratchPad
 {
-    public class UIAndGate : UILogicComponent
+    public class SPAndGate : SPLogicComponent
     {
-        protected UIAndGate() : base()
+        protected SPAndGate() : base()
         {
 
         }

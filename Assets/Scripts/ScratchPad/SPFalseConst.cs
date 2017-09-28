@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Assets.Scripts.UI
+namespace Assets.Scripts.ScratchPad
 {
-    public class UIXorGate : UILogicComponent
+    public class SPFalseConst : SPLogicComponent
     {
-        protected UIXorGate() : base()
+        protected SPFalseConst() : base()
         {
 
         }

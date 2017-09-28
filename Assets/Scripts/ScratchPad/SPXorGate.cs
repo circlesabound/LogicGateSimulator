@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Assets.Scripts.UI
+namespace Assets.Scripts.ScratchPad
 {
-    public class UIOrGate : UILogicComponent
+    public class SPXorGate : SPLogicComponent
     {
-        protected UIOrGate() : base()
+        protected SPXorGate() : base()
         {
 
         }

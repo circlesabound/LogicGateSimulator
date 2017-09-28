@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using UnityEngine;
+using System.Linq;
+using System.Text;
 
-namespace Assets.Scripts.UI
+namespace Assets.Scripts.ScratchPad
 {
-    public class UIEdge : UILogicComponent
+    public class SPOrGate : SPLogicComponent
     {
-        protected UIEdge() : base()
+        protected SPOrGate() : base()
         {
 
         }

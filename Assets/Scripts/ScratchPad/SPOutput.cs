@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Assets.Scripts.UI
+namespace Assets.Scripts.ScratchPad
 {
-    public class UINotGate : UILogicComponent
+    public class SPOutput : SPLogicComponent
     {
-        protected UINotGate() : base()
+        protected SPOutput() : base()
         {
 
         }
