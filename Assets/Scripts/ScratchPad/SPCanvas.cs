@@ -1,4 +1,5 @@
 ﻿using Assets.Scripts.UI;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Assertions;
@@ -6,53 +7,141 @@ using UnityEngine.EventSystems;
 
 namespace Assets.Scripts.ScratchPad
 {
+    public enum SPTool
+    {
+        // "Normal" tools
+
+        Pointer,
+        Pan,
+        Zoom,
+
+        // "Special" tools
+
+        NewComponent,
+        DrawEdge
+    }
+
     public class SPCanvas : MonoBehaviour, IPointerClickHandler
     {
-        public GameObject foreground;
         public List<GameObject> Components;
+        public GameObject Foreground;
+        public SPEdge SPEdgePrefab;
+        private SPTool _CurrentTool;
+        private SPTool _PreviousTool;
+
+        public SPEdge CurrentEdge
+        {
+            get;
+            private set;
+        }
+
+        public SPTool CurrentTool
+        {
+            get
+            {
+                return this._CurrentTool;
+            }
+            set
+            {
+                switch (value)
+                {
+                    case SPTool.Pan:
+                    case SPTool.Zoom:
+                        throw new NotImplementedException();
+                    default:
+                        if (this._CurrentTool == SPTool.Pointer || this._CurrentTool == SPTool.Pan || this._CurrentTool == SPTool.Zoom)
+                        {
+                            this._PreviousTool = this._CurrentTool;
+                        }
+                        this._CurrentTool = value;
+                        break;
+                }
+            }
+        }
+
+        public void FinishEdge(SPConnector connector)
+        {
+            // this may throw ArgumentException, let SPConnector.OnPointerClick handle that
+            CurrentEdge.AddConnector(connector);
+            CurrentEdge.Finalise();
+
+            // Don't keep track of edges of now
+            CurrentEdge = null;
+        }
 
         public void OnPointerClick(PointerEventData eventData)
         {
-            UIToolboxComponentEntry chosenComponentEntry = GameObject.FindObjectOfType<UIToolboxContainer>().CurrentPanel.CurrentlySelectedEntry as UIToolboxComponentEntry;
-            if (chosenComponentEntry == null)
+            Debug.Log("Canvas| " + this.CurrentTool.ToString() + " | " + eventData.button.ToString() + " click");
+            if (CurrentTool == SPTool.Pointer)
             {
-                return;
+                //
             }
+            else if (CurrentTool == SPTool.Pan)
+            {
+                throw new NotImplementedException();
+            }
+            else if (CurrentTool == SPTool.Zoom)
+            {
+                throw new NotImplementedException();
+            }
+            else if (CurrentTool == SPTool.NewComponent)
+            {
+                UIToolboxComponentEntry chosenComponentEntry = GameObject.FindObjectOfType<UIToolboxContainer>().CurrentPanel.CurrentlySelectedEntry as UIToolboxComponentEntry;
+                Assert.IsNotNull(chosenComponentEntry);
 
-            if (eventData.button == PointerEventData.InputButton.Left)
-            {
-                Debug.Log("Canvas| Left click");
-                GameObject prefab = Resources.Load(chosenComponentEntry.Prefab) as GameObject;
-                Assert.IsNotNull(prefab);
-                GameObject newElem = GameObject.Instantiate(
-                    prefab,
-                    new Vector3(
-                        eventData.pointerCurrentRaycast.worldPosition.x,
-                        eventData.pointerCurrentRaycast.worldPosition.y),
-                    Quaternion.identity,
-                    foreground.transform);
-                Assert.IsNotNull(newElem);
-                newElem.tag = "SPElement";
+                if (eventData.button == PointerEventData.InputButton.Left)
+                {
+                    GameObject prefab = Resources.Load(chosenComponentEntry.Prefab) as GameObject;
+                    Assert.IsNotNull(prefab);
+                    GameObject newElem = GameObject.Instantiate(
+                        prefab,
+                        new Vector3(
+                            eventData.pointerCurrentRaycast.worldPosition.x,
+                            eventData.pointerCurrentRaycast.worldPosition.y),
+                        Quaternion.identity,
+                        Foreground.transform);
+                    Assert.IsNotNull(newElem);
+                    newElem.tag = "SPElement";
 
-                // will this memory leak?
-                Components.Add(newElem);
+                    // will this memory leak?
+                    Components.Add(newElem);
+                }
+                else if (eventData.button == PointerEventData.InputButton.Right)
+                {
+                    //
+                }
             }
-            else if (eventData.button == PointerEventData.InputButton.Right)
+            else if (CurrentTool == SPTool.DrawEdge)
             {
-                Debug.Log("Canvas| Right click");
+                //
             }
+        }
+
+        public void RestorePreviousTool()
+        {
+            this.CurrentTool = this._PreviousTool;
+        }
+
+        public void StartEdge(SPConnector connector)
+        {
+            CurrentEdge = Instantiate(SPEdgePrefab, Foreground.transform);
+            Assert.IsNotNull(CurrentEdge);
+            CurrentEdge.AddConnector(connector);
         }
 
         // Use this for initialization
         private void Awake()
         {
+            Assert.IsNotNull(Foreground);
             Components = new List<GameObject>();
+            _CurrentTool = SPTool.Pointer;
+            _PreviousTool = SPTool.Pointer;
+            CurrentEdge = null;
         }
 
         private void Start()
         {
-            foreground = GameObject.Find("Foreground");
-            Assert.IsNotNull(foreground);
+            //Foreground = GameObject.Find("Foreground"); // Linked in Unity inspector
         }
 
         // Update is called once per frame

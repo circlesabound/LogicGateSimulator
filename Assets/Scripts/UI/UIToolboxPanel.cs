@@ -169,7 +169,16 @@ namespace Assets.Scripts.UI
         public void ToggleSelectedEntry(UIToolboxEntry entrySelection)
         {
             Assert.IsTrue(this.Entries.Contains(entrySelection));
-            this.CurrentlySelectedEntry = (this.CurrentlySelectedEntry == entrySelection) ? null : entrySelection;
+            if (this.CurrentlySelectedEntry == entrySelection)
+            {
+                this.CurrentlySelectedEntry = null;
+                GameObject.FindObjectOfType<SPCanvas>().RestorePreviousTool();
+            }
+            else
+            {
+                this.CurrentlySelectedEntry = entrySelection;
+                GameObject.FindObjectOfType<SPCanvas>().CurrentTool = SPTool.NewComponent;
+            }
             foreach (var component in this.Entries)
             {
                 component.gameObject.GetComponent<Image>().sprite = (component == this.CurrentlySelectedEntry) ? component.ActiveSprite : component.InactiveSprite;

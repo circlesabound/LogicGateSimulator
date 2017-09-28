@@ -4,7 +4,7 @@ namespace Assets.Scripts.ScratchPad
 {
     public class SPInConnector : SPConnector
     {
-        protected override SPConnectorType ConnectorType
+        internal override SPConnectorType ConnectorType
         {
             get
             {

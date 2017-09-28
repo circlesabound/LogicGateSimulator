@@ -1,4 +1,4 @@
-﻿using System;
+﻿using Assets.Scripts.ScratchPad;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using UnityEngine;
@@ -22,6 +22,14 @@ namespace Assets.Scripts.UI
             {
                 // Sanity check
                 Assert.IsTrue(this.Panels.Contains(value));
+
+                // Reset current tool if necessary
+                SPCanvas canvas = GameObject.FindObjectOfType<SPCanvas>();
+                Assert.IsNotNull(canvas);
+                if (canvas.CurrentTool == SPTool.NewComponent)
+                {
+                    canvas.RestorePreviousTool();
+                }
 
                 // Hide all panels
                 foreach (var p in this.Panels) p.Hide();
