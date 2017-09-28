@@ -1,4 +1,6 @@
-﻿namespace Assets.Scripts.UI
+﻿using Assets.Scripts.ScratchPad;
+
+namespace Assets.Scripts.UI
 {
     /// <summary>
     /// An entry for a logic component in a toolbox panel
@@ -7,7 +9,7 @@
     {
         public const string NAME_PREFIX = "UIToolboxComponentEntry_";
 
-        public UILogicComponent LogicComponentPrefab;
+        public string Prefab;
 
         public string SimpleName
         {

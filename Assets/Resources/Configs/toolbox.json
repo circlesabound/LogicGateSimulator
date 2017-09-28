@@ -7,27 +7,27 @@
             "components": [
                 {
                     "component_name": "AND gate",
-                    "prefab": "Prefabs/UIAndGate",
+                    "prefab": "Prefabs/SPAndGate",
                     "sprite_selected": "Sprites/TestSquareTextureRed",
-                    "sprite_unselected": "Sprites/TestSquareTexture"
+                    "sprite_unselected": "Sprites/and"
                 },
                 {
                     "component_name": "OR gate",
-                    "prefab": "Prefabs/UIOrGate",
+                    "prefab": "Prefabs/SPOrGate",
                     "sprite_selected": "Sprites/TestSquareTextureRed",
-                    "sprite_unselected": "Sprites/TestSquareTexture"
+                    "sprite_unselected": "Sprites/or"
                 },
                 {
                     "component_name": "NOT gate",
-                    "prefab": "Prefabs/UINotGate",
+                    "prefab": "Prefabs/SPNotGate",
                     "sprite_selected": "Sprites/TestSquareTextureRed",
-                    "sprite_unselected": "Sprites/TestSquareTexture"
+                    "sprite_unselected": "Sprites/not"
                 },
                 {
                     "component_name": "XOR gate",
-                    "prefab": "Prefabs/UIXorGate",
+                    "prefab": "Prefabs/SPXorGate",
                     "sprite_selected": "Sprites/TestSquareTextureRed",
-                    "sprite_unselected": "Sprites/TestSquareTexture"
+                    "sprite_unselected": "Sprites/xor"
                 }
             ]
         },
@@ -38,21 +38,21 @@
             "components": [
                 {
                     "component_name": "TRUE constant",
-                    "prefab": "Prefabs/UITrueConst",
+                    "prefab": "Prefabs/SPTrueConst",
                     "sprite_selected": "Sprites/TestSquareTextureRed",
-                    "sprite_unselected": "Sprites/TestSquareTexture"
+                    "sprite_unselected": "Sprites/true"
                 },
                 {
                     "component_name": "FALSE constant",
-                    "prefab": "Prefabs/UIFalseConst",
+                    "prefab": "Prefabs/SPFalseConst",
                     "sprite_selected": "Sprites/TestSquareTextureRed",
-                    "sprite_unselected": "Sprites/TestSquareTexture"
+                    "sprite_unselected": "Sprites/false"
                 },
                 {
                     "component_name": "Output",
-                    "prefab": "Prefabs/UIOutput",
+                    "prefab": "Prefabs/SPOutput",
                     "sprite_selected": "Sprites/TestSquareTextureRed",
-                    "sprite_unselected": "Sprites/TestSquareTexture"
+                    "sprite_unselected": "Sprites/out"
                 }
             ]
         }

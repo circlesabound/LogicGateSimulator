@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Assets.Scripts.ScratchPad;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.UI;
@@ -106,7 +107,7 @@ namespace Assets.Scripts.UI
             foreach (var componentEntryConfig in subPanelConfig.components)
             {
                 // Load component prefab
-                UILogicComponent componentPrefab = Resources.Load<UILogicComponent>(componentEntryConfig.prefab);
+                SPLogicComponent componentPrefab = Resources.Load<SPLogicComponent>(componentEntryConfig.prefab);
                 Assert.IsNotNull(componentPrefab);
 
                 // Load sprites
@@ -123,7 +124,7 @@ namespace Assets.Scripts.UI
                 // Set up component entry
                 newComponentEntry.SimpleName = componentEntryConfig.component_name;
                 newComponentEntry.SetSprites(activeSprite, inactiveSprite);
-                newComponentEntry.LogicComponentPrefab = componentPrefab;
+                newComponentEntry.Prefab = componentEntryConfig.prefab;
             }
 
             // Finalise panel
