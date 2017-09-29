@@ -68,8 +68,8 @@ namespace Assets.Scripts.ScratchPad
                 LineRenderer.SetPosition(1, InConnector.gameObject.transform.position);
 
                 // register edge with connector endpoints
-                InConnector.ConnectedEdges.Add(this);
                 OutConnector.ConnectedEdges.Add(this);
+                InConnector.ConnectedEdges.Add(this);
                 SPLogicComponent outConnectorComponent = OutConnector.ParentComponent;
                 SPLogicComponent inConnectorComponent = InConnector.ParentComponent;
                 Assert.IsNotNull(outConnectorComponent);
@@ -81,6 +81,9 @@ namespace Assets.Scripts.ScratchPad
                 Canvas.Circuit.AddComponent(BackendConnection);
                 Canvas.Circuit.Connect(
                     outConnectorComponent.LogicComponent, OutConnector.ConnectorId,
+                    BackendConnection, 0);
+                Canvas.Circuit.Connect(
+                    BackendConnection, 0,
                     inConnectorComponent.LogicComponent, InConnector.ConnectorId);
 
                 Finalised = true;
@@ -108,6 +111,20 @@ namespace Assets.Scripts.ScratchPad
             {
                 var mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
                 LineRenderer.SetPosition(1, mousePos);
+            }
+            else
+            {
+                Assert.IsNotNull(BackendConnection);
+                if (BackendConnection.Outputs[0] == true)
+                {
+                    LineRenderer.startColor = Color.green;
+                    LineRenderer.endColor = Color.green;
+                }
+                else
+                {
+                    LineRenderer.startColor = Color.red;
+                    LineRenderer.endColor = Color.red;
+                }
             }
         }
 

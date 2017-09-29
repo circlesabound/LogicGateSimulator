@@ -35,6 +35,7 @@ namespace Assets.Scripts.ScratchPad
             Assert.IsNotNull(OutConnector);
             OutConnector.gameObject.name = "OutConnector";
             OutConnector.transform.localPosition = new Vector3(1, 0, -1);
+            OutConnector.Register(this, SPConnectorType.SPOutConnector, 0);
         }
 
         // Use this for initialisation

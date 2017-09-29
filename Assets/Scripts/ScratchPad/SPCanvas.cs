@@ -81,7 +81,7 @@ namespace Assets.Scripts.ScratchPad
             Debug.Log("Canvas| " + this.CurrentTool.ToString() + " | " + eventData.button.ToString() + " click");
             if (CurrentTool == SPTool.Pointer)
             {
-                // do nothing
+                Circuit.Simulate(); //TODO move this somewhere else
             }
             else if (CurrentTool == SPTool.Pan)
             {

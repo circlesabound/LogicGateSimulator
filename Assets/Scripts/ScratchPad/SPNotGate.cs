@@ -23,11 +23,13 @@ namespace Assets.Scripts.ScratchPad
             Assert.IsNotNull(InConnector);
             InConnector.gameObject.name = "InConnector";
             InConnector.transform.localPosition = new Vector3(-1, 0, -1);
+            InConnector.Register(this, SPConnectorType.SPInConnector, 0);
 
             OutConnector = Instantiate(SPOutConnectorPrefab, gameObject.transform, false);
             Assert.IsNotNull(OutConnector);
             OutConnector.gameObject.name = "OutConnector";
             OutConnector.transform.localPosition = new Vector3(1, 0, -1);
+            OutConnector.Register(this, SPConnectorType.SPOutConnector, 0);
         }
 
         // Use this for initialisation
