@@ -78,9 +78,8 @@ namespace Assets.Scripts.ScratchPad
         {
             if (!Finalised && InConnector != null && OutConnector != null && AnchorConnector != null)
             {
-                // finalise line position
-                LineRenderer.SetPosition(0, OutConnector.gameObject.transform.position);
-                LineRenderer.SetPosition(1, InConnector.gameObject.transform.position);
+                // update line position
+                UpdatePosition();
 
                 // register edge with connector endpoints
                 OutConnector.ConnectedEdge = this;
@@ -114,6 +113,14 @@ namespace Assets.Scripts.ScratchPad
             Debug.Log("Edge| " + Canvas.CurrentTool.ToString() + " | " + eventData.button.ToString());
         }
 
+        public void UpdatePosition()
+        {
+            Assert.IsNotNull(InConnector);
+            Assert.IsNotNull(OutConnector);
+            LineRenderer.SetPosition(0, OutConnector.gameObject.transform.position);
+            LineRenderer.SetPosition(1, InConnector.gameObject.transform.position);
+        }
+
         protected void Awake()
         {
             Finalised = false;
@@ -124,8 +131,7 @@ namespace Assets.Scripts.ScratchPad
         {
             if (!Finalised)
             {
-                var mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-                LineRenderer.SetPosition(1, mousePos);
+                LineRenderer.SetPosition(1, Util.Util.MouseWorldCoordinates);
             }
             else
             {

@@ -1,4 +1,4 @@
-﻿using System;
+﻿using Assets.Scripts.Util;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -35,17 +35,25 @@ namespace Assets.Scripts.ScratchPad
 
         public void OnBeginDrag(PointerEventData eventData)
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
         }
 
         public void OnDrag(PointerEventData eventData)
         {
-            throw new NotImplementedException();
+            if (Canvas.CurrentTool == SPTool.Pointer)
+            {
+                this.gameObject.transform.position = Util.Util.MouseWorldCoordinates;
+                Enumerable
+                    .Concat(InConnectors, OutConnectors)
+                    .Select(c => c.ConnectedEdge)
+                    .Where(e => e != null)
+                    .ForEach(e => e.UpdatePosition());
+            }
         }
 
         public void OnEndDrag(PointerEventData eventData)
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
         }
 
         public void OnPointerClick(PointerEventData eventData)
