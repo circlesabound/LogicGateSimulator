@@ -120,7 +120,13 @@ namespace Assets.Scripts.ScratchPad
             }
             else if (CurrentTool == SPTool.DrawEdge)
             {
-                //
+                if (eventData.button == PointerEventData.InputButton.Right)
+                {
+                    // Cancel drawing edge
+                    Assert.IsNotNull(CurrentEdge);
+                    CurrentEdge.Delete();
+                    RestorePreviousTool();
+                }
             }
         }
 

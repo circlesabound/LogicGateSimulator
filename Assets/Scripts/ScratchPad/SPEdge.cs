@@ -94,6 +94,23 @@ namespace Assets.Scripts.ScratchPad
             }
         }
 
+        public void Delete()
+        {
+            if (Finalised)
+            {
+                // Update canvas and backend
+                Canvas.Circuit.RemoveComponent(BackendConnection);
+                Canvas.Edges.Remove(this.gameObject);
+
+                // Unregister edge with connector endpoints
+                if (OutConnector != null) OutConnector.ConnectedEdges.Remove(this);
+                if (InConnector != null) InConnector.ConnectedEdges.Remove(this);
+            }
+
+            // Destroy GameObject
+            Destroy(this.gameObject);
+        }
+
         public void OnPointerClick(PointerEventData eventData)
         {
             Debug.Log("Edge| " + Canvas.CurrentTool.ToString() + " | " + eventData.button.ToString());

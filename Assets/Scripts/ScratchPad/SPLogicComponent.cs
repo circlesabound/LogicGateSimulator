@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.EventSystems;
+using Assets.Scripts.ExtensionMethods;
 
 namespace Assets.Scripts.ScratchPad
 {
@@ -51,20 +53,43 @@ namespace Assets.Scripts.ScratchPad
         {
         }
 
+        public void Delete()
+        {
+            Canvas.Components.Remove(this.gameObject);
+            Canvas.Circuit.RemoveComponent(this.LogicComponent);
+            Destroy(this.gameObject);
+        }
+
         public void OnPointerClick(PointerEventData eventData)
         {
+            Debug.Log(this.GetType().Name + "| " + Canvas.CurrentTool.ToString() + " | " + eventData.button.ToString() + " click");
             if (eventData.button == PointerEventData.InputButton.Left)
             {
-                Debug.Log("Element| Left click");
-
-                // start drawing a line for connection?
+                //
             }
             else if (eventData.button == PointerEventData.InputButton.Right)
             {
-                Debug.Log("Element| Right click");
+                switch (Canvas.CurrentTool)
+                {
+                    case SPTool.Pointer:
+                        // Delete any incoming/outgoing edges
+                        var edgeList = Enumerable
+                            .Concat(InConnectors, OutConnectors)
+                            .SelectMany(c => c.ConnectedEdges)
+                            .ToList();
+                        for (int i = 0; i < edgeList.Count; ++i)
+                        {
+                            edgeList[i].Delete();
+                        }
 
-                // open the right click menu here --> some youtube link
-                // this https://unity3d.com/learn/tutorials/modules/intermediate/live-training-archive/panels-panes-windows
+                        // Delete myself
+                        Delete();
+                        break;
+
+                    default:
+                        // do nothing
+                        break;
+                }
             }
         }
 
