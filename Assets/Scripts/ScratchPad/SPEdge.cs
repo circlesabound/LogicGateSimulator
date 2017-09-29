@@ -8,10 +8,9 @@ namespace Assets.Scripts.ScratchPad
     public class SPEdge : MonoBehaviour, IPointerClickHandler
     {
         private SPConnector AnchorConnector;
+        private Connection BackendConnection;
         private SPCanvas Canvas;
         private bool Finalised;
-        private Connection BackendConnection;
-
         private LineRenderer LineRenderer;
 
         public SPInConnector InConnector
@@ -36,8 +35,7 @@ namespace Assets.Scripts.ScratchPad
 
             if (connector.ConnectorType == SPConnectorType.SPInConnector)
             {
-                // InConnectors should only have one incoming edge
-                if (InConnector == null && connector.ConnectedEdges.Count == 0)
+                if (InConnector == null && connector.ConnectedEdge == null)
                 {
                     InConnector = (SPInConnector)connector;
                 }
@@ -48,7 +46,7 @@ namespace Assets.Scripts.ScratchPad
             }
             else if (connector.ConnectorType == SPConnectorType.SPOutConnector)
             {
-                if (OutConnector == null)
+                if (OutConnector == null && connector.ConnectedEdge == null)
                 {
                     OutConnector = (SPOutConnector)connector;
                 }
@@ -57,6 +55,23 @@ namespace Assets.Scripts.ScratchPad
                     throw new ArgumentException();
                 }
             }
+        }
+
+        public void Delete()
+        {
+            if (Finalised)
+            {
+                // Update canvas and backend
+                Canvas.Circuit.RemoveComponent(BackendConnection);
+                Canvas.Edges.Remove(this.gameObject);
+
+                // Unregister edge with connector endpoints
+                if (OutConnector != null) OutConnector.ConnectedEdge = null;
+                if (InConnector != null) InConnector.ConnectedEdge = null;
+            }
+
+            // Destroy GameObject
+            Destroy(this.gameObject);
         }
 
         public void Finalise()
@@ -68,8 +83,8 @@ namespace Assets.Scripts.ScratchPad
                 LineRenderer.SetPosition(1, InConnector.gameObject.transform.position);
 
                 // register edge with connector endpoints
-                OutConnector.ConnectedEdges.Add(this);
-                InConnector.ConnectedEdges.Add(this);
+                OutConnector.ConnectedEdge = this;
+                InConnector.ConnectedEdge = this;
                 SPLogicComponent outConnectorComponent = OutConnector.ParentComponent;
                 SPLogicComponent inConnectorComponent = InConnector.ParentComponent;
                 Assert.IsNotNull(outConnectorComponent);
@@ -92,23 +107,6 @@ namespace Assets.Scripts.ScratchPad
             {
                 throw new InvalidOperationException();
             }
-        }
-
-        public void Delete()
-        {
-            if (Finalised)
-            {
-                // Update canvas and backend
-                Canvas.Circuit.RemoveComponent(BackendConnection);
-                Canvas.Edges.Remove(this.gameObject);
-
-                // Unregister edge with connector endpoints
-                if (OutConnector != null) OutConnector.ConnectedEdges.Remove(this);
-                if (InConnector != null) InConnector.ConnectedEdges.Remove(this);
-            }
-
-            // Destroy GameObject
-            Destroy(this.gameObject);
         }
 
         public void OnPointerClick(PointerEventData eventData)

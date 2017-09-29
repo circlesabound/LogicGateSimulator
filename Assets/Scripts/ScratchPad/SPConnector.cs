@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.EventSystems;
@@ -14,12 +13,23 @@ namespace Assets.Scripts.ScratchPad
 
     public abstract class SPConnector : MonoBehaviour, IPointerClickHandler
     {
+        private SPEdge _ConnectedEdge;
         private SPCanvas Canvas;
 
-        public List<SPEdge> ConnectedEdges
+        public SPEdge ConnectedEdge
         {
-            get;
-            private set;
+            get
+            {
+                return _ConnectedEdge;
+            }
+            set
+            {
+                if ((_ConnectedEdge == null) == (value == null))
+                {
+                    throw new InvalidOperationException();
+                }
+                _ConnectedEdge = value;
+            }
         }
 
         public int ConnectorId
@@ -48,9 +58,12 @@ namespace Assets.Scripts.ScratchPad
             {
                 if (Canvas.CurrentTool == SPTool.Pointer)
                 {
-                    // We're starting a new edge
-                    Canvas.StartEdge(this);
-                    Canvas.CurrentTool = SPTool.DrawEdge;
+                    if (this.ConnectedEdge == null)
+                    {
+                        // We're starting a new edge
+                        Canvas.StartEdge(this);
+                        Canvas.CurrentTool = SPTool.DrawEdge;
+                    }
                 }
                 else if (Canvas.CurrentTool == SPTool.DrawEdge)
                 {
@@ -80,7 +93,6 @@ namespace Assets.Scripts.ScratchPad
 
         private void Awake()
         {
-            ConnectedEdges = new List<SPEdge>();
         }
 
         private void Start()
