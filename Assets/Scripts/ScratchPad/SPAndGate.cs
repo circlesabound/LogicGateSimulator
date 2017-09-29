@@ -16,7 +16,7 @@ namespace Assets.Scripts.ScratchPad
         // Use this for initialisation
         protected override void Start()
         {
-            //TODO: attach a backend representation to this object
+            LogicComponent = new AndGate();
         }
 
         // Update is called once per frame

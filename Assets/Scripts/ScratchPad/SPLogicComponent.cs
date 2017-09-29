@@ -14,8 +14,7 @@ namespace Assets.Scripts.ScratchPad
         public SPInConnector SPInConnectorPrefab;
         public SPOutConnector SPOutConnectorPrefab;
 
-        //TODO: add a reference to the backend representation as an instance member
-        protected object LogicComponent;
+        protected LogicComponent LogicComponent;
 
         protected SPLogicComponent()
         {
