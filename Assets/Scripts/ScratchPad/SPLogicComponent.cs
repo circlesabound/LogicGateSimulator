@@ -14,7 +14,12 @@ namespace Assets.Scripts.ScratchPad
         public SPInConnector SPInConnectorPrefab;
         public SPOutConnector SPOutConnectorPrefab;
 
-        protected LogicComponent LogicComponent;
+        protected List<SPConnector> InConnectors;
+        protected List<SPConnector> OutConnectors;
+
+        public LogicComponent LogicComponent;
+
+        protected SPCanvas Canvas;
 
         protected SPLogicComponent()
         {
@@ -29,12 +34,16 @@ namespace Assets.Scripts.ScratchPad
             Assert.IsNotNull(SPInConnectorPrefab);
             Assert.IsNotNull(SPOutConnectorPrefab);
             Assert.raiseExceptions = false;
+
+            InConnectors = new List<SPConnector>();
+            OutConnectors = new List<SPConnector>();
         }
 
         // Use this for initialisation
         protected virtual void Start()
         {
-            //TODO: attach a backend representation to this object
+            Canvas = FindObjectOfType<SPCanvas>();
+            Assert.IsNotNull(Canvas);
         }
 
         // Update is called once per frame

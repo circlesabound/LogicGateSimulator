@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.EventSystems;
@@ -14,6 +15,24 @@ namespace Assets.Scripts.ScratchPad
     public abstract class SPConnector : MonoBehaviour, IPointerClickHandler
     {
         private SPCanvas Canvas;
+
+        public List<SPEdge> ConnectedEdges
+        {
+            get;
+            private set;
+        }
+
+        public int ConnectorId
+        {
+            get;
+            private set;
+        }
+
+        public SPLogicComponent ParentComponent
+        {
+            get;
+            private set;
+        }
 
         internal abstract SPConnectorType ConnectorType
         {
@@ -47,6 +66,21 @@ namespace Assets.Scripts.ScratchPad
                     }
                 }
             }
+        }
+
+        internal void Register(SPLogicComponent parentComponent, SPConnectorType connectorType, int connectorId)
+        {
+            // Sanity checks
+            Assert.IsNull(ParentComponent);
+            Assert.AreEqual(connectorType, ConnectorType);
+
+            ParentComponent = parentComponent;
+            ConnectorId = connectorId;
+        }
+
+        private void Awake()
+        {
+            ConnectedEdges = new List<SPEdge>();
         }
 
         private void Start()

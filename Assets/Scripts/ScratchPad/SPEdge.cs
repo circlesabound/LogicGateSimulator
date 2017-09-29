@@ -10,6 +10,7 @@ namespace Assets.Scripts.ScratchPad
         private SPConnector AnchorConnector;
         private SPCanvas Canvas;
         private bool Finalised;
+        private Connection BackendConnection;
 
         private LineRenderer LineRenderer;
 
@@ -35,7 +36,8 @@ namespace Assets.Scripts.ScratchPad
 
             if (connector.ConnectorType == SPConnectorType.SPInConnector)
             {
-                if (InConnector == null)
+                // InConnectors should only have one incoming edge
+                if (InConnector == null && connector.ConnectedEdges.Count == 0)
                 {
                     InConnector = (SPInConnector)connector;
                 }
@@ -61,10 +63,27 @@ namespace Assets.Scripts.ScratchPad
         {
             if (!Finalised && InConnector != null && OutConnector != null && AnchorConnector != null)
             {
-                Finalised = true;
+                // finalise line position
                 LineRenderer.SetPosition(0, OutConnector.gameObject.transform.position);
                 LineRenderer.SetPosition(1, InConnector.gameObject.transform.position);
-                //TODO interface with backend
+
+                // register edge with connector endpoints
+                InConnector.ConnectedEdges.Add(this);
+                OutConnector.ConnectedEdges.Add(this);
+                SPLogicComponent outConnectorComponent = OutConnector.ParentComponent;
+                SPLogicComponent inConnectorComponent = InConnector.ParentComponent;
+                Assert.IsNotNull(outConnectorComponent);
+                Assert.IsNotNull(inConnectorComponent);
+
+                // update canvas and backend
+                Canvas.Edges.Add(this.gameObject);
+                BackendConnection = new Connection();
+                Canvas.Circuit.AddComponent(BackendConnection);
+                Canvas.Circuit.Connect(
+                    outConnectorComponent.LogicComponent, OutConnector.ConnectorId,
+                    inConnectorComponent.LogicComponent, InConnector.ConnectorId);
+
+                Finalised = true;
             }
             else
             {
@@ -100,6 +119,7 @@ namespace Assets.Scripts.ScratchPad
             Assert.IsNotNull(LineRenderer);
             Assert.IsNotNull(AnchorConnector);
             LineRenderer.SetPosition(0, AnchorConnector.gameObject.transform.position);
+            LineRenderer.SetPosition(1, AnchorConnector.gameObject.transform.position);
         }
     }
 }

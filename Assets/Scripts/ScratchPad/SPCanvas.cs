@@ -24,10 +24,17 @@ namespace Assets.Scripts.ScratchPad
     public class SPCanvas : MonoBehaviour, IPointerClickHandler
     {
         public List<GameObject> Components;
+        public List<GameObject> Edges;
         public GameObject Foreground;
         public SPEdge SPEdgePrefab;
         private SPTool _CurrentTool;
         private SPTool _PreviousTool;
+
+        public Circuit Circuit
+        {
+            get;
+            private set;
+        }
 
         public SPEdge CurrentEdge
         {
@@ -63,9 +70,9 @@ namespace Assets.Scripts.ScratchPad
         {
             // this may throw ArgumentException, let SPConnector.OnPointerClick handle that
             CurrentEdge.AddConnector(connector);
-            CurrentEdge.Finalise();
 
-            // Don't keep track of edges of now
+            CurrentEdge.Finalise();
+            this.Edges.Add(CurrentEdge.gameObject);
             CurrentEdge = null;
         }
 
@@ -134,9 +141,11 @@ namespace Assets.Scripts.ScratchPad
         {
             Assert.IsNotNull(Foreground);
             Components = new List<GameObject>();
+            Edges = new List<GameObject>();
             _CurrentTool = SPTool.Pointer;
             _PreviousTool = SPTool.Pointer;
             CurrentEdge = null;
+            Circuit = new Circuit();
         }
 
         private void Start()

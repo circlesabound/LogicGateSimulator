@@ -9,7 +9,17 @@ namespace Assets.Scripts.ScratchPad
 {
     public class SPOutput : SPLogicComponent
     {
-        protected SPConnector InConnector;
+        protected SPConnector InConnector
+        {
+            get
+            {
+                return InConnectors[0];
+            }
+            set
+            {
+                InConnectors[0] = value;
+            }
+        }
 
         protected SPOutput() : base()
         {
@@ -17,6 +27,9 @@ namespace Assets.Scripts.ScratchPad
 
         protected override void Awake()
         {
+            base.Awake();
+            InConnectors.AddRange(Enumerable.Repeat<SPConnector>(null, 1));
+
             // Set up connector
             InConnector = Instantiate(SPInConnectorPrefab, gameObject.transform, false);
             Assert.IsNotNull(InConnector);
@@ -27,6 +40,7 @@ namespace Assets.Scripts.ScratchPad
         // Use this for initialisation
         protected override void Start()
         {
+            base.Start();
             //TODO: attach a backend representation to this object
         }
 

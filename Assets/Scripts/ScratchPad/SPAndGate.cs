@@ -16,7 +16,9 @@ namespace Assets.Scripts.ScratchPad
         // Use this for initialisation
         protected override void Start()
         {
+            base.Start();
             LogicComponent = new AndGate();
+            Canvas.Circuit.AddComponent(LogicComponent);
         }
 
         // Update is called once per frame
