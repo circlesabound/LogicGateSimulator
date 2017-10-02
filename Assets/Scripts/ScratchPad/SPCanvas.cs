@@ -26,6 +26,7 @@ namespace Assets.Scripts.ScratchPad
         public List<GameObject> Components;
         public List<GameObject> Edges;
         public GameObject Foreground;
+        public bool Running;
         public SPEdge SPEdgePrefab;
         private SPTool _CurrentTool;
         private SPTool _PreviousTool;
@@ -81,7 +82,7 @@ namespace Assets.Scripts.ScratchPad
             Debug.Log("Canvas| " + this.CurrentTool.ToString() + " | " + eventData.button.ToString() + " click");
             if (CurrentTool == SPTool.Pointer)
             {
-                Circuit.Simulate(); //TODO move this somewhere else
+                // do nothing
             }
             else if (CurrentTool == SPTool.Pan)
             {
@@ -152,16 +153,17 @@ namespace Assets.Scripts.ScratchPad
             _PreviousTool = SPTool.Pointer;
             CurrentEdge = null;
             Circuit = new Circuit();
+            Running = false;
         }
 
         private void Start()
         {
-            //Foreground = GameObject.Find("Foreground"); // Linked in Unity inspector
         }
 
         // Update is called once per frame
         private void Update()
         {
+            if (Running) Circuit.Simulate();
         }
     }
 }
