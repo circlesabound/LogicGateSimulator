@@ -1,4 +1,5 @@
 ﻿using Assets.Scripts.UI;
+using Assets.Scripts.Util;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -164,6 +165,8 @@ namespace Assets.Scripts.ScratchPad
         private void Update()
         {
             if (Running) Circuit.Simulate();
+            var scrollDelta = Input.GetAxis("Mouse ScrollWheel");
+            CameraAdjust.Zoom(scrollDelta);
         }
     }
 }

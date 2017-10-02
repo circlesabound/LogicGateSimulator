@@ -17,7 +17,7 @@ namespace Assets.Scripts.Util
         {
             get
             {
-                var pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                var pos = UnityEngine.Camera.main.ScreenToWorldPoint(Input.mousePosition);
                 return new Vector2(pos.x, pos.y);
             }
         }
