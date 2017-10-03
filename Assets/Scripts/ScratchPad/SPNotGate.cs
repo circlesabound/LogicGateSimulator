@@ -1,19 +1,36 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.Assertions;
 
 namespace Assets.Scripts.ScratchPad
 {
     public class SPNotGate : SPLogicComponent
     {
-        protected SPConnector InConnector;
-        protected SPConnector OutConnector;
-
         protected SPNotGate() : base()
         {
+        }
+
+        protected SPConnector InConnector
+        {
+            get
+            {
+                return InConnectors[0];
+            }
+            set
+            {
+                InConnectors[0] = value;
+            }
+        }
+
+        protected SPConnector OutConnector
+        {
+            get
+            {
+                return OutConnectors[0];
+            }
+            set
+            {
+                OutConnectors[0] = value;
+            }
         }
 
         protected override void Awake()
