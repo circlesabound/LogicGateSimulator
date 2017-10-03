@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Linq;
+using UnityEngine;
 using UnityEngine.Assertions;
 
 namespace Assets.Scripts.ScratchPad
@@ -35,6 +36,10 @@ namespace Assets.Scripts.ScratchPad
 
         protected override void Awake()
         {
+            base.Awake();
+            InConnectors.AddRange(Enumerable.Repeat<SPConnector>(null, 1));
+            OutConnectors.AddRange(Enumerable.Repeat<SPConnector>(null, 1));
+
             // Set up connectors
             InConnector = Instantiate(SPInConnectorPrefab, gameObject.transform, false);
             Assert.IsNotNull(InConnector);
