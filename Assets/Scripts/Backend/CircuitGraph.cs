@@ -54,7 +54,7 @@ public class CircuitGraph
     private void RemoveCircuitEdge(CircuitEdge edge)
     {
         if (edge == null) return;
-        if (!edge.OutNode.HasEdgeOut(edge) || edge.InNode.HasEdgeOut(edge))
+        if (!edge.OutNode.HasEdgeOut(edge) || !edge.InNode.HasEdgeIn(edge))
         {
             throw new ArgumentException("Given edge does not exist");
         }
@@ -65,8 +65,12 @@ public class CircuitGraph
     public void RemoveNode(LogicComponent component)
     {
         var node = Nodes[component];
-        node.AdjListIn.ForEach(this.RemoveCircuitEdge);
-        node.AdjListOut.ForEach(this.RemoveCircuitEdge);
+        for (int i = 0; i < node.AdjListIn.Count; i++) {
+            this.RemoveCircuitEdge(node.AdjListIn[i]);
+        }
+        for (int i = 0; i < node.AdjListOut.Count; i++) {
+            this.RemoveCircuitEdge(node.AdjListOut[i]);
+        }
         Nodes.Remove(component);
     }
 }

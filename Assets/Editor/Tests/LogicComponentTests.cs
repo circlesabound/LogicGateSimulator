@@ -73,6 +73,18 @@ namespace Assets.Editor.Tests
         }
 
         [Test]
+        public void Test_OutputSimulate()
+        {
+            Output output = new Output();
+
+            Assert.AreEqual(output.Value, false);
+            output.Simulate(new bool[] { true });
+            Assert.AreEqual(output.Value, true);
+            output.Simulate(new bool[] { false });
+            Assert.AreEqual(output.Value, false);
+        }
+
+        [Test]
         public void Test_InputOutputSanityCheck()
         {
             LogicComponent xor_gate = new XorGate();

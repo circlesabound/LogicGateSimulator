@@ -120,5 +120,21 @@ namespace Assets.Editor.Tests
                 Assert.AreEqual(or_gate.Outputs, new List<bool>() { true });
             }
         }
+
+        [Test]
+        public void Test_RemoveComponent()
+        {
+            Circuit circuit = new Circuit();
+            var and_gate = new AndGate();
+            var true_const = new TrueConst();
+
+            circuit.AddComponent(and_gate);
+            circuit.AddComponent(true_const);
+            circuit.Connect(true_const, 0, and_gate, 0);
+            circuit.Connect(and_gate, 0, and_gate, 1);
+
+            circuit.RemoveComponent(and_gate);
+            circuit.RemoveComponent(true_const);
+        }
     }
 }
