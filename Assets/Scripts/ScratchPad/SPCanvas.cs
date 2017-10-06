@@ -1,4 +1,5 @@
-﻿using Assets.Scripts.UI;
+﻿using Assets.Scripts.Savefile;
+using Assets.Scripts.UI;
 using Assets.Scripts.Util;
 using System;
 using System.Collections.Generic;
@@ -31,6 +32,8 @@ namespace Assets.Scripts.ScratchPad
         public SPEdge SPEdgePrefab;
         private SPTool _CurrentTool;
         private SPTool _PreviousTool;
+
+        private LogicComponentFactory LogicComponentFactory;
 
         public Circuit Circuit
         {
@@ -100,17 +103,14 @@ namespace Assets.Scripts.ScratchPad
 
                 if (eventData.button == PointerEventData.InputButton.Left)
                 {
-                    GameObject prefab = Resources.Load(chosenComponentEntry.Prefab) as GameObject;
-                    Assert.IsNotNull(prefab);
-                    GameObject newElem = GameObject.Instantiate(
-                        prefab,
-                        new Vector3(
-                            eventData.pointerCurrentRaycast.worldPosition.x,
-                            eventData.pointerCurrentRaycast.worldPosition.y),
-                        Quaternion.identity,
-                        Foreground.transform);
-                    Assert.IsNotNull(newElem);
-                    newElem.tag = "SPElement";
+                    // Build component configuration
+                    LogicComponentConfig componentConfig = new LogicComponentConfig(
+                        chosenComponentEntry.ComponentClassname,
+                        eventData.pointerCurrentRaycast.worldPosition.x,
+                        eventData.pointerCurrentRaycast.worldPosition.y);
+
+                    // Pass config to factory
+                    var newElem = LogicComponentFactory.MakeFromConfig(componentConfig);
 
                     // will this memory leak?
                     Components.Add(newElem);
@@ -159,6 +159,7 @@ namespace Assets.Scripts.ScratchPad
 
         private void Start()
         {
+            this.LogicComponentFactory = new LogicComponentFactory(this.Foreground);
         }
 
         // Update is called once per frame

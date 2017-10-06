@@ -6,7 +6,7 @@ namespace Assets.Scripts.UI
     public class UIToolboxComponentConfig
     {
         public string component_name;
-        public string prefab;
+        public string component_classname;
         public string sprite_selected;
         public string sprite_unselected;
     }

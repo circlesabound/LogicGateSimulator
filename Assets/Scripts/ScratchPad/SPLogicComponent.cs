@@ -8,7 +8,7 @@ using UnityEngine.EventSystems;
 namespace Assets.Scripts.ScratchPad
 {
     /// <summary>
-    /// An abstract class that all UI representations of a logic component must extend.
+    /// An abstract class that all scratchpad representations of a logic component must extend.
     /// </summary>
     public abstract class SPLogicComponent : MonoBehaviour, IPointerClickHandler, IBeginDragHandler, IDragHandler, IEndDragHandler
     {
