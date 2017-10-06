@@ -33,9 +33,10 @@ namespace Assets.Scripts.Savefile
                 // Class names in the config file are not fully qualified, we need to append the namespace
                 string fullyQualified = SPLogicComponentNamespace + "." + componentListElement.classname;
                 Type componentType = Type.GetType(fullyQualified, throwOnError: true);
+                Assert.IsTrue(typeof(SPLogicComponent).IsAssignableFrom(componentType));
 
                 // Pre-load the related prefab
-                GameObject prefab = Resources.Load(componentListElement.prefab) as GameObject;
+                GameObject prefab = Resources.Load<GameObject>(componentListElement.prefab);
                 Assert.IsNotNull(prefab);
 
                 Assert.IsFalse(this.PrefabMapping.ContainsKey(componentType));
@@ -54,6 +55,7 @@ namespace Assets.Scripts.Savefile
 
             // Load the prefab given the typename
             Type t = Type.GetType(fullyQualified, throwOnError: true);
+            Assert.IsTrue(typeof(SPLogicComponent).IsAssignableFrom(t));
             Assert.IsTrue(this.PrefabMapping.ContainsKey(t));
             GameObject prefab = this.PrefabMapping[t];
 
