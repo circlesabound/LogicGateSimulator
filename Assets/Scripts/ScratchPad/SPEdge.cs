@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Assets.Scripts.Savefile;
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.EventSystems;
@@ -63,7 +65,7 @@ namespace Assets.Scripts.ScratchPad
             {
                 // Update canvas and backend
                 Canvas.Circuit.RemoveComponent(BackendConnection);
-                Canvas.Edges.Remove(this.gameObject);
+                Canvas.Edges.Remove(this);
 
                 // Unregister edge with connector endpoints
                 if (OutConnector != null) OutConnector.ConnectedEdge = null;
@@ -90,7 +92,7 @@ namespace Assets.Scripts.ScratchPad
                 Assert.IsNotNull(inConnectorComponent);
 
                 // update canvas and backend
-                Canvas.Edges.Add(this.gameObject);
+                Canvas.Edges.Add(this);
                 BackendConnection = new Connection();
                 Canvas.Circuit.AddComponent(BackendConnection);
                 Canvas.Circuit.Connect(
@@ -158,6 +160,19 @@ namespace Assets.Scripts.ScratchPad
             Assert.IsNotNull(AnchorConnector);
             LineRenderer.SetPosition(0, AnchorConnector.gameObject.transform.position);
             LineRenderer.SetPosition(1, AnchorConnector.gameObject.transform.position);
+        }
+
+        /// <summary>
+        /// Generate a config for this edge.
+        /// </summary>
+        /// <param name="componentGuidMap">A one-to-one mapping from SPLogicComponents to GUIDs.</param>
+        /// <returns>An EdgeConfig which can be used to rebuild this edge.</returns>
+        /// <returns></returns>
+        public EdgeConfig GenerateConfig(IReadOnlyDictionary<SPLogicComponent, Guid> componentGuidMap)
+        {
+            return new EdgeConfig(
+                componentGuidMap[InConnector.ParentComponent],
+                componentGuidMap[OutConnector.ParentComponent]);
         }
     }
 }

@@ -45,13 +45,13 @@ namespace Assets.Scripts.Savefile
             Debug.Log("Populated component prefab map with " + PrefabMapping.Count.ToString() + " pairs.");
         }
 
-        public GameObject MakeFromConfig(LogicComponentConfig config)
+        public SPLogicComponent MakeFromConfig(LogicComponentConfig config)
         {
             // Sanity check
             Assert.IsNotNull(config);
 
             // Build typename from classname
-            string fullyQualified = SPLogicComponentNamespace + "." + config.Classname;
+            string fullyQualified = SPLogicComponentNamespace + "." + config.classname;
 
             // Load the prefab given the typename
             Type t = Type.GetType(fullyQualified, throwOnError: true);
@@ -62,13 +62,13 @@ namespace Assets.Scripts.Savefile
             // Instantiate the component onto the foreground
             GameObject newGameObject = GameObject.Instantiate(
                 prefab,
-                new Vector3(config.Position[0], config.Position[1]),
+                new Vector3(config.position[0], config.position[1]),
                 Quaternion.identity,
                 this.CanvasForeground.transform);
             Assert.IsNotNull(newGameObject);
             newGameObject.tag = "SPElement";
 
-            return newGameObject;
+            return (SPLogicComponent)(newGameObject.GetComponent(t));
         }
 
         #region Component list serialisation data types

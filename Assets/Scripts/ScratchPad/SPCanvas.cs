@@ -25,8 +25,8 @@ namespace Assets.Scripts.ScratchPad
 
     public class SPCanvas : MonoBehaviour, IPointerClickHandler
     {
-        public List<GameObject> Components;
-        public List<GameObject> Edges;
+        public List<SPLogicComponent> Components;
+        public List<SPEdge> Edges;
         public GameObject Foreground;
         public bool Running;
         public SPEdge SPEdgePrefab;
@@ -77,7 +77,7 @@ namespace Assets.Scripts.ScratchPad
             CurrentEdge.AddConnector(connector);
 
             CurrentEdge.Finalise();
-            this.Edges.Add(CurrentEdge.gameObject);
+            this.Edges.Add(CurrentEdge);
             CurrentEdge = null;
         }
 
@@ -110,10 +110,10 @@ namespace Assets.Scripts.ScratchPad
                         eventData.pointerCurrentRaycast.worldPosition.y);
 
                     // Pass config to factory
-                    var newElem = LogicComponentFactory.MakeFromConfig(componentConfig);
+                    var newComponent = LogicComponentFactory.MakeFromConfig(componentConfig);
 
                     // will this memory leak?
-                    Components.Add(newElem);
+                    Components.Add(newComponent);
                 }
                 else if (eventData.button == PointerEventData.InputButton.Right)
                 {
@@ -148,8 +148,8 @@ namespace Assets.Scripts.ScratchPad
         private void Awake()
         {
             Assert.IsNotNull(Foreground);
-            Components = new List<GameObject>();
-            Edges = new List<GameObject>();
+            Components = new List<SPLogicComponent>();
+            Edges = new List<SPEdge>();
             _CurrentTool = SPTool.Pointer;
             _PreviousTool = SPTool.Pointer;
             CurrentEdge = null;

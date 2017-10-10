@@ -1,4 +1,6 @@
-﻿using Assets.Scripts.Util;
+﻿using Assets.Scripts.Savefile;
+using Assets.Scripts.Util;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -28,7 +30,7 @@ namespace Assets.Scripts.ScratchPad
 
         public void Delete()
         {
-            Canvas.Components.Remove(this.gameObject);
+            Canvas.Components.Remove(this);
             Canvas.Circuit.RemoveComponent(this.LogicComponent);
             Destroy(this.gameObject);
         }
@@ -112,6 +114,29 @@ namespace Assets.Scripts.ScratchPad
         // Update is called once per frame
         protected virtual void Update()
         {
+        }
+
+        /// <summary>
+        /// Generate a config for this logic component.
+        /// </summary>
+        /// <returns>A config which can rebuild this logic component.</returns>
+        public LogicComponentConfig GenerateConfig()
+        {
+            return GenerateConfig(Guid.NewGuid());
+        }
+
+        /// <summary>
+        /// Generate a config for this logic component using a given GUID.
+        /// </summary>
+        /// <param name="guid">The GUID that the config will use for self-identification.</param>
+        /// <returns>A config which can rebuild this logic component.</returns>
+        public LogicComponentConfig GenerateConfig(Guid guid)
+        {
+            return new LogicComponentConfig(
+                guid,
+                this.GetType(),
+                gameObject.transform.position.x,
+                gameObject.transform.position.y);
         }
     }
 }
