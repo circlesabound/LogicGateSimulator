@@ -77,7 +77,7 @@ namespace Assets.Scripts.UI.MessageBoxes
             {
                 mb.Message.SetActive(false);
             }
-            if (config.is_modal)
+            if (!config.is_modal)
             {
                 mb.BackgroundShade.SetActive(false);
             }
