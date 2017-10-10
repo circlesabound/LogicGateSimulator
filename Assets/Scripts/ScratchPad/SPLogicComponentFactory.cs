@@ -6,7 +6,7 @@ using UnityEngine.Assertions;
 
 namespace Assets.Scripts.Savefile
 {
-    public class LogicComponentFactory
+    public class SPLogicComponentFactory
     {
         private const string COMPONENT_LIST_RESOURCE = "Configs/components";
 
@@ -16,7 +16,7 @@ namespace Assets.Scripts.Savefile
 
         private Dictionary<Type, GameObject> PrefabMapping;
 
-        public LogicComponentFactory(GameObject canvasForeground)
+        public SPLogicComponentFactory(GameObject canvasForeground)
         {
             Assert.IsNotNull(canvasForeground);
             this.CanvasForeground = canvasForeground;

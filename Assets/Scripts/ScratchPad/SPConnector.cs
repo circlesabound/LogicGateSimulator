@@ -75,7 +75,8 @@ namespace Assets.Scripts.ScratchPad
                     }
                     catch (ArgumentException)
                     {
-                        //TODO something
+                        // tried to connect to the wrong connector type
+                        // don't need to do anything here
                     }
                 }
             }

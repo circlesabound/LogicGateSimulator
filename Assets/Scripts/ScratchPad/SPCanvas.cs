@@ -33,7 +33,7 @@ namespace Assets.Scripts.ScratchPad
         private SPTool _CurrentTool;
         private SPTool _PreviousTool;
 
-        private LogicComponentFactory LogicComponentFactory;
+        private SPLogicComponentFactory LogicComponentFactory;
 
         public Circuit Circuit
         {
@@ -159,7 +159,7 @@ namespace Assets.Scripts.ScratchPad
 
         private void Start()
         {
-            this.LogicComponentFactory = new LogicComponentFactory(this.Foreground);
+            this.LogicComponentFactory = new SPLogicComponentFactory(this.Foreground);
         }
 
         // Update is called once per frame

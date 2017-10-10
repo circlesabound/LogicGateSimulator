@@ -1,0 +1,22 @@
+{
+    "title": "File exists",
+    "message": "That file already exists, do you want to overwrite it?",
+    "text_input": {
+        "hidden": true
+    },
+    "buttons": {
+        "positive_button": {
+            "label": "Yes",
+            "onclick": "OnConfirmButtonClick"
+        },
+        "neutral_button": {
+            "hidden": true
+        },
+        "negative_button": {
+            "label": "No",
+            "onclick": "OnCancelButtonClick"
+        }
+    },
+    "is_modal": true,
+    "classname": "ConfirmMessageBox"
+}

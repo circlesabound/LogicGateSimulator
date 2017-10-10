@@ -1,0 +1,21 @@
+{
+    "title": "Error",
+    "message": "Error saving circuit",
+    "text_input": {
+        "hidden": true
+    },
+    "buttons": {
+        "positive_button": {
+            "hidden": true
+        },
+        "neutral_button": {
+            "label": "Okay",
+            "onclick": "OnOkayButtonClick"
+        },
+        "negative_button": {
+            "hidden": true
+        }
+    },
+    "is_modal": true,
+    "classname": "SimpleMessageBox"
+}

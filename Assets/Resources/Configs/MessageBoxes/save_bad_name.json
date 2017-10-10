@@ -1,0 +1,21 @@
+{
+    "title": "Invalid name",
+    "message": "That is an invalid name, please try again.",
+    "text_input": {
+        "hidden": true
+    },
+    "buttons": {
+        "positive_button": {
+            "hidden": true
+        },
+        "neutral_button": {
+            "label": "Okay",
+            "onclick": "OnOkayButtonClick"
+        },
+        "negative_button": {
+            "hidden": true
+        }
+    },
+    "is_modal": true,
+    "classname": "SimpleMessageBox"
+}
