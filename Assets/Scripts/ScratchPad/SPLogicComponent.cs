@@ -140,5 +140,10 @@ namespace Assets.Scripts.ScratchPad
                 gameObject.transform.position.x,
                 gameObject.transform.position.y);
         }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode() ^ gameObject.transform.position.GetHashCode();
+        }
     }
 }

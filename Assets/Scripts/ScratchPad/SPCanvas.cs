@@ -2,6 +2,7 @@
 using Assets.Scripts.UI;
 using Assets.Scripts.Util;
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Assertions;
@@ -33,6 +34,16 @@ namespace Assets.Scripts.ScratchPad
         public SPEdge SPEdgePrefab;
         private SPTool _CurrentTool;
         private SPTool _PreviousTool;
+
+        public int ComponentsHash
+        {
+            get
+            {
+                return Components.Aggregate(0, (h, c) => h ^ c.GetHashCode());
+            }
+        }
+
+        public int LastSavedComponentsHash;
 
         private SPLogicComponentFactory LogicComponentFactory;
 

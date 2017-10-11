@@ -14,11 +14,14 @@ namespace Assets.Scripts.UI
     {
         private const string OPEN_CIRCUIT_MESSAGE_BOX_CONFIG_RESOURCE = "Configs/MessageBoxes/open";
         private const string OPEN_ERROR_MESSAGE_BOX_CONFIG_RESOURCE = "Configs/MessageBoxes/open_error";
+        private const string UNSAVED_CHANGES_MESSAGE_BOX_CONFIG_RESOURCE = "Configs/MessageBoxes/unsaved_changes";
 
         private SPCanvas Canvas;
         private UIMessageBoxFactory MessageBoxFactory;
         private MessageBoxConfig OpenCircuitMessageBoxConfig;
         private MessageBoxConfig OpenErrorMessageBoxConfig;
+        private MessageBoxConfig UnsavedChangesMessageBoxConfig;
+        private Stack<string> SelectedFilenameStash; // to save filename data across confirmation message boxes
 
         /// <summary>
         /// Linked to button click in Unity inspector
@@ -39,7 +42,22 @@ namespace Assets.Scripts.UI
         {
             if (triggerData.ButtonPressed == UIMessageBox.MessageBoxButtonType.Positive)
             {
-                // TODO here would be a good place to prompt unsaved changes
+                // Check for unsaved changes
+                if (triggerData.Sender.GetType() == typeof(OpenCircuitMessageBox) &&
+                    Canvas.LastSavedComponentsHash != Canvas.ComponentsHash)
+                {
+                    // Ask for confirmation of unsaved changes, save filename
+                    SelectedFilenameStash.Push(triggerData.TextInput);
+                    MessageBoxFactory.MakeFromConfig(UnsavedChangesMessageBoxConfig, this);
+                    Destroy(triggerData.Sender.gameObject);
+                    return;
+                }
+                else if (triggerData.Sender.GetType() == typeof(ConfirmMessageBox))
+                {
+                    // Confirmation received, pop filename
+                    triggerData.TextInput = SelectedFilenameStash.Pop();
+                    SelectedFilenameStash.Clear();
+                }
 
                 string fullpath = Directories.SAVEFILE_FOLDER_FULL_PATH + "/" + triggerData.TextInput + ".json";
 
@@ -90,6 +108,9 @@ namespace Assets.Scripts.UI
                 {
                     edge.UpdatePosition();
                 }
+
+                // Loading a circuit means the circuit that was just loaded is "saved"
+                Canvas.LastSavedComponentsHash = Canvas.ComponentsHash;
             }
 
             Canvas.Frozen = false;
@@ -99,6 +120,7 @@ namespace Assets.Scripts.UI
         private void Awake()
         {
             MessageBoxFactory = new UIMessageBoxFactory();
+            SelectedFilenameStash = new Stack<string>();
 
             // Load the message box config for open circuit
             TextAsset configAsset = Resources.Load<TextAsset>(OPEN_CIRCUIT_MESSAGE_BOX_CONFIG_RESOURCE);
@@ -109,6 +131,11 @@ namespace Assets.Scripts.UI
             configAsset = Resources.Load<TextAsset>(OPEN_ERROR_MESSAGE_BOX_CONFIG_RESOURCE);
             Assert.IsNotNull(configAsset);
             OpenErrorMessageBoxConfig = JsonUtility.FromJson<MessageBoxConfig>(configAsset.text);
+
+            // Load the message box config for unsaved changes
+            configAsset = Resources.Load<TextAsset>(UNSAVED_CHANGES_MESSAGE_BOX_CONFIG_RESOURCE);
+            Assert.IsNotNull(configAsset);
+            UnsavedChangesMessageBoxConfig = JsonUtility.FromJson<MessageBoxConfig>(configAsset.text);
         }
 
         private void Start()

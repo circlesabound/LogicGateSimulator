@@ -1,0 +1,25 @@
+{
+    "title": "Unsaved changes",
+    "message": "You will lose your unsaved changes, are you sure?",
+    "scroll_view": {
+        "hidden": true
+    },
+    "text_input": {
+        "hidden": true
+    },
+    "buttons": {
+        "positive_button": {
+            "label": "Yes",
+            "onclick": "OnConfirmButtonClick"
+        },
+        "neutral_button": {
+            "hidden": true
+        },
+        "negative_button": {
+            "label": "No",
+            "onclick": "OnCancelButtonClick"
+        }
+    },
+    "is_modal": true,
+    "classname": "ConfirmMessageBox"
+}

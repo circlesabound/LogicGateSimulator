@@ -70,6 +70,7 @@ namespace Assets.Scripts.UI
                 {
                     Directory.CreateDirectory(Directories.SAVEFILE_FOLDER_FULL_PATH);
                     File.WriteAllText(fullpath, saveData);
+                    Canvas.LastSavedComponentsHash = Canvas.ComponentsHash;
                 }
                 catch (Exception e)
                 {
