@@ -1,11 +1,7 @@
 ﻿using Assets.Scripts.Savefile;
 using Assets.Scripts.Util;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.UI;
@@ -14,11 +10,53 @@ namespace Assets.Scripts.UI.MessageBoxes
 {
     public class SaveCircuitMessageBox : UIMessageBox
     {
-        public const string SAVE_OVERWRITE_MESSAGE_BOX_CONFIG_RESOURCE = "Configs/MessageBoxes/save_overwrite";
-        public const string SAVE_BAD_NAME_MESSAGE_BOX_CONFIG_RESOURCE = "Configs/MessageBoxes/save_bad_name";
-        private MessageBoxConfig SaveOverwriteMessageBoxConfig;
-        private MessageBoxConfig SaveBadNameMessageBoxConfig;
+        private const string SAVE_BAD_NAME_MESSAGE_BOX_CONFIG_RESOURCE = "Configs/MessageBoxes/bad_name";
+        private const string SAVE_OVERWRITE_MESSAGE_BOX_CONFIG_RESOURCE = "Configs/MessageBoxes/save_overwrite";
         private UIMessageBoxFactory MessageBoxFactory;
+        private MessageBoxConfig SaveBadNameMessageBoxConfig;
+        private MessageBoxConfig SaveOverwriteMessageBoxConfig;
+
+        public void OnCancelButtonClick()
+        {
+            // Run callback to close message box and unfreeze canvas
+            MessageBoxTriggerData triggerData = new MessageBoxTriggerData
+            {
+                ButtonPressed = MessageBoxButtonType.Negative,
+                Sender = this
+            };
+            TriggerTarget.Trigger(triggerData);
+        }
+
+        public void OnSaveButtonClick()
+        {
+            string filename = this.TextInput.FindChildGameObject("UIMessageBoxTextInputText").GetComponent<Text>().text;
+            string fullname = filename + ".json";
+            string fullpath = Directories.SAVEFILE_FOLDER_FULL_PATH + "/" + fullname;
+
+            // If file has invalid name, show error dialog
+            if (filename.IndexOfAny(Path.GetInvalidFileNameChars()) != -1 ||
+                String.IsNullOrWhiteSpace(filename))
+            {
+                MessageBoxFactory.MakeFromConfig(SaveBadNameMessageBoxConfig, this);
+                return;
+            }
+
+            // If file already exists, ask for overwrite confirmation
+            if (File.Exists(fullpath))
+            {
+                MessageBoxFactory.MakeFromConfig(SaveOverwriteMessageBoxConfig, this);
+                return;
+            }
+
+            // Run callback to save circuit, close message box, and unfreeze canvas
+            MessageBoxTriggerData triggerData = new MessageBoxTriggerData
+            {
+                ButtonPressed = MessageBoxButtonType.Positive,
+                Sender = this,
+                TextInput = filename
+            };
+            TriggerTarget.Trigger(triggerData);
+        }
 
         public override void Trigger(MessageBoxTriggerData triggerData)
         {
@@ -43,43 +81,6 @@ namespace Assets.Scripts.UI.MessageBoxes
                 }
                 Destroy(triggerData.Sender.gameObject);
             }
-        }
-
-        public void OnSaveButtonClick()
-        {
-            string filename = this.TextInput.FindChildGameObject("UIMessageBoxTextInputText").GetComponent<Text>().text;
-            string fullname = filename + ".json";
-            string fullpath = Directories.SAVEFILE_FOLDER_FULL_PATH + "/" + fullname;
-
-            // If file has invalid name, show error dialog
-            if (filename.IndexOfAny(Path.GetInvalidFileNameChars()) != -1 ||
-                String.IsNullOrWhiteSpace(filename))
-            {
-                MessageBoxFactory.MakeFromConfig(SaveBadNameMessageBoxConfig, this);
-                return;
-            }
-
-            // If file already exists, ask for overwrite confirmation
-            if (File.Exists(fullpath))
-            {
-                MessageBoxFactory.MakeFromConfig(SaveOverwriteMessageBoxConfig, this);
-                return;
-            }
-
-            // Run callback to save circuit, callback will clean up message box
-            MessageBoxTriggerData triggerData = new MessageBoxTriggerData
-            {
-                ButtonPressed = MessageBoxButtonType.Positive,
-                Sender = this,
-                TextInput = filename
-            };
-            TriggerTarget.Trigger(triggerData);
-        }
-
-        public void OnCancelButtonClick()
-        {
-            // Do nothing, close message box
-            Destroy(gameObject);
         }
 
         private void Awake()

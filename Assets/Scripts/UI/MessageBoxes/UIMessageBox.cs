@@ -62,6 +62,14 @@ namespace Assets.Scripts.UI.MessageBoxes
             }
         }
 
+        public GameObject ScrollView
+        {
+            get
+            {
+                return gameObject.FindChildGameObject("UIMessageBox/UIMessageBoxScrollViewContainer/UIMessageBoxScrollView/UIMessageBoxScrollViewMask/UIMessageBoxScrollViewContent");
+            }
+        }
+
         public GameObject TextInput
         {
             get

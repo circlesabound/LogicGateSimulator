@@ -1,6 +1,9 @@
 {
     "title": "File exists",
     "message": "That file already exists, do you want to overwrite it?",
+    "scroll_view": {
+        "hidden": true
+    },
     "text_input": {
         "hidden": true
     },

@@ -7,10 +7,40 @@ namespace Assets.Scripts.UI.MessageBoxes
     {
         public string title;
         public string message;
+        public MessageBoxScrollView scroll_view;
         public MessageBoxTextInputConfig text_input;
         public MessageBoxButtonContainer buttons;
         public bool is_modal;
         public string classname;
+
+        [Serializable]
+        public class MessageBoxScrollView
+        {
+            public bool hidden;
+            public string content_type;
+            public MessageBoxScrollViewStaticContent static_content;
+            public MessageBoxScrollViewDynamicContent dynamic_content;
+        }
+
+        [Serializable]
+        public class MessageBoxScrollViewStaticContent
+        {
+            public MessageBoxScrollViewItemConfig[] items;
+        }
+
+        [Serializable]
+        public class MessageBoxScrollViewDynamicContent
+        {
+            public MessageBoxScrollViewItemConfig item_blueprint;
+        }
+
+        [Serializable]
+        public class MessageBoxScrollViewItemConfig
+        {
+            public string label;
+            public string classname;
+            public string onclick;
+        }
 
         [Serializable]
         public class MessageBoxTextInputConfig

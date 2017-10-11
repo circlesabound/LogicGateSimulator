@@ -1,6 +1,9 @@
 {
     "title": "Save circuit",
     "message": "Enter a name to save this circuit as: ",
+    "scroll_view": {
+        "hidden": true
+    },
     "text_input": {
         "placeholder": "Circuit name"
     },

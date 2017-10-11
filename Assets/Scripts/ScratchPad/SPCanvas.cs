@@ -29,6 +29,7 @@ namespace Assets.Scripts.ScratchPad
         public List<SPEdge> Edges;
         public GameObject Foreground;
         public bool Running;
+        public bool Frozen;
         public SPEdge SPEdgePrefab;
         private SPTool _CurrentTool;
         private SPTool _PreviousTool;
@@ -155,6 +156,7 @@ namespace Assets.Scripts.ScratchPad
             CurrentEdge = null;
             Circuit = new Circuit();
             Running = false;
+            Frozen = false;
         }
 
         private void Start()
@@ -165,9 +167,12 @@ namespace Assets.Scripts.ScratchPad
         // Update is called once per frame
         private void Update()
         {
-            if (Running) Circuit.Simulate();
-            var scrollDelta = Input.GetAxis("Mouse ScrollWheel");
-            CameraAdjust.Zoom(scrollDelta);
+            if (!Frozen)
+            {
+                if (Running) Circuit.Simulate();
+                var scrollDelta = Input.GetAxis("Mouse ScrollWheel");
+                CameraAdjust.SimpleZoom(scrollDelta);
+            }
         }
     }
 }

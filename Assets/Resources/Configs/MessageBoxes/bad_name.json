@@ -1,6 +1,9 @@
 {
     "title": "Invalid name",
     "message": "That is an invalid name, please try again.",
+    "scroll_view": {
+        "hidden": true
+    },
     "text_input": {
         "hidden": true
     },

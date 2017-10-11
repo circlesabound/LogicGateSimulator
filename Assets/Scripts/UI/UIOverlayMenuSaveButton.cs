@@ -12,7 +12,7 @@ namespace Assets.Scripts.UI
 {
     public class UIOverlayMenuSaveButton : MonoBehaviour, IMessageBoxTriggerTarget
     {
-        public const string SAVE_MESSAGE_BOX_CONFIG_RESOURCE = "Configs/MessageBoxes/save";
+        private const string SAVE_MESSAGE_BOX_CONFIG_RESOURCE = "Configs/MessageBoxes/save";
         private const string SAVE_ERROR_MESSAGE_BOX_CONFIG_RESOURCE = "Configs/MessageBoxes/save_error";
 
         private SPCanvas Canvas;
@@ -25,56 +25,62 @@ namespace Assets.Scripts.UI
         /// </summary>
         public void OnButtonClick()
         {
+            Canvas.Frozen = true;
             MessageBoxFactory.MakeFromConfig(SaveCircuitMessageBoxConfig, this);
         }
 
         /// <summary>
-        /// Callback to be executed after succesful SaveCircuitMessageBox confirmation.
-        /// Saves the circuit as JSON.
+        /// Callback to be executed after SaveCircuitMessageBox.
+        /// Unfreezes the canvas and closes the message box.
+        /// Positive trigger saves the circuit as JSON.
         /// </summary>
-        /// <param name="triggerData"></param>
+        /// <param name="triggerData">Data to pass from the trigger source to the trigger target.</param>
         public void Trigger(MessageBoxTriggerData triggerData)
         {
-            // Bind a GUID for each component
-            Dictionary<SPLogicComponent, Guid> guidMap = Canvas.Components
-                .ToDictionary(c => c, c => Guid.NewGuid());
+            if (triggerData.ButtonPressed == UIMessageBox.MessageBoxButtonType.Positive)
+            {
+                // Bind a GUID for each component
+                Dictionary<SPLogicComponent, Guid> guidMap = Canvas.Components
+                    .ToDictionary(c => c, c => Guid.NewGuid());
 
-            // Generate configs for components
-            List<LogicComponentConfig> componentConfigs = guidMap
-                .Select(kvp => kvp.Key.GenerateConfig(kvp.Value))
-                .ToList();
+                // Generate configs for components
+                List<LogicComponentConfig> componentConfigs = guidMap
+                    .Select(kvp => kvp.Key.GenerateConfig(kvp.Value))
+                    .ToList();
 
-            // Generate configs for edges, mapping connected components using GUIDs
-            List<EdgeConfig> edgeConfigs = Canvas.Edges
-                .Select(e => e.GenerateConfig(guidMap))
-                .ToList();
+                // Generate configs for edges, mapping connected components using GUIDs
+                List<EdgeConfig> edgeConfigs = Canvas.Edges
+                    .Select(e => e.GenerateConfig(guidMap))
+                    .ToList();
 
-            // Build savefile
-            CircuitConfig spConfig = new CircuitConfig(componentConfigs, edgeConfigs);
+                // Build savefile
+                CircuitConfig spConfig = new CircuitConfig(componentConfigs, edgeConfigs);
 #if DEVELOPMENT_BUILD
-            string saveData = JsonUtility.ToJson(spConfig, prettyPrint: true);
+                string saveData = JsonUtility.ToJson(spConfig, prettyPrint: true);
 #else
             string saveData = JsonUtility.ToJson(spConfig, prettyPrint: false);
 #endif
 
-            // Build full file path
-            string filename = triggerData.TextInput + ".json";
-            string fullpath = Directories.SAVEFILE_FOLDER_FULL_PATH + "/" + filename;
+                // Build full file path
+                string filename = triggerData.TextInput + ".json";
+                string fullpath = Directories.SAVEFILE_FOLDER_FULL_PATH + "/" + filename;
 
-            // Write to file
-            Debug.Log("Saving to " + fullpath);
-            try
-            {
-                Directory.CreateDirectory(Directories.SAVEFILE_FOLDER_FULL_PATH);
-                File.WriteAllText(fullpath, saveData);
-            }
-            catch (Exception e)
-            {
-                // uh oh
-                Debug.LogException(e);
-                MessageBoxFactory.MakeFromConfig(SaveErrorMessageBoxConfig);
+                // Write to file
+                Debug.Log("Saving to " + fullpath);
+                try
+                {
+                    Directory.CreateDirectory(Directories.SAVEFILE_FOLDER_FULL_PATH);
+                    File.WriteAllText(fullpath, saveData);
+                }
+                catch (Exception e)
+                {
+                    // uh oh
+                    Debug.LogException(e);
+                    MessageBoxFactory.MakeFromConfig(SaveErrorMessageBoxConfig);
+                }
             }
 
+            Canvas.Frozen = false;
             Destroy(triggerData.Sender.gameObject);
         }
 

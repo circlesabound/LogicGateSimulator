@@ -1,6 +1,6 @@
 {
-    "title": "Error",
-    "message": "Error saving circuit",
+    "title": "No such file",
+    "message": "No saved circuit was found matching that name, please try again.",
     "scroll_view": {
         "hidden": true
     },
@@ -19,6 +19,6 @@
             "hidden": true
         }
     },
-    "is_modal": false,
+    "is_modal": true,
     "classname": "SimpleMessageBox"
 }
