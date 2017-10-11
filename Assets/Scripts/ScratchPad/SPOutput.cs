@@ -33,19 +33,9 @@ namespace Assets.Scripts.ScratchPad
             InConnector.gameObject.name = "InConnector";
             InConnector.transform.localPosition = new Vector3(-1, 0, -1);
             InConnector.Register(this, SPConnectorType.SPInConnector, 0);
-        }
 
-        // Use this for initialisation
-        protected override void Start()
-        {
-            base.Start();
             LogicComponent = new Output();
             Canvas.Circuit.AddComponent(LogicComponent);
-        }
-
-        // Update is called once per frame
-        protected override void Update()
-        {
         }
     }
 }

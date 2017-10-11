@@ -28,8 +28,8 @@ namespace Assets.Scripts.ScratchPad
         public List<SPLogicComponent> Components;
         public List<SPEdge> Edges;
         public GameObject Foreground;
-        public bool Running;
         public bool Frozen;
+        public bool Running;
         public SPEdge SPEdgePrefab;
         private SPTool _CurrentTool;
         private SPTool _PreviousTool;
@@ -78,7 +78,6 @@ namespace Assets.Scripts.ScratchPad
             CurrentEdge.AddConnector(connector);
 
             CurrentEdge.Finalise();
-            this.Edges.Add(CurrentEdge);
             CurrentEdge = null;
         }
 

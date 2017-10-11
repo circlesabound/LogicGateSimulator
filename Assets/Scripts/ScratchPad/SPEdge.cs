@@ -33,6 +33,8 @@ namespace Assets.Scripts.ScratchPad
             if (AnchorConnector == null)
             {
                 AnchorConnector = connector;
+                LineRenderer.SetPosition(0, AnchorConnector.gameObject.transform.position);
+                LineRenderer.SetPosition(1, AnchorConnector.gameObject.transform.position);
             }
 
             if (connector.ConnectorType == SPConnectorType.SPInConnector)
@@ -126,6 +128,10 @@ namespace Assets.Scripts.ScratchPad
         protected void Awake()
         {
             Finalised = false;
+            LineRenderer = GetComponent<LineRenderer>();
+            Assert.IsNotNull(LineRenderer);
+            Canvas = FindObjectOfType<SPCanvas>();
+            Assert.IsNotNull(Canvas);
         }
 
         // Update is called once per frame
@@ -151,17 +157,6 @@ namespace Assets.Scripts.ScratchPad
             }
         }
 
-        private void Start()
-        {
-            Canvas = FindObjectOfType<SPCanvas>();
-            Assert.IsNotNull(Canvas);
-            LineRenderer = GetComponent<LineRenderer>();
-            Assert.IsNotNull(LineRenderer);
-            Assert.IsNotNull(AnchorConnector);
-            LineRenderer.SetPosition(0, AnchorConnector.gameObject.transform.position);
-            LineRenderer.SetPosition(1, AnchorConnector.gameObject.transform.position);
-        }
-
         /// <summary>
         /// Generate a config for this edge.
         /// </summary>
@@ -172,7 +167,9 @@ namespace Assets.Scripts.ScratchPad
         {
             return new EdgeConfig(
                 componentGuidMap[InConnector.ParentComponent],
-                componentGuidMap[OutConnector.ParentComponent]);
+                InConnector.ConnectorId,
+                componentGuidMap[OutConnector.ParentComponent],
+                OutConnector.ConnectorId);
         }
     }
 }

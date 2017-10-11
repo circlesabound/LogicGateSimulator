@@ -12,9 +12,8 @@ namespace Assets.Scripts.UI
 {
     public class UIOverlayMenuSaveButton : MonoBehaviour, IMessageBoxTriggerTarget
     {
-        private const string SAVE_MESSAGE_BOX_CONFIG_RESOURCE = "Configs/MessageBoxes/save";
+        private const string SAVE_CIRCUIT_MESSAGE_BOX_CONFIG_RESOURCE = "Configs/MessageBoxes/save";
         private const string SAVE_ERROR_MESSAGE_BOX_CONFIG_RESOURCE = "Configs/MessageBoxes/save_error";
-
         private SPCanvas Canvas;
         private UIMessageBoxFactory MessageBoxFactory;
         private MessageBoxConfig SaveCircuitMessageBoxConfig;
@@ -89,7 +88,7 @@ namespace Assets.Scripts.UI
             MessageBoxFactory = new UIMessageBoxFactory();
 
             // Load the message box config for save ciruit
-            TextAsset configAsset = Resources.Load<TextAsset>(SAVE_MESSAGE_BOX_CONFIG_RESOURCE);
+            TextAsset configAsset = Resources.Load<TextAsset>(SAVE_CIRCUIT_MESSAGE_BOX_CONFIG_RESOURCE);
             Assert.IsNotNull(configAsset);
             SaveCircuitMessageBoxConfig = JsonUtility.FromJson<MessageBoxConfig>(configAsset.text);
 
