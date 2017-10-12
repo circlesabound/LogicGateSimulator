@@ -56,7 +56,7 @@ namespace Assets.Scripts.ScratchPad
             //throw new NotImplementedException();
         }
 
-        public void OnPointerClick(PointerEventData eventData)
+        public virtual void OnPointerClick(PointerEventData eventData)
         {
             Debug.Log(this.GetType().Name + "| " + Canvas.CurrentTool.ToString() + " | " + eventData.button.ToString() + " click");
             if (eventData.button == PointerEventData.InputButton.Left)
