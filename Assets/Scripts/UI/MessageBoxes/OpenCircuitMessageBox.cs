@@ -90,10 +90,17 @@ namespace Assets.Scripts.UI.MessageBoxes
 
         public IEnumerable<string> EnumerateScrollViewItems()
         {
-            return Directory.EnumerateFiles(Directories.SAVEFILE_FOLDER_FULL_PATH)
-                .Where(fullpath => fullpath.EndsWith(".json"))
-                .Select(fullpath => Path.GetFileNameWithoutExtension(fullpath))
-                .OrderBy(name => name);
+            if (Directory.Exists(Directories.SAVEFILE_FOLDER_FULL_PATH))
+            {
+                return Directory.EnumerateFiles(Directories.SAVEFILE_FOLDER_FULL_PATH)
+                    .Where(fullpath => fullpath.EndsWith(".json"))
+                    .Select(fullpath => Path.GetFileNameWithoutExtension(fullpath))
+                    .OrderBy(name => name);
+            }
+            else
+            {
+                return Enumerable.Empty<string>();
+            }
         }
 
         private void Awake()
