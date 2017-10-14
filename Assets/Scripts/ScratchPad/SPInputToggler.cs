@@ -33,9 +33,8 @@ namespace Assets.Scripts.ScratchPad
         public override void OnPointerClick(PointerEventData eventData)
         {
             Debug.Log(this.GetType().Name + "| " + Canvas.CurrentTool.ToString() + " | " + eventData.button.ToString() + " click");
-            if (eventData.button == PointerEventData.InputButton.Left)
+            if (eventData.button == PointerEventData.InputButton.Left && !eventData.dragging)
             {
-                //
                 Debug.Log("toggling value");
                 InputComponent inputComponent = (InputComponent)LogicComponent;
                 inputComponent.FlipValue();
