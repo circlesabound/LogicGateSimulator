@@ -7,25 +7,25 @@
             "components": [
                 {
                     "component_name": "AND gate",
-                    "component_classname": "SPAndGate",
+                    "prefab": "Prefabs/SPAndGate",
                     "sprite_selected": "Sprites/TestSquareTextureRed",
                     "sprite_unselected": "Sprites/and"
                 },
                 {
                     "component_name": "OR gate",
-                    "component_classname": "SPOrGate",
+                    "prefab": "Prefabs/SPOrGate",
                     "sprite_selected": "Sprites/TestSquareTextureRed",
                     "sprite_unselected": "Sprites/or"
                 },
                 {
                     "component_name": "NOT gate",
-                    "component_classname": "SPNotGate",
+                    "prefab": "Prefabs/SPNotGate",
                     "sprite_selected": "Sprites/TestSquareTextureRed",
                     "sprite_unselected": "Sprites/not"
                 },
                 {
                     "component_name": "XOR gate",
-                    "component_classname": "SPXorGate",
+                    "prefab": "Prefabs/SPXorGate",
                     "sprite_selected": "Sprites/TestSquareTextureRed",
                     "sprite_unselected": "Sprites/xor"
                 }
@@ -38,19 +38,19 @@
             "components": [
                 {
                     "component_name": "TRUE constant",
-                    "component_classname": "SPTrueConst",
+                    "prefab": "Prefabs/SPTrueConst",
                     "sprite_selected": "Sprites/TestSquareTextureRed",
                     "sprite_unselected": "Sprites/true"
                 },
                 {
                     "component_name": "FALSE constant",
-                    "component_classname": "SPFalseConst",
+                    "prefab": "Prefabs/SPFalseConst",
                     "sprite_selected": "Sprites/TestSquareTextureRed",
                     "sprite_unselected": "Sprites/false"
                 },
                 {
                     "component_name": "Output",
-                    "component_classname": "SPOutput",
+                    "prefab": "Prefabs/SPOutput",
                     "sprite_selected": "Sprites/TestSquareTextureRed",
                     "sprite_unselected": "Sprites/out"
                 }

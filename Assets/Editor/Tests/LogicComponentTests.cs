@@ -24,6 +24,16 @@ namespace Assets.Editor.Tests
         }
 
         [Test]
+        public void Test_Splitter()
+        {
+            LogicComponent fanout = new Splitter();
+
+            // Check truth table:
+            Assert.AreEqual(fanout.Simulate(new [] { true }), new List<bool> { true, true });
+            Assert.AreEqual(fanout.Simulate(new [] { false }), new List<bool> { false, false });
+        }
+
+        [Test]
         public void Test_ConstantComponents()
         {
             LogicComponent true_constant = new TrueConst();
