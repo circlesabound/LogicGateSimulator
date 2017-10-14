@@ -27,6 +27,14 @@
         {
             "classname": "SPOutput",
             "prefab": "Prefabs/SPOutput"
+        },
+        {
+            "classname": "SPSplitterComponent",
+            "prefab": "Prefabs/SPSplitterComponent"
+        },
+        {
+            "classname": "SPInputToggler",
+            "prefab": "Prefabs/SPInputToggler"
         }
     ]
 }
