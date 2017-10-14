@@ -81,6 +81,7 @@ namespace Assets.Scripts.UI
                 var circuitConfig = JsonUtility.FromJson<CircuitConfig>(data);
                 var componentConfigs = circuitConfig.logic_components;
                 var edgeConfigs = circuitConfig.edges;
+                var togglerConfigs = circuitConfig.toggles;
 
                 // Clear the canvas
                 for (int i = Canvas.Components.Count - 1; i >= 0; --i)
@@ -95,6 +96,18 @@ namespace Assets.Scripts.UI
                     config => config.Guid,
                     config => logicComponentFactory.MakeFromConfig(config));
                 Canvas.Components.AddRange(guidMap.Values);
+
+                // Restore state for input togglers
+                foreach (var config in togglerConfigs)
+                {
+                    Guid guid = Guid.Parse(config.guid_string);
+                    SPInputToggler inputToggler = (SPInputToggler)guidMap[guid];
+                    while (((InputComponent)inputToggler.LogicComponent).value != config.value)
+                    {
+                        // this better not infinite loop
+                        inputToggler.ToggleValue();
+                    }
+                }
 
                 // Build edges using GUID map
                 foreach (var config in edgeConfigs)

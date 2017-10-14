@@ -52,8 +52,22 @@ namespace Assets.Scripts.UI
                     .Select(e => e.GenerateConfig(guidMap))
                     .ToList();
 
+                // Generate additional configs to save state of input togglers
+                List<InputToggleConfig> toggleConfigs = guidMap
+                    .Where(kvp => kvp.Key.GetType() == typeof(SPInputToggler))
+                    .Select(kvp => new InputToggleConfig
+                    {
+                        guid_string = kvp.Value.ToString(),
+                        value = ((InputComponent)kvp.Key.LogicComponent).value
+                    })
+                    .ToList();
+
                 // Build savefile
-                CircuitConfig spConfig = new CircuitConfig(componentConfigs, edgeConfigs);
+                CircuitConfig spConfig = new CircuitConfig(
+                    componentConfigs,
+                    edgeConfigs,
+                    toggleConfigs);
+
 #if DEVELOPMENT_BUILD
                 string saveData = JsonUtility.ToJson(spConfig, prettyPrint: true);
 #else
