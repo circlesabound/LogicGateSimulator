@@ -2,26 +2,37 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class Clock : LogicComponent{
-    private uint tick;
-    private uint period;
+public class Clock : LogicComponent
+{
+    private uint _period;
 
-    public Clock(uint period) : base(0, 1) {
-        this.Outputs[0] = false;
-        this.tick = 0;
-        if (period == 0)
+    public uint Tick { get; private set; }
+    public uint Period
+    {
+        get { return this._period; }
+        set
         {
-            throw new ArgumentOutOfRangeException("Period cannot be zero");
+            if (value == 0)
+            {
+                throw new ArgumentOutOfRangeException("Period cannot be zero");
+            }
+            this._period = value;
         }
-        this.period = period;
+    }
+
+    public Clock(uint period) : base(0, 1)
+    {
+        this.Outputs[0] = false;
+        this.Tick = 0;
+        this.Period = period;
     }
 
     protected override List<bool> CoreSimulate(IList<bool> inputs)
     {
-        this.tick++;
-        if (this.tick == period)
+        this.Tick++;
+        if (this.Tick >= Period)
         {
-            this.tick = 0;
+            this.Tick = 0;
             return new List<bool> { !this.Outputs[0] };
         }
         return new List<bool> { this.Outputs[0] };
