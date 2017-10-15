@@ -95,9 +95,6 @@ namespace Assets.Scripts.UI
                 {
                     edge.UpdatePosition();
                 }
-
-                // Loading a circuit means the circuit that was just loaded is "saved"
-                Canvas.LastSavedComponentsHash = Canvas.ComponentsHash;
             }
 
             Canvas.Frozen = false;
