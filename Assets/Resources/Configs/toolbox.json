@@ -2,75 +2,75 @@
     "panels": [
         {
             "panel_name": "Logic gates",
-            "sprite_selected": "Sprites/TestSquareTextureRed",
-            "sprite_unselected": "Sprites/TestSquareTexture",
+            "sprite_selected": "Sprites/gatesEntrySelected",
+            "sprite_unselected": "Sprites/gatesEntry",
             "components": [
                 {
                     "component_name": "AND gate",
                     "component_classname": "SPAndGate",
-                    "sprite_selected": "Sprites/TestSquareTextureRed",
+                    "sprite_selected": "Sprites/andSelection",
                     "sprite_unselected": "Sprites/and"
                 },
                 {
                     "component_name": "OR gate",
                     "component_classname": "SPOrGate",
-                    "sprite_selected": "Sprites/TestSquareTextureRed",
+                    "sprite_selected": "Sprites/orSelection",
                     "sprite_unselected": "Sprites/or"
                 },
                 {
                     "component_name": "NOT gate",
                     "component_classname": "SPNotGate",
-                    "sprite_selected": "Sprites/TestSquareTextureRed",
+                    "sprite_selected": "Sprites/notSelection",
                     "sprite_unselected": "Sprites/not"
                 },
                 {
                     "component_name": "XOR gate",
                     "component_classname": "SPXorGate",
-                    "sprite_selected": "Sprites/TestSquareTextureRed",
+                    "sprite_selected": "Sprites/xorSelection",
                     "sprite_unselected": "Sprites/xor"
                 }
             ]
         },
         {
             "panel_name": "Inputs/outputs",
-            "sprite_selected": "Sprites/TestSquareTextureRed",
-            "sprite_unselected": "Sprites/TestSquareTexture",
+            "sprite_selected": "Sprites/IOentrySelection",
+            "sprite_unselected": "Sprites/IOentry",
             "components": [
                 {
                     "component_name": "TRUE constant",
                     "component_classname": "SPTrueConst",
-                    "sprite_selected": "Sprites/TestSquareTextureRed",
+                    "sprite_selected": "Sprites/trueSelection",
                     "sprite_unselected": "Sprites/true"
                 },
                 {
                     "component_name": "FALSE constant",
                     "component_classname": "SPFalseConst",
-                    "sprite_selected": "Sprites/TestSquareTextureRed",
+                    "sprite_selected": "Sprites/falseSelection",
                     "sprite_unselected": "Sprites/false"
                 },
                 {
                     "component_name": "Output",
                     "component_classname": "SPOutput",
-                    "sprite_selected": "Sprites/TestSquareTextureRed",
+                    "sprite_selected": "Sprites/outSelection",
                     "sprite_unselected": "Sprites/out"
                 },
                 {
                     "component_name": "Input Toggler",
                     "component_classname": "SPInputToggler",
-                    "sprite_selected": "Sprites/TestSquareTextureRed",
-                    "sprite_unselected": "Sprites/out"
+                    "sprite_selected": "Sprites/switchOffSelection",
+                    "sprite_unselected": "Sprites/switchOff"
                 }
             ]
         },
         {
             "panel_name": "Others",
-            "sprite_selected": "Sprites/TestSquareTextureRed",
-            "sprite_unselected": "Sprites/TestSquareTexture",
+            "sprite_selected": "Sprites/otherEntrySelection",
+            "sprite_unselected": "Sprites/otherEntry",
             "components": [
                 {
                     "component_name": "Splitter",
                     "component_classname": "SPSplitterComponent",
-                    "sprite_selected": "Sprites/TestSquareTextureRed",
+                    "sprite_selected": "Sprites/splitterSelection",
                     "sprite_unselected": "Sprites/splitter"
                 }
             ]
