@@ -1,6 +1,8 @@
-﻿using Assets.Scripts.UI;
+﻿using Assets.Scripts.Savefile;
+using Assets.Scripts.UI;
 using Assets.Scripts.Util;
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Assertions;
@@ -24,13 +26,26 @@ namespace Assets.Scripts.ScratchPad
 
     public class SPCanvas : MonoBehaviour, IPointerClickHandler
     {
-        public List<GameObject> Components;
-        public List<GameObject> Edges;
+        public List<SPLogicComponent> Components;
+        public List<SPEdge> Edges;
         public GameObject Foreground;
+        public bool Frozen;
         public bool Running;
         public SPEdge SPEdgePrefab;
         private SPTool _CurrentTool;
         private SPTool _PreviousTool;
+
+        public int ComponentsHash
+        {
+            get
+            {
+                return Components.Aggregate(0, (h, c) => h ^ c.GetHashCode());
+            }
+        }
+
+        public int LastSavedComponentsHash;
+
+        private SPLogicComponentFactory LogicComponentFactory;
 
         public Circuit Circuit
         {
@@ -74,7 +89,6 @@ namespace Assets.Scripts.ScratchPad
             CurrentEdge.AddConnector(connector);
 
             CurrentEdge.Finalise();
-            this.Edges.Add(CurrentEdge.gameObject);
             CurrentEdge = null;
         }
 
@@ -100,20 +114,17 @@ namespace Assets.Scripts.ScratchPad
 
                 if (eventData.button == PointerEventData.InputButton.Left)
                 {
-                    GameObject prefab = Resources.Load(chosenComponentEntry.Prefab) as GameObject;
-                    Assert.IsNotNull(prefab);
-                    GameObject newElem = GameObject.Instantiate(
-                        prefab,
-                        new Vector3(
-                            eventData.pointerCurrentRaycast.worldPosition.x,
-                            eventData.pointerCurrentRaycast.worldPosition.y),
-                        Quaternion.identity,
-                        Foreground.transform);
-                    Assert.IsNotNull(newElem);
-                    newElem.tag = "SPElement";
+                    // Build component configuration
+                    LogicComponentConfig componentConfig = new LogicComponentConfig(
+                        chosenComponentEntry.ComponentClassname,
+                        eventData.pointerCurrentRaycast.worldPosition.x,
+                        eventData.pointerCurrentRaycast.worldPosition.y);
+
+                    // Pass config to factory
+                    var newComponent = LogicComponentFactory.MakeFromConfig(componentConfig);
 
                     // will this memory leak?
-                    Components.Add(newElem);
+                    Components.Add(newComponent);
                 }
                 else if (eventData.button == PointerEventData.InputButton.Right)
                 {
@@ -148,25 +159,30 @@ namespace Assets.Scripts.ScratchPad
         private void Awake()
         {
             Assert.IsNotNull(Foreground);
-            Components = new List<GameObject>();
-            Edges = new List<GameObject>();
+            Components = new List<SPLogicComponent>();
+            Edges = new List<SPEdge>();
             _CurrentTool = SPTool.Pointer;
             _PreviousTool = SPTool.Pointer;
             CurrentEdge = null;
             Circuit = new Circuit();
             Running = false;
+            Frozen = false;
         }
 
         private void Start()
         {
+            this.LogicComponentFactory = new SPLogicComponentFactory(this.Foreground);
         }
 
         // Update is called once per frame
         private void Update()
         {
-            if (Running) Circuit.Simulate();
-            var scrollDelta = Input.GetAxis("Mouse ScrollWheel");
-            CameraAdjust.Zoom(scrollDelta);
+            if (!Frozen)
+            {
+                if (Running) Circuit.Simulate();
+                var scrollDelta = Input.GetAxis("Mouse ScrollWheel");
+                CameraAdjust.SimpleZoom(scrollDelta);
+            }
         }
     }
 }

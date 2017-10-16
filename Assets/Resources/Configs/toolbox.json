@@ -1,79 +1,79 @@
 {
-  "panels": [
-    {
-      "panel_name": "Logic gates",
-      "sprite_selected": "Sprites/TestSquareTextureRed",
-      "sprite_unselected": "Sprites/TestSquareTexture",
-      "components": [
+    "panels": [
         {
-          "component_name": "AND gate",
-          "prefab": "Prefabs/SPAndGate",
-          "sprite_selected": "Sprites/TestSquareTextureRed",
-          "sprite_unselected": "Sprites/and"
+            "panel_name": "Logic gates",
+            "sprite_selected": "Sprites/TestSquareTextureRed",
+            "sprite_unselected": "Sprites/TestSquareTexture",
+            "components": [
+                {
+                    "component_name": "AND gate",
+                    "component_classname": "SPAndGate",
+                    "sprite_selected": "Sprites/TestSquareTextureRed",
+                    "sprite_unselected": "Sprites/and"
+                },
+                {
+                    "component_name": "OR gate",
+                    "component_classname": "SPOrGate",
+                    "sprite_selected": "Sprites/TestSquareTextureRed",
+                    "sprite_unselected": "Sprites/or"
+                },
+                {
+                    "component_name": "NOT gate",
+                    "component_classname": "SPNotGate",
+                    "sprite_selected": "Sprites/TestSquareTextureRed",
+                    "sprite_unselected": "Sprites/not"
+                },
+                {
+                    "component_name": "XOR gate",
+                    "component_classname": "SPXorGate",
+                    "sprite_selected": "Sprites/TestSquareTextureRed",
+                    "sprite_unselected": "Sprites/xor"
+                }
+            ]
         },
         {
-          "component_name": "OR gate",
-          "prefab": "Prefabs/SPOrGate",
-          "sprite_selected": "Sprites/TestSquareTextureRed",
-          "sprite_unselected": "Sprites/or"
+            "panel_name": "Inputs/outputs",
+            "sprite_selected": "Sprites/TestSquareTextureRed",
+            "sprite_unselected": "Sprites/TestSquareTexture",
+            "components": [
+                {
+                    "component_name": "TRUE constant",
+                    "component_classname": "SPTrueConst",
+                    "sprite_selected": "Sprites/TestSquareTextureRed",
+                    "sprite_unselected": "Sprites/true"
+                },
+                {
+                    "component_name": "FALSE constant",
+                    "component_classname": "SPFalseConst",
+                    "sprite_selected": "Sprites/TestSquareTextureRed",
+                    "sprite_unselected": "Sprites/false"
+                },
+                {
+                    "component_name": "Output",
+                    "component_classname": "SPOutput",
+                    "sprite_selected": "Sprites/TestSquareTextureRed",
+                    "sprite_unselected": "Sprites/out"
+                },
+                {
+                    "component_name": "Input Toggler",
+                    "component_classname": "SPInputToggler",
+                    "sprite_selected": "Sprites/TestSquareTextureRed",
+                    "sprite_unselected": "Sprites/out"
+                }
+            ]
         },
         {
-          "component_name": "NOT gate",
-          "prefab": "Prefabs/SPNotGate",
-          "sprite_selected": "Sprites/TestSquareTextureRed",
-          "sprite_unselected": "Sprites/not"
-        },
-        {
-          "component_name": "XOR gate",
-          "prefab": "Prefabs/SPXorGate",
-          "sprite_selected": "Sprites/TestSquareTextureRed",
-          "sprite_unselected": "Sprites/xor"
+            "panel_name": "Others",
+            "sprite_selected": "Sprites/TestSquareTextureRed",
+            "sprite_unselected": "Sprites/TestSquareTexture",
+            "components": [
+                {
+                    "component_name": "Splitter",
+                    "component_classname": "SPSplitterComponent",
+                    "sprite_selected": "Sprites/TestSquareTextureRed",
+                    "sprite_unselected": "Sprites/splitter"
+                }
+            ]
         }
-      ]
-    },
-    {
-      "panel_name": "Inputs/Outputs",
-      "sprite_selected": "Sprites/TestSquareTextureRed",
-      "sprite_unselected": "Sprites/TestSquareTexture",
-      "components": [
-        {
-          "component_name": "TRUE constant",
-          "prefab": "Prefabs/SPTrueConst",
-          "sprite_selected": "Sprites/TestSquareTextureRed",
-          "sprite_unselected": "Sprites/true"
-        },
-        {
-          "component_name": "FALSE constant",
-          "prefab": "Prefabs/SPFalseConst",
-          "sprite_selected": "Sprites/TestSquareTextureRed",
-          "sprite_unselected": "Sprites/false"
-        },
-        {
-          "component_name": "Output",
-          "prefab": "Prefabs/SPOutput",
-          "sprite_selected": "Sprites/TestSquareTextureRed",
-          "sprite_unselected": "Sprites/out"
-        },
-        {
-          "component_name": "Input Toggler",
-          "prefab": "Prefabs/SPInputToggler",
-          "sprite_selected": "Sprites/TestSquareTextureRed",
-          "sprite_unselected": "Sprites/out"
-        }
-      ]
-    },
-    {
-      "panel_name": "Others",
-      "sprite_selected": "Sprites/TestSquareTextureRed",
-      "sprite_unselected": "Sprites/TestSquareTexture",
-      "components": [
-        {
-          "component_name": "Splitter",
-          "prefab": "Prefabs/SPSplitterComponent",
-          "sprite_selected": "Sprites/TestSquareTextureRed",
-          "sprite_unselected": "Sprites/splitter"
-        }
-      ]
-    }
-  ]
+    ]
 }
