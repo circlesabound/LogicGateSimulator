@@ -116,12 +116,6 @@ namespace Assets.Scripts.UI
                     Canvas.FinishEdge(guidMap[config.ComponentGuids[1]].OutConnectors[config.connector_ids[1]]);
                 }
 
-                // Edges don't show without forcing an update
-                foreach (var edge in Canvas.Edges)
-                {
-                    edge.UpdatePosition();
-                }
-
                 // Loading a circuit means the circuit that was just loaded is "saved"
                 Canvas.LastSavedComponentsHash = Canvas.ComponentsHash;
             }
