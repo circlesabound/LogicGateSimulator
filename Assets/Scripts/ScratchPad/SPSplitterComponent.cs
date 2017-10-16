@@ -67,12 +67,7 @@ namespace Assets.Scripts.ScratchPad
             OutConnectorBottom.gameObject.name = "OutConnectorBottom";
             OutConnectorBottom.transform.localPosition = new Vector3(1, -1, -1);
             OutConnectorBottom.Register(this, SPConnectorType.SPOutConnector, 1);
-        }
 
-        // Use this for initialisation
-        protected override void Start()
-        {
-            base.Start();
             LogicComponent = new Splitter();
             Canvas.Circuit.AddComponent(LogicComponent);
         }
