@@ -35,6 +35,10 @@
         {
             "classname": "SPInputToggler",
             "prefab": "Prefabs/SPInputToggler"
+        },
+        {
+            "classname": "SPClock",
+            "prefab": "Prefabs/SPClock"
         }
     ]
 }
