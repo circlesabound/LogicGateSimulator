@@ -55,12 +55,6 @@
                     "sprite_unselected": "Sprites/out"
                 },
                 {
-                    "component_name": "Clock",
-                    "prefab": "Prefabs/SPClock",
-                    "sprite_selected": "Sprites/TestSquareTextureRed",
-                    "sprite_unselected": "Sprites/clock"
-                },
-                {
                     "component_name": "Input Toggler",
                     "component_classname": "SPInputToggler",
                     "sprite_selected": "Sprites/TestSquareTextureRed",
@@ -78,6 +72,12 @@
                     "component_classname": "SPSplitterComponent",
                     "sprite_selected": "Sprites/TestSquareTextureRed",
                     "sprite_unselected": "Sprites/splitter"
+                },
+                {
+                    "component_name": "Clock",
+                    "component_classname": "SPClock",
+                    "sprite_selected": "Sprites/TestSquareTextureRed",
+                    "sprite_unselected": "Sprites/clock"
                 }
             ]
         }
