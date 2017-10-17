@@ -7,6 +7,9 @@
     "text_input": {
         "placeholder": "Circuit name"
     },
+    "number_slider": {
+        "hidden": true
+    },
     "buttons": {
         "positive_button": {
             "label": "Save",

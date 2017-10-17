@@ -9,6 +9,7 @@ namespace Assets.Scripts.UI.MessageBoxes
         public string message;
         public MessageBoxScrollView scroll_view;
         public MessageBoxTextInputConfig text_input;
+        public MessageBoxNumberSliderConfig number_slider;
         public MessageBoxButtonContainer buttons;
         public bool is_modal;
         public string classname;
@@ -47,6 +48,37 @@ namespace Assets.Scripts.UI.MessageBoxes
         {
             public bool hidden;
             public string placeholder;
+        }
+
+        [Serializable]
+        public class MessageBoxNumberSliderConfig
+        {
+            public bool hidden;
+            public float min_value;
+            public float max_value;
+            public MessageBoxNumberSliderLabelConfig label_left;
+            public MessageBoxNumberSliderLabelConfig label_right;
+        }
+
+        [Serializable]
+        public class MessageBoxNumberSliderLabelConfig
+        {
+            public bool hidden;
+            public string content_type;
+            public MessageBoxNumberSliderStaticLabel static_content;
+            public MessageBoxNumberSliderDynamicLabel dynamic_provider;
+        }
+
+        [Serializable]
+        public class MessageBoxNumberSliderStaticLabel
+        {
+            public string label;
+        }
+
+        [Serializable]
+        public class MessageBoxNumberSliderDynamicLabel
+        {
+            public string classname;
         }
 
         [Serializable]

@@ -190,6 +190,57 @@ namespace Assets.Scripts.UI.MessageBoxes
                 mb.TextInput.SetActive(false);
             }
 
+            Assert.IsNotNull(config.number_slider);
+            if (!config.number_slider.hidden)
+            {
+                var slider = mb.SliderContainer.FindChildGameObject("UIMessageBoxNumberSlider").GetComponent<Slider>();
+                Assert.IsNotNull(slider);
+                slider.minValue = config.number_slider.min_value;
+                slider.maxValue = config.number_slider.max_value;
+
+                // Set up labels
+                Action<MessageBoxConfig.MessageBoxNumberSliderLabelConfig, GameObject, string> labelSetup = (labelConfig, labelObject, dictKey) =>
+                {
+                    if (!labelConfig.hidden)
+                    {
+                        if (labelConfig.content_type == "static")
+                        {
+                            mb.NumberSliderLabelGenerators["left"] = () => labelConfig.static_content.label;
+                        }
+                        else if (labelConfig.content_type == "dynamic")
+                        {
+                            // Build provider typename from classname
+                            string providerClassname = UIMessageBoxNamespace + "." + labelConfig.dynamic_provider.classname;
+                            Type providerType = Type.GetType(providerClassname, throwOnError: true);
+                            Assert.IsTrue(typeof(ILabelProvider).IsAssignableFrom(providerType));
+                            Assert.IsTrue(typeof(MonoBehaviour).IsAssignableFrom(providerType));
+
+                            // Add a provider instance as a script component
+                            var labelProvider = (ILabelProvider)labelObject.AddComponent(providerType);
+
+                            // Set up label generator
+                            mb.NumberSliderLabelGenerators[dictKey] = labelProvider.GenerateLabel;
+                        }
+                    }
+                    else
+                    {
+                        labelObject.SetActive(false);
+                    }
+                };
+                labelSetup(
+                    config.number_slider.label_left,
+                    mb.SliderContainer.FindChildGameObject("UIMessageBoxNumberSliderLabelLeft"),
+                    "left");
+                labelSetup(
+                    config.number_slider.label_right,
+                    mb.SliderContainer.FindChildGameObject("UIMessageBoxNumberSliderLabelRight"),
+                    "right");
+            }
+            else
+            {
+                mb.SliderContainer.SetActive(false);
+            }
+
             Assert.IsNotNull(config.buttons);
             if (!config.buttons.hidden)
             {
