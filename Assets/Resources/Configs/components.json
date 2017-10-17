@@ -1,0 +1,44 @@
+{
+    "components": [
+        {
+            "classname": "SPAndGate",
+            "prefab": "Prefabs/SPAndGate"
+        },
+        {
+            "classname": "SPOrGate",
+            "prefab": "Prefabs/SPOrGate"
+        },
+        {
+            "classname": "SPNotGate",
+            "prefab": "Prefabs/SPNotGate"
+        },
+        {
+            "classname": "SPXorGate",
+            "prefab": "Prefabs/SPXorGate"
+        },
+        {
+            "classname": "SPTrueConst",
+            "prefab": "Prefabs/SPTrueConst"
+        },
+        {
+            "classname": "SPFalseConst",
+            "prefab": "Prefabs/SPFalseConst"
+        },
+        {
+            "classname": "SPOutput",
+            "prefab": "Prefabs/SPOutput"
+        },
+        {
+            "classname": "SPSplitterComponent",
+            "prefab": "Prefabs/SPSplitterComponent"
+        },
+        {
+            "classname": "SPInputToggler",
+            "prefab": "Prefabs/SPInputToggler"
+        },
+        {
+            "classname": "SPClock",
+            "prefab": "Prefabs/SPClock"
+        }
+    ]
+}

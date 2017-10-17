@@ -9,7 +9,7 @@ namespace Assets.Scripts.UI
     {
         public const string NAME_PREFIX = "UIToolboxComponentEntry_";
 
-        public string Prefab;
+        public string ComponentClassname;
 
         public string SimpleName
         {

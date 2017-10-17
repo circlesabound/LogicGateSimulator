@@ -1,0 +1,31 @@
+{
+    "title": "Open circuit",
+    "message": "Choose a saved circuit to open: ",
+    "scroll_view": {
+        "content_type": "dynamic",
+        "dynamic_content": {
+            "item_blueprint": {
+                "classname": "OpenCircuitScrollViewItem",
+                "onclick": "OnItemClick"
+            }
+        }
+    },
+    "text_input": {
+        "hidden": true
+    },
+    "buttons": {
+        "positive_button": {
+            "label": "Open",
+            "onclick": "OnOpenButtonClick"
+        },
+        "neutral_button": {
+            "hidden": true
+        },
+        "negative_button": {
+            "label": "Cancel",
+            "onclick": "OnCancelButtonClick"
+        }
+    },
+    "is_modal": true,
+    "classname": "OpenCircuitMessageBox"
+}

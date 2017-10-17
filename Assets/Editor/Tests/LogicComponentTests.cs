@@ -1,4 +1,5 @@
 ﻿using NUnit.Framework;
+using System;
 using System.Collections.Generic;
 
 namespace Assets.Editor.Tests
@@ -21,6 +22,16 @@ namespace Assets.Editor.Tests
             // Check truth table:
             Assert.AreEqual(connection.Simulate(new [] { true }), new List<bool> { true });
             Assert.AreEqual(connection.Simulate(new [] { false }), new List<bool> { false });
+        }
+
+        [Test]
+        public void Test_Splitter()
+        {
+            LogicComponent fanout = new Splitter();
+
+            // Check truth table:
+            Assert.AreEqual(fanout.Simulate(new [] { true }), new List<bool> { true, true });
+            Assert.AreEqual(fanout.Simulate(new [] { false }), new List<bool> { false, false });
         }
 
         [Test]
@@ -100,6 +111,27 @@ namespace Assets.Editor.Tests
             Assert.That(() => xor_gate.Outputs = new List<bool> { true }, Throws.Nothing);
             Assert.That(() => xor_gate.Outputs = new List<bool> { true, false },
                 Throws.ArgumentException);
+        }
+
+        [Test]
+        public void Test_Clock()
+        {
+            // Assert that clock with zero period is invalid
+            Assert.That(() => new Clock(0), Throws.TypeOf<ArgumentOutOfRangeException>());
+
+            // Check outputs for different periods
+            for (uint i = 1; i < 100; i++)
+            {
+                Circuit circuit = new Circuit();
+                LogicComponent clock = new Clock(i);
+                circuit.AddComponent(clock);
+                for (uint j = 0; j < 400; j++)
+                {
+                    bool expected = ((j / i) % 2 != 0);
+                    Assert.AreEqual(clock.Outputs[0], expected);
+                    circuit.Simulate();
+                }
+            }
         }
     }
 }
