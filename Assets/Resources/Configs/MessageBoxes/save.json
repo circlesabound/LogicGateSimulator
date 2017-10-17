@@ -1,0 +1,25 @@
+{
+    "title": "Save circuit",
+    "message": "Enter a name to save this circuit as: ",
+    "scroll_view": {
+        "hidden": true
+    },
+    "text_input": {
+        "placeholder": "Circuit name"
+    },
+    "buttons": {
+        "positive_button": {
+            "label": "Save",
+            "onclick": "OnSaveButtonClick"
+        },
+        "neutral_button": {
+            "hidden": true
+        },
+        "negative_button": {
+            "label": "Cancel",
+            "onclick": "OnCancelButtonClick"
+        }
+    },
+    "is_modal": true,
+    "classname": "SaveCircuitMessageBox"
+}

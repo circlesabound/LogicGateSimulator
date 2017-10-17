@@ -28,7 +28,7 @@ namespace Assets.Scripts.Util
         /// <param name="zoomLevelDelta"></param>
         public static void SimpleZoom(float zoomLevelDelta)
         {
-            CurrentZoom -= zoomLevelDelta;
+            CurrentZoom = (float)Math.Pow(Math.Sqrt(CurrentZoom) - Math.Sqrt(Math.Abs(zoomLevelDelta)) * Math.Sign(zoomLevelDelta), 2);
         }
 
         /// <summary>

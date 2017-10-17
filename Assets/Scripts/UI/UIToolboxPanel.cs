@@ -106,10 +106,6 @@ namespace Assets.Scripts.UI
 
             foreach (var componentEntryConfig in subPanelConfig.components)
             {
-                // Load component prefab
-                SPLogicComponent componentPrefab = Resources.Load<SPLogicComponent>(componentEntryConfig.prefab);
-                Assert.IsNotNull(componentPrefab);
-
                 // Load sprites
                 Sprite activeSprite = Resources.Load<Sprite>(componentEntryConfig.sprite_selected);
                 Sprite inactiveSprite = Resources.Load<Sprite>(componentEntryConfig.sprite_unselected);
@@ -124,7 +120,7 @@ namespace Assets.Scripts.UI
                 // Set up component entry
                 newComponentEntry.SimpleName = componentEntryConfig.component_name;
                 newComponentEntry.SetSprites(activeSprite, inactiveSprite);
-                newComponentEntry.Prefab = componentEntryConfig.prefab;
+                newComponentEntry.ComponentClassname = componentEntryConfig.component_classname;
             }
 
             // Finalise panel
