@@ -72,6 +72,12 @@
                     "component_classname": "SPSplitterComponent",
                     "sprite_selected": "Sprites/TestSquareTextureRed",
                     "sprite_unselected": "Sprites/splitter"
+                },
+                {
+                    "component_name": "Clock",
+                    "component_classname": "SPClock",
+                    "sprite_selected": "Sprites/TestSquareTextureRed",
+                    "sprite_unselected": "Sprites/clock"
                 }
             ]
         }
