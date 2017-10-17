@@ -15,7 +15,13 @@ namespace Assets.Scripts.UI.MessageBoxes
 {
     public class OpenCircuitMessageBox : UIMessageBox, IScrollViewItemProvider
     {
+        private static Color32 UNSELECTED_ENTRY_COLOUR = new Color32(204, 204, 204, 255);
+        private static Color32 UNSELECTED_TEXT_COLOUR = new Color32(50, 50, 50, 255);
+        private static Color32 SELECTED_ENTRY_COLOUR = new Color32(135, 135, 135, 135);
+        private static Color32 SELECTED_TEXT_COLOUR = new Color32(255, 255, 255, 255);
+
         private const string OPEN_BAD_NAME_MESSAGE_BOX_CONFIG_RESOURCE = "Configs/MessageBoxes/bad_name";
+
         private const string OPEN_NO_FILE_MESSAGE_BOX_CONFIG_RESOURCE = "Configs/MessageBoxes/open_no_file";
         private UIMessageBoxFactory MessageBoxFactory;
         private MessageBoxConfig OpenBadNameMessageBoxConfig;
@@ -88,7 +94,7 @@ namespace Assets.Scripts.UI.MessageBoxes
             TriggerTarget.Trigger(triggerData);
         }
 
-        public IEnumerable<string> EnumerateScrollViewItems()
+        public IEnumerable<string> GenerateScrollViewItems()
         {
             if (Directory.Exists(Directories.SAVEFILE_FOLDER_FULL_PATH))
             {
@@ -122,12 +128,12 @@ namespace Assets.Scripts.UI.MessageBoxes
         {
             foreach (var entry in Entries)
             {
-                entry.gameObject.GetComponent<Image>().color = new Color32(204, 204, 204, 255);
-                entry.Text.GetComponent<Text>().color = new Color32(50, 50, 50, 255);
+                entry.gameObject.GetComponent<Image>().color = UNSELECTED_ENTRY_COLOUR;
+                entry.Text.GetComponent<Text>().color = UNSELECTED_TEXT_COLOUR;
             }
             CurrentlySelectedEntry = selectedEntry;
-            CurrentlySelectedEntry.gameObject.GetComponent<Image>().color = new Color32(135, 135, 135, 135);
-            CurrentlySelectedEntry.Text.GetComponent<Text>().color = new Color32(255, 255, 255, 255);
+            CurrentlySelectedEntry.gameObject.GetComponent<Image>().color = SELECTED_ENTRY_COLOUR;
+            CurrentlySelectedEntry.Text.GetComponent<Text>().color = SELECTED_TEXT_COLOUR;
         }
     }
 }

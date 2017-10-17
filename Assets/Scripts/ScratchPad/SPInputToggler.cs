@@ -56,17 +56,6 @@ namespace Assets.Scripts.ScratchPad
             FalseSprite = Resources.Load<Sprite>("Sprites/switchOff");
         }
 
-        // Use this for initialisation
-        protected override void Start()
-        {
-            base.Start();
-        }
-
-        // Update is called once per frame
-        protected override void Update()
-        {
-        }
-
         public override int GetHashCode()
         {
             return base.GetHashCode() ^ ((InputComponent)LogicComponent).value.GetHashCode();

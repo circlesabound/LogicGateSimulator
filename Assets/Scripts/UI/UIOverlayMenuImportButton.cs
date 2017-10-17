@@ -76,9 +76,8 @@ namespace Assets.Scripts.UI
                 {
                     Guid guid = Guid.Parse(config.guid_string);
                     SPInputToggler inputToggler = (SPInputToggler)guidMap[guid];
-                    while (((InputComponent)inputToggler.LogicComponent).value != config.value)
+                    if (((InputComponent)inputToggler.LogicComponent).value != config.value)
                     {
-                        // this better not infinite loop
                         inputToggler.ToggleValue();
                     }
                 }
@@ -88,12 +87,6 @@ namespace Assets.Scripts.UI
                 {
                     Canvas.StartEdge(guidMap[config.ComponentGuids[0]].InConnectors[config.connector_ids[0]]);
                     Canvas.FinishEdge(guidMap[config.ComponentGuids[1]].OutConnectors[config.connector_ids[1]]);
-                }
-
-                // Edges don't show without forcing an update
-                foreach (var edge in Canvas.Edges)
-                {
-                    edge.UpdatePosition();
                 }
             }
 
