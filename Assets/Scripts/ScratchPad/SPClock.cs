@@ -43,7 +43,7 @@ namespace Assets.Scripts.ScratchPad
         {
             base.Start();
             // @TODO hardcoded for now lmao
-            LogicComponent = new Clock(1);
+            LogicComponent = new Clock(10);
             Canvas.Circuit.AddComponent(LogicComponent);
         }
 
