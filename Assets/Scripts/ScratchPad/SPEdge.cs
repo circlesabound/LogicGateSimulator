@@ -81,6 +81,10 @@ namespace Assets.Scripts.ScratchPad
                 // Can't join connectors of the same type (must be in-to-out or out-to-in)
                 throw new ArgumentException();
             }
+            if (connector.ConnectedEdge != null)
+            {
+                throw new ArgumentException();
+            }
 
             if (AnchorConnector.ConnectorType == SPConnectorType.SPInConnector)
             {
