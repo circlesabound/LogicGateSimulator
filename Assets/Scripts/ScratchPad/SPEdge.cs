@@ -228,6 +228,16 @@ namespace Assets.Scripts.ScratchPad
         /// <param name="yscale">The amount to scale by in the y direction.</param>
         private void SetScale(float xscale, float yscale)
         {
+            // Make backwards lines look better
+            gameObject.transform.localRotation = Quaternion.identity;
+            if (xscale < 0)
+            {
+                var temp = -xscale;
+                xscale = yscale;
+                yscale = temp;
+                gameObject.transform.Rotate(0, 0, 90);
+            }
+
             // Some global scaling shenanigans
             gameObject.transform.localScale = new Vector3
             {
