@@ -142,7 +142,7 @@ namespace Assets.Scripts.UI.MessageBoxes
 
                     // Enumerate over the IEnumerable<string> from the item provider method
                     var provider = (IScrollViewItemProvider)mb;
-                    foreach (var itemLabel in provider.EnumerateScrollViewItems())
+                    foreach (var itemLabel in provider.GenerateScrollViewItems())
                     {
                         // Instantiate a scrollview item from the prefab
                         GameObject itemObject = GameObject.Instantiate(

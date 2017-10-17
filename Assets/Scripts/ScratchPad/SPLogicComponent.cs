@@ -57,11 +57,11 @@ namespace Assets.Scripts.ScratchPad
             if (Canvas.CurrentTool == SPTool.Pointer)
             {
                 this.gameObject.transform.position = Util.Util.MouseWorldCoordinates;
-                Enumerable
-                    .Concat(InConnectors, OutConnectors)
-                    .Select(c => c.ConnectedEdge)
-                    .Where(e => e != null)
-                    .ForEach(e => e.UpdatePosition());
+                //    Enumerable
+                //        .Concat(InConnectors, OutConnectors)
+                //        .Select(c => c.ConnectedEdge)
+                //        .Where(e => e != null)
+                //        .ForEach(e => e.UpdatePosition());
             }
         }
 

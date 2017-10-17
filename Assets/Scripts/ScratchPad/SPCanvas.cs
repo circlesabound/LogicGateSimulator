@@ -86,9 +86,7 @@ namespace Assets.Scripts.ScratchPad
         public void FinishEdge(SPConnector connector)
         {
             // this may throw ArgumentException, let SPConnector.OnPointerClick handle that
-            CurrentEdge.AddConnector(connector);
-
-            CurrentEdge.Finalise();
+            CurrentEdge.AddFinishingConnector(connector);
             CurrentEdge = null;
         }
 
@@ -152,7 +150,7 @@ namespace Assets.Scripts.ScratchPad
         {
             CurrentEdge = Instantiate(SPEdgePrefab, Foreground.transform);
             Assert.IsNotNull(CurrentEdge);
-            CurrentEdge.AddConnector(connector);
+            CurrentEdge.AddStartingConnector(connector);
         }
 
         // Use this for initialization
