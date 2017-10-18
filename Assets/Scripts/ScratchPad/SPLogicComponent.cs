@@ -22,6 +22,9 @@ namespace Assets.Scripts.ScratchPad
         public List<SPConnector> InConnectors;
         public List<SPConnector> OutConnectors;
 
+        public Sprite UnselectedSprite;
+        public Sprite SelectedSprite;
+
         protected SPLogicComponent()
         {
             // Don't do anything here!
@@ -100,6 +103,9 @@ namespace Assets.Scripts.ScratchPad
             Assert.IsNotNull(SPOutConnectorPrefab);
             Assert.raiseExceptions = false;
 
+            Assert.IsNotNull(SelectedSprite);
+            Assert.IsNotNull(UnselectedSprite);
+
             InConnectors = new List<SPConnector>();
             OutConnectors = new List<SPConnector>();
 
@@ -144,6 +150,22 @@ namespace Assets.Scripts.ScratchPad
         public override int GetHashCode()
         {
             return base.GetHashCode() ^ gameObject.transform.position.GetHashCode();
+        }
+
+        /// <summary>
+        /// Linked in Unity inspector
+        /// </summary>
+        public virtual void OnBeginHover()
+        {
+            gameObject.GetComponent<SpriteRenderer>().sprite = SelectedSprite;
+        }
+
+        /// <summary>
+        /// Linked in Unity inspector
+        /// </summary>
+        public virtual void OnEndHover()
+        {
+            gameObject.GetComponent<SpriteRenderer>().sprite = UnselectedSprite;
         }
     }
 }

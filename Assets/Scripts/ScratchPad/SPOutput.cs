@@ -6,9 +6,15 @@ namespace Assets.Scripts.ScratchPad
 {
     public class SPOutput : SPLogicComponent
     {
-        private Sprite TrueSprite;
-        private Sprite FalseSprite;
+        public Sprite TrueSprite;
+        public Sprite FalseSprite;
+
+        public Sprite SelectedTrueSprite;
+        public Sprite SelectedFalseSprite;
+
         private SpriteRenderer spriteRenderer;
+
+        private bool Selected;
 
         protected SPOutput() : base()
         {
@@ -41,8 +47,6 @@ namespace Assets.Scripts.ScratchPad
             LogicComponent = new Output();
             Canvas.Circuit.AddComponent(LogicComponent);
 
-            TrueSprite = Resources.Load<Sprite>("Sprites/outTrue");
-            FalseSprite = Resources.Load<Sprite>("Sprites/out");
             spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
         }
 
@@ -52,12 +56,24 @@ namespace Assets.Scripts.ScratchPad
             Output outputComponent = (Output)LogicComponent;
             if (outputComponent.Value == true)
             {
-                spriteRenderer.sprite = TrueSprite;
+                if (Selected) spriteRenderer.sprite = SelectedTrueSprite;
+                else spriteRenderer.sprite = TrueSprite;
             }
             else
             {
-                spriteRenderer.sprite = FalseSprite;
+                if (Selected) spriteRenderer.sprite = SelectedFalseSprite;
+                else spriteRenderer.sprite = FalseSprite;
             }
+        }
+
+        public override void OnBeginHover()
+        {
+            Selected = true;
+        }
+
+        public override void OnEndHover()
+        {
+            Selected = false;
         }
     }
 }

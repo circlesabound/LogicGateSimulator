@@ -86,5 +86,17 @@ namespace Assets.Scripts.ScratchPad
             base.Update();
             //TODO swap sprites depending on clock state
         }
+
+        public override void OnBeginHover()
+        {
+            // TODO override with different sprite depending on clock tick
+            base.OnBeginHover();
+        }
+
+        public override void OnEndHover()
+        {
+            // TODO override with different sprite depending on clock tick
+            base.OnEndHover();
+        }
     }
 }
