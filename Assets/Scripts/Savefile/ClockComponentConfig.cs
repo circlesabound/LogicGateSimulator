@@ -3,9 +3,9 @@
 namespace Assets.Scripts.Savefile
 {
     [Serializable]
-    public class InputToggleConfig
+    public class ClockComponentConfig
     {
         public string guid_string;
-        public bool value;
+        public uint period;
     }
 }

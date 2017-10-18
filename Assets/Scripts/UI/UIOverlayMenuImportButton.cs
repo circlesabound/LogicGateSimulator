@@ -62,6 +62,7 @@ namespace Assets.Scripts.UI
                 var componentConfigs = circuitConfig.logic_components;
                 var edgeConfigs = circuitConfig.edges;
                 var togglerConfigs = circuitConfig.toggles;
+                var clockConfigs = circuitConfig.clocks;
 
                 var logicComponentFactory = new SPLogicComponentFactory(Canvas.Foreground);
 
@@ -80,6 +81,14 @@ namespace Assets.Scripts.UI
                     {
                         inputToggler.ToggleValue();
                     }
+                }
+
+                // Restore state for clock components
+                foreach (var config in clockConfigs)
+                {
+                    Guid guid = Guid.Parse(config.guid_string);
+                    SPClock clock = (SPClock)guidMap[guid];
+                    ((Clock)clock.LogicComponent).Period = config.period;
                 }
 
                 // Build edges using GUID map

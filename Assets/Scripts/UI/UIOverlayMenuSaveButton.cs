@@ -62,11 +62,22 @@ namespace Assets.Scripts.UI
                     })
                     .ToList();
 
+                // Generate additional configs to save state of clock components
+                List<ClockComponentConfig> clockConfigs = guidMap
+                    .Where(kvp => kvp.Key.GetType() == typeof(SPClock))
+                    .Select(kvp => new ClockComponentConfig
+                    {
+                        guid_string = kvp.Value.ToString(),
+                        period = ((Clock)kvp.Key.LogicComponent).Period
+                    })
+                    .ToList();
+
                 // Build savefile
                 CircuitConfig spConfig = new CircuitConfig(
                     componentConfigs,
                     edgeConfigs,
-                    toggleConfigs);
+                    toggleConfigs,
+                    clockConfigs);
 
 #if DEVELOPMENT_BUILD
                 string saveData = JsonUtility.ToJson(spConfig, prettyPrint: true);

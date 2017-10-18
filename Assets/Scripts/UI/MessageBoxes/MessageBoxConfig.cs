@@ -56,6 +56,7 @@ namespace Assets.Scripts.UI.MessageBoxes
             public bool hidden;
             public float min_value;
             public float max_value;
+            public bool use_integer_values;
             public MessageBoxNumberSliderLabelConfig label_left;
             public MessageBoxNumberSliderLabelConfig label_right;
         }

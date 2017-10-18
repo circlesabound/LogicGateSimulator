@@ -197,6 +197,10 @@ namespace Assets.Scripts.UI.MessageBoxes
                 Assert.IsNotNull(slider);
                 slider.minValue = config.number_slider.min_value;
                 slider.maxValue = config.number_slider.max_value;
+                if (config.number_slider.use_integer_values)
+                {
+                    slider.wholeNumbers = true;
+                }
 
                 // Set up labels
                 Action<MessageBoxConfig.MessageBoxNumberSliderLabelConfig, GameObject, string> labelSetup = (labelConfig, labelObject, dictKey) =>
