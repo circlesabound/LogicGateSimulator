@@ -9,6 +9,7 @@
     "number_slider": {
         "min_value": 1,
         "max_value": 300,
+        "use_integer_values": true,
         "label_left": {
             "content_type": "static",
             "static_content": {

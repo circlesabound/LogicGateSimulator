@@ -1,4 +1,5 @@
-﻿using Assets.Scripts.Util;
+﻿using Assets.Scripts.ScratchPad;
+using Assets.Scripts.Util;
 using System;
 using UnityEngine.UI;
 
@@ -10,7 +11,7 @@ namespace Assets.Scripts.UI.MessageBoxes
         {
             get
             {
-                return gameObject.FindChildGameObject("UIMessageBox/UIMessageBoxNumberSliderContainer/UIMessageBoxNumberSlider").GetComponent<Slider>().value;
+                return SliderContainer.FindChildGameObject("UIMessageBoxNumberSlider").GetComponent<Slider>().value;
             }
         }
 
@@ -39,6 +40,11 @@ namespace Assets.Scripts.UI.MessageBoxes
         {
             // shouldn't be accepting triggers
             throw new NotImplementedException();
+        }
+
+        private void Start()
+        {
+            SliderContainer.FindChildGameObject("UIMessageBoxNumberSlider").GetComponent<Slider>().value = ((Clock)((SPClock)TriggerTarget).LogicComponent).Period;
         }
     }
 }

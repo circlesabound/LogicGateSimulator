@@ -29,6 +29,11 @@ namespace Assets.Scripts.ScratchPad
             }
         }
 
+        public override int GetHashCode()
+        {
+            return base.GetHashCode() ^ ((Clock)LogicComponent).Period.GetHashCode();
+        }
+
         public override void OnPointerClick(PointerEventData eventData)
         {
             base.OnPointerClick(eventData);
@@ -78,6 +83,8 @@ namespace Assets.Scripts.ScratchPad
         // Update is called once per frame
         protected override void Update()
         {
+            base.Update();
+            //TODO swap sprites depending on clock state
         }
     }
 }

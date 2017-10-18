@@ -82,6 +82,7 @@ namespace Assets.Scripts.UI
                 var componentConfigs = circuitConfig.logic_components;
                 var edgeConfigs = circuitConfig.edges;
                 var togglerConfigs = circuitConfig.toggles;
+                var clockConfigs = circuitConfig.clocks;
 
                 // Clear the canvas
                 for (int i = Canvas.Components.Count - 1; i >= 0; --i)
@@ -102,11 +103,18 @@ namespace Assets.Scripts.UI
                 {
                     Guid guid = Guid.Parse(config.guid_string);
                     SPInputToggler inputToggler = (SPInputToggler)guidMap[guid];
-                    while (((InputComponent)inputToggler.LogicComponent).value != config.value)
+                    if (((InputComponent)inputToggler.LogicComponent).value != config.value)
                     {
-                        // this better not infinite loop
                         inputToggler.ToggleValue();
                     }
+                }
+
+                // Restore state for clock components
+                foreach (var config in clockConfigs)
+                {
+                    Guid guid = Guid.Parse(config.guid_string);
+                    SPClock clock = (SPClock)guidMap[guid];
+                    ((Clock)clock.LogicComponent).Period = config.period;
                 }
 
                 // Build edges using GUID map
