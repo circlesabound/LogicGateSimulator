@@ -35,6 +35,18 @@ namespace Assets.Scripts.ScratchPad
         private SPTool _CurrentTool;
         private SPTool _PreviousTool;
 
+        public float SecondsPerUpdate
+        {
+            get
+            {
+                return Time.fixedDeltaTime;
+            }
+            set
+            {
+                Time.fixedDeltaTime = value;
+            }
+        }
+
         public int ComponentsHash
         {
             get
@@ -172,12 +184,20 @@ namespace Assets.Scripts.ScratchPad
             this.LogicComponentFactory = new SPLogicComponentFactory(this.Foreground);
         }
 
+        // FixedUpdate is called once every SecondsPerUpdate seconds
+        private void FixedUpdate()
+        {
+            if (!Frozen)
+            {
+                if (Running) Circuit.Simulate();
+            }
+        }
+
         // Update is called once per frame
         private void Update()
         {
             if (!Frozen)
             {
-                if (Running) Circuit.Simulate();
                 var scrollDelta = Input.GetAxis("Mouse ScrollWheel");
                 CameraAdjust.SimpleZoom(scrollDelta);
             }
