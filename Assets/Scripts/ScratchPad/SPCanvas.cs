@@ -30,7 +30,9 @@ namespace Assets.Scripts.ScratchPad
         public List<SPEdge> Edges;
         public GameObject Foreground;
         public bool Frozen;
-        public bool Running;
+        private bool Running;
+        private int StepsToRunLeft;
+        private UIOverlayControlRunButton RunButton;
         public SPEdge SPEdgePrefab;
         private SPTool _CurrentTool;
         private SPTool _PreviousTool;
@@ -165,6 +167,35 @@ namespace Assets.Scripts.ScratchPad
             CurrentEdge.AddStartingConnector(connector);
         }
 
+        private void SetRunning()
+        {
+            Running = true;
+            RunButton.SetButtonStateToRunning();
+        }
+
+        public void StopRunning()
+        {
+            Running = false;
+            RunButton.SetButtonStateToNotRunning();
+        }
+
+        public void Run()
+        {
+            // If no more steps to run, assume we want to run indefinitely:
+            if (StepsToRunLeft <= 0) {
+                StepsToRunLeft = -1;
+            }
+            SetRunning();
+        }
+
+        public void RunForKSteps(int K)
+        {
+            if (K > 0) {
+                StepsToRunLeft = K;
+                SetRunning();
+            }
+        }
+
         // Use this for initialization
         private void Awake()
         {
@@ -182,6 +213,8 @@ namespace Assets.Scripts.ScratchPad
         private void Start()
         {
             this.LogicComponentFactory = new SPLogicComponentFactory(this.Foreground);
+            this.RunButton = FindObjectOfType<UIOverlayControlRunButton>();
+            Assert.IsNotNull(this.RunButton);
         }
 
         // FixedUpdate is called once every SecondsPerUpdate seconds
@@ -189,7 +222,16 @@ namespace Assets.Scripts.ScratchPad
         {
             if (!Frozen)
             {
-                if (Running) Circuit.Simulate();
+                if (Running)
+                {
+                    Circuit.Simulate();
+                    if (StepsToRunLeft > 0) {
+                        StepsToRunLeft--;
+                        if (StepsToRunLeft == 0) {
+                            StopRunning();
+                        }
+                    }
+                }
             }
         }
 

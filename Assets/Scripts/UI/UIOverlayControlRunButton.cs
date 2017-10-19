@@ -30,11 +30,11 @@ namespace Assets.Scripts.UI
         {
             if (ButtonState == UIOverlayControlRunButtonState.PauseButton)
             {
-                SetNotRunning();
+                PauseButtonClick();
             }
             else
             {
-                SetRunning();
+                RunButtonClick();
             }
         }
 
@@ -43,24 +43,30 @@ namespace Assets.Scripts.UI
             //
         }
 
-        private void SetNotRunning()
+        // Used by the Canvas to update the button's state to reflect
+        // whether the canvas is running.
+        public void SetButtonStateToNotRunning()
         {
-            // Swap the button
             ButtonState = UIOverlayControlRunButtonState.RunButton;
             DisplayText.text = "Run";
-
-            // Update canvas state
-            Canvas.Running = false;
         }
 
-        private void SetRunning()
+        public void SetButtonStateToRunning()
         {
-            // Swap the button
             ButtonState = UIOverlayControlRunButtonState.PauseButton;
             DisplayText.text = "Pause";
+        }
 
+        private void PauseButtonClick()
+        {
             // Update canvas state
-            Canvas.Running = true;
+            Canvas.StopRunning();
+        }
+
+        private void RunButtonClick()
+        {
+            // Update canvas state
+            Canvas.Run();
         }
 
         private void Start()
@@ -71,7 +77,7 @@ namespace Assets.Scripts.UI
             Assert.IsNotNull(displayTextTransform);
             DisplayText = displayTextTransform.gameObject.GetComponent<Text>();
             Assert.IsNotNull(DisplayText);
-            SetNotRunning();
+            SetButtonStateToNotRunning();
         }
 
         private void Update()
