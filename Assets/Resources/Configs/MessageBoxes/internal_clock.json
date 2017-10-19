@@ -7,8 +7,8 @@
         "hidden": true
     },
     "number_slider": {
-        "min_value": 0.1,
-        "max_value": 50,
+        "min_value": 0.05,
+        "max_value": 600,
         "label_left": {
             "content_type": "static",
             "static_content": {
@@ -36,5 +36,5 @@
         }
     },
     "is_modal": true,
-    "classname": "ClockMessageBox"
+    "classname": "SetSpeedMessageBox"
 }
