@@ -1,5 +1,5 @@
 {
-    "title": "Set number of steps to run",
+    "title": "Run circuit for a number of steps",
     "scroll_view": {
         "hidden": true
     },
@@ -13,7 +13,7 @@
         "label_left": {
             "content_type": "static",
             "static_content": {
-                "label": "Number of steps to run"
+                "label": "Steps to run"
             }
         },
         "label_right": {

@@ -12,7 +12,7 @@
         "label_left": {
             "content_type": "static",
             "static_content": {
-                "label": "Updates per second"
+                "label": "Updates / s"
             }
         },
         "label_right": {

@@ -9,6 +9,11 @@ namespace Assets.Scripts.UI
     {
         private SPCanvas Canvas;
         private UIMessageBoxFactory MessageBoxFactory;
+        public float FramesPerSecond
+        {
+            get;
+            private set;
+        }
 
         private const string INTERNAL_CLOCK_MESSAGE_BOX_CONFIG_RESOURCE = "Configs/MessageBoxes/internal_clock";
         private MessageBoxConfig InternalClockMessageBoxConfig;
@@ -33,11 +38,11 @@ namespace Assets.Scripts.UI
             if (triggerData.ButtonPressed == UIMessageBox.MessageBoxButtonType.Positive)
             {
                 Assert.IsTrue(triggerData.NumberInput.HasValue);
-                float FramesPerSecond = triggerData.NumberInput.Value;
+                FramesPerSecond = triggerData.NumberInput.Value;
                 // Shouldn't be possible at all so we'll assert it out.
-                Assert.IsTrue(FramesPerSecond >= 0);
+                Assert.IsTrue(FramesPerSecond > 0);
 
-                float SecondsPerFrame = 1/FramesPerSecond;
+                float SecondsPerFrame = 1 / FramesPerSecond;
 
                 Canvas.SecondsPerUpdate = SecondsPerFrame;
             }
@@ -45,7 +50,6 @@ namespace Assets.Scripts.UI
             Canvas.Frozen = false;
             Destroy(triggerData.Sender.gameObject);
         }
-
 
         private void Awake()
         {
@@ -61,6 +65,7 @@ namespace Assets.Scripts.UI
         {
             Canvas = FindObjectOfType<SPCanvas>();
             Assert.IsNotNull(Canvas);
+            FramesPerSecond = 1 / Canvas.SecondsPerUpdate;
         }
     }
 }
