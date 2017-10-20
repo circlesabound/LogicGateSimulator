@@ -1,4 +1,5 @@
 ﻿using Assets.Scripts.UI.MessageBoxes;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Assertions;
@@ -9,12 +10,19 @@ namespace Assets.Scripts.ScratchPad
     public class SPClock : SPLogicComponent, IMessageBoxTriggerTarget
     {
         private const string CLOCK_MESSAGE_BOX_CONFIG_RESOURCE = "Configs/MessageBoxes/clock";
+        private const int CLOCK_SPRITES_COUNT = 12;
         private const uint DEFAULT_CLOCK_RATE = 60;
         private MessageBoxConfig ClockMessageBoxConfig;
         private UIMessageBoxFactory MessageBoxFactory;
-        private SpriteRenderer renderer;
-        private Sprite[] sprites;
-        private int currentSprite;
+        private SpriteRenderer SpriteRenderer;
+
+        // sprites linked in unity inspector
+        public List<Sprite> UnselectedClockSprites;
+
+        public List<Sprite> SelectedClockSprites;
+        private int CurrentSpriteIndex;
+
+        private bool Hover;
 
         protected SPClock() : base()
         {
@@ -66,9 +74,8 @@ namespace Assets.Scripts.ScratchPad
             OutConnectors.AddRange(Enumerable.Repeat<SPConnector>(null, 1));
 
             // Set up renderer
-            renderer = gameObject.GetComponent<SpriteRenderer>();
-            sprites = Resources.LoadAll<Sprite>("Sprites");
-            currentSprite = 0;
+            SpriteRenderer = gameObject.GetComponent<SpriteRenderer>();
+            CurrentSpriteIndex = 0;
 
             // Set up connectors
             OutConnector = Instantiate(SPOutConnectorPrefab, gameObject.transform, false);
@@ -86,6 +93,9 @@ namespace Assets.Scripts.ScratchPad
 
             LogicComponent = new Clock(DEFAULT_CLOCK_RATE);
             Canvas.Circuit.AddComponent(LogicComponent);
+
+            Assert.AreEqual(CLOCK_SPRITES_COUNT, UnselectedClockSprites.Count);
+            Assert.AreEqual(CLOCK_SPRITES_COUNT, SelectedClockSprites.Count);
         }
 
         // Update is called once per frame
@@ -93,12 +103,18 @@ namespace Assets.Scripts.ScratchPad
         {
             base.Update();
 
-            // need to find a way to only update if the circuit is running?
             Clock clock = LogicComponent as Clock;
-            if (clock.Tick == 1)
+            if (Canvas.Running)
             {
-                currentSprite = (currentSprite + 1) % sprites.Length;
-                renderer.sprite = sprites[currentSprite];
+                CurrentSpriteIndex = Mathf.FloorToInt((float)clock.Tick / clock.Period * CLOCK_SPRITES_COUNT);
+                if (Hover)
+                {
+                    SpriteRenderer.sprite = SelectedClockSprites[CurrentSpriteIndex];
+                }
+                else
+                {
+                    SpriteRenderer.sprite = UnselectedClockSprites[CurrentSpriteIndex];
+                }
             }
 
             //TODO swap sprites depending on clock state
@@ -106,14 +122,14 @@ namespace Assets.Scripts.ScratchPad
 
         public override void OnPointerEnter(PointerEventData data)
         {
-            // TODO override with different sprite depending on clock tick
-            base.OnPointerEnter(data);
+            Hover = true;
+            SpriteRenderer.sprite = SelectedClockSprites[CurrentSpriteIndex];
         }
 
         public override void OnPointerExit(PointerEventData data)
         {
-            // TODO override with different sprite depending on clock tick
-            base.OnPointerExit(data);
+            Hover = false;
+            SpriteRenderer.sprite = UnselectedClockSprites[CurrentSpriteIndex];
         }
     }
 }
