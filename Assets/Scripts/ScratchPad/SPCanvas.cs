@@ -172,6 +172,11 @@ namespace Assets.Scripts.ScratchPad
             CurrentEdge.AddStartingConnector(connector);
         }
 
+        public void ResetCircuit()
+        {
+            Circuit.ResetComponents();
+        }
+
         // Use this for initialization
         private void Awake()
         {

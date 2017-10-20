@@ -7,6 +7,11 @@ public class Output : LogicComponent {
     public Output() : base(1, 0) {
     }
 
+    public override void Reset()
+    {
+        this.Value = false;
+    }
+
     protected override List<bool> CoreSimulate(IList<bool> inputs)
     {
         this.Value = inputs[0];

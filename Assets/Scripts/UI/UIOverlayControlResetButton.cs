@@ -14,7 +14,7 @@ namespace Assets.Scripts.UI
         /// </summary>
         public void OnButtonClick()
         {
-            throw new NotImplementedException();
+            Canvas.ResetCircuit();
         }
 
         private void Start()

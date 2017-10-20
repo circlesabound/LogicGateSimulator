@@ -6,6 +6,11 @@ public class FalseConst : LogicComponent{
         this.Outputs[0] = false;
     }
 
+    public override void Reset()
+    {
+        this.Outputs[0] = false;
+    }
+
     protected override List<bool> CoreSimulate(IList<bool> inputs)
     {
         return new List<bool> { false };
