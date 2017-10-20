@@ -16,6 +16,9 @@ namespace Assets.Scripts.UI
         private SPCanvas Canvas;
         private Text DisplayText;
 
+        public Sprite RunButtonSprite;
+        public Sprite PauseButtonSprite;
+
         public UIOverlayControlRunButtonState ButtonState
         {
             get;
@@ -48,6 +51,7 @@ namespace Assets.Scripts.UI
             // Swap the button
             ButtonState = UIOverlayControlRunButtonState.RunButton;
             DisplayText.text = "Run";
+            gameObject.GetComponent<Image>().sprite = RunButtonSprite;
 
             // Update canvas state
             Canvas.Running = false;
@@ -58,6 +62,7 @@ namespace Assets.Scripts.UI
             // Swap the button
             ButtonState = UIOverlayControlRunButtonState.PauseButton;
             DisplayText.text = "Pause";
+            gameObject.GetComponent<Image>().sprite = PauseButtonSprite;
 
             // Update canvas state
             Canvas.Running = true;
