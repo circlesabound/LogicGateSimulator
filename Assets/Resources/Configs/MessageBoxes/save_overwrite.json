@@ -7,6 +7,9 @@
     "text_input": {
         "hidden": true
     },
+    "number_slider": {
+        "hidden": true
+    },
     "buttons": {
         "positive_button": {
             "label": "Yes",

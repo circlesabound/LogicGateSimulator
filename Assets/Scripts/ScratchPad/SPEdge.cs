@@ -10,7 +10,7 @@ namespace Assets.Scripts.ScratchPad
 {
     public class SPEdge : MonoBehaviour
     {
-        private const float LINE_WIDTH = 0.03f;
+        private const float LINE_THICKNESS = 0.03f;
 
         private SPConnector AnchorConnector;
 
@@ -66,6 +66,22 @@ namespace Assets.Scripts.ScratchPad
             get
             {
                 return gameObject.FindChildGameObject("SPEdgeSegmentRight");
+            }
+        }
+
+        private GameObject ElbowTop
+        {
+            get
+            {
+                return gameObject.FindChildGameObject("SPEdgeElbowTop");
+            }
+        }
+
+        private GameObject ElbowBottom
+        {
+            get
+            {
+                return gameObject.FindChildGameObject("SPEdgeElbowBottom");
             }
         }
 
@@ -204,11 +220,13 @@ namespace Assets.Scripts.ScratchPad
             Hover = false;
         }
 
-        private void ApplyToAllSegments(Action<GameObject> action)
+        private void ApplyToAllParts(Action<GameObject> action)
         {
             action(SegmentLeft);
             action(SegmentMiddle);
             action(SegmentRight);
+            action(ElbowTop);
+            action(ElbowBottom);
         }
 
         private void Awake()
@@ -217,7 +235,7 @@ namespace Assets.Scripts.ScratchPad
             Assert.IsNotNull(Canvas);
 
             // To avoid rendering errors, hide until the first update
-            gameObject.GetComponentsInChildren<Renderer>().ForEach(r => r.enabled = false);
+            ApplyToAllParts(part => part.gameObject.GetComponent<Renderer>().enabled = false);
         }
 
         /// <summary>
@@ -228,6 +246,16 @@ namespace Assets.Scripts.ScratchPad
         /// <param name="yscale">The amount to scale by in the y direction.</param>
         private void SetScale(float xscale, float yscale)
         {
+            // Make backwards lines look better
+            gameObject.transform.localRotation = Quaternion.identity;
+            if (xscale < 0)
+            {
+                var temp = -xscale;
+                xscale = yscale;
+                yscale = temp;
+                gameObject.transform.Rotate(0, 0, 90);
+            }
+
             // Some global scaling shenanigans
             gameObject.transform.localScale = new Vector3
             {
@@ -236,10 +264,12 @@ namespace Assets.Scripts.ScratchPad
                 z = gameObject.transform.localScale.z
             };
 
+            // Attempt to fix DBZ errors
+            xscale += (xscale == 0) ? 0.01f : 0;
+            yscale += (yscale == 0) ? 0.01f : 0;
+
             float xscaled = xscale / gameObject.transform.lossyScale.x;
             float yscaled = yscale / gameObject.transform.lossyScale.y;
-            if (float.IsInfinity(xscaled)) xscaled = 0;
-            if (float.IsInfinity(yscaled)) yscaled = 0;
 
             gameObject.transform.localScale = new Vector3
             {
@@ -252,20 +282,34 @@ namespace Assets.Scripts.ScratchPad
             SegmentLeft.transform.localScale = new Vector3
             {
                 x = SegmentLeft.transform.localScale.x,
-                y = yscaled != 0 ? LINE_WIDTH / yscaled : 0,
+                y = LINE_THICKNESS / yscaled,
                 z = SegmentLeft.transform.localScale.z
             };
             SegmentMiddle.transform.localScale = new Vector3
             {
-                x = xscaled != 0 ? LINE_WIDTH / xscaled : 0,
+                x = LINE_THICKNESS / xscaled,
                 y = SegmentMiddle.transform.localScale.y,
                 z = SegmentMiddle.transform.localScale.z
             };
             SegmentRight.transform.localScale = new Vector3
             {
                 x = SegmentRight.transform.localScale.x,
-                y = yscaled != 0 ? LINE_WIDTH / yscaled : 0,
+                y = LINE_THICKNESS / yscaled,
                 z = SegmentRight.transform.localScale.z
+            };
+
+            // Inverse scale the elbows along both axes
+            ElbowTop.transform.localScale = new Vector3
+            {
+                x = LINE_THICKNESS / xscaled,
+                y = LINE_THICKNESS / yscaled,
+                z = ElbowTop.transform.localScale.z
+            };
+            ElbowBottom.transform.localScale = new Vector3
+            {
+                x = LINE_THICKNESS / xscaled,
+                y = LINE_THICKNESS / yscaled,
+                z = ElbowBottom.transform.localScale.z
             };
 
             // Unity complains if the individual segments have a negative scale
@@ -295,14 +339,14 @@ namespace Assets.Scripts.ScratchPad
             {
                 colour = Color.white;
             }
-            ApplyToAllSegments(segment =>
+            ApplyToAllParts(segment =>
             {
                 segment.GetComponent<Renderer>().material.color = colour;
             });
             if (!Visible)
             {
                 Visible = true;
-                gameObject.GetComponentsInChildren<Renderer>().ForEach(r => r.enabled = true);
+                ApplyToAllParts(part => part.gameObject.GetComponent<Renderer>().enabled = true);
             }
         }
 

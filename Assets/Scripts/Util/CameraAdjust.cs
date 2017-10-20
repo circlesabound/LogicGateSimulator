@@ -31,6 +31,11 @@ namespace Assets.Scripts.Util
             CurrentZoom = (float)Math.Pow(Math.Sqrt(CurrentZoom) - Math.Sqrt(Math.Abs(zoomLevelDelta)) * Math.Sign(zoomLevelDelta), 2);
         }
 
+        public static void Pan(Vector2 delta)
+        {
+            Camera.main.transform.Translate(delta);
+        }
+
         /// <summary>
         /// Smooth zooming
         /// </summary>

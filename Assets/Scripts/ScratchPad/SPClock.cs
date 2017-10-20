@@ -1,14 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Assets.Scripts.UI.MessageBoxes;
 using System.Linq;
-using System.Text;
 using UnityEngine;
 using UnityEngine.Assertions;
+using UnityEngine.EventSystems;
 
 namespace Assets.Scripts.ScratchPad
 {
-    public class SPClock : SPLogicComponent
+    public class SPClock : SPLogicComponent, IMessageBoxTriggerTarget
     {
+        private const string CLOCK_MESSAGE_BOX_CONFIG_RESOURCE = "Configs/MessageBoxes/clock";
+        private const uint DEFAULT_CLOCK_RATE = 60;
+        private MessageBoxConfig ClockMessageBoxConfig;
+        private UIMessageBoxFactory MessageBoxFactory;
+
+        protected SPClock() : base()
+        {
+        }
+
         protected SPConnector OutConnector
         {
             get
@@ -21,8 +29,32 @@ namespace Assets.Scripts.ScratchPad
             }
         }
 
-        protected SPClock() : base()
+        public override int GetHashCode()
         {
+            return base.GetHashCode() ^ ((Clock)LogicComponent).Period.GetHashCode();
+        }
+
+        public override void OnPointerClick(PointerEventData eventData)
+        {
+            base.OnPointerClick(eventData);
+            if (eventData.button == PointerEventData.InputButton.Left && !eventData.dragging)
+            {
+                if (Canvas.CurrentTool == SPTool.Pointer)
+                {
+                    MessageBoxFactory.MakeFromConfig(ClockMessageBoxConfig, this);
+                }
+            }
+        }
+
+        public void Trigger(MessageBoxTriggerData triggerData)
+        {
+            if (triggerData.ButtonPressed == UIMessageBox.MessageBoxButtonType.Positive)
+            {
+                Assert.IsTrue(triggerData.NumberInput.HasValue);
+                ((Clock)this.LogicComponent).Period = (uint)triggerData.NumberInput.Value;
+                Debug.Log("Setting clock rate to " + ((Clock)this.LogicComponent).Period.ToString());
+            }
+            Destroy(triggerData.Sender.gameObject);
         }
 
         protected override void Awake()
@@ -36,20 +68,23 @@ namespace Assets.Scripts.ScratchPad
             OutConnector.gameObject.name = "OutConnector";
             OutConnector.transform.localPosition = new Vector3(1, 0, -1);
             OutConnector.Register(this, SPConnectorType.SPOutConnector, 0);
-        }
 
-        // Use this for initialisation
-        protected override void Start()
-        {
-            base.Start();
-            // @TODO hardcoded for now lmao
-            LogicComponent = new Clock(10);
+            MessageBoxFactory = new UIMessageBoxFactory();
+
+            // Load the message box config for save ciruit
+            TextAsset configAsset = Resources.Load<TextAsset>(CLOCK_MESSAGE_BOX_CONFIG_RESOURCE);
+            Assert.IsNotNull(configAsset);
+            ClockMessageBoxConfig = JsonUtility.FromJson<MessageBoxConfig>(configAsset.text);
+
+            LogicComponent = new Clock(DEFAULT_CLOCK_RATE);
             Canvas.Circuit.AddComponent(LogicComponent);
         }
 
         // Update is called once per frame
         protected override void Update()
         {
+            base.Update();
+            //TODO swap sprites depending on clock state
         }
     }
 }

@@ -24,26 +24,17 @@ namespace Assets.Scripts.ScratchPad
         DrawEdge
     }
 
-    public class SPCanvas : MonoBehaviour, IPointerClickHandler
+    public class SPCanvas : MonoBehaviour, IPointerClickHandler, IBeginDragHandler, IDragHandler, IEndDragHandler
     {
         public List<SPLogicComponent> Components;
         public List<SPEdge> Edges;
         public GameObject Foreground;
         public bool Frozen;
+        public int LastSavedComponentsHash;
         public bool Running;
         public SPEdge SPEdgePrefab;
         private SPTool _CurrentTool;
         private SPTool _PreviousTool;
-
-        public int ComponentsHash
-        {
-            get
-            {
-                return Components.Aggregate(0, (h, c) => h ^ c.GetHashCode());
-            }
-        }
-
-        public int LastSavedComponentsHash;
 
         private SPLogicComponentFactory LogicComponentFactory;
 
@@ -51,6 +42,14 @@ namespace Assets.Scripts.ScratchPad
         {
             get;
             private set;
+        }
+
+        public int ComponentsHash
+        {
+            get
+            {
+                return Components.Aggregate(0, (h, c) => h ^ c.GetHashCode());
+            }
         }
 
         public SPEdge CurrentEdge
@@ -88,6 +87,26 @@ namespace Assets.Scripts.ScratchPad
             // this may throw ArgumentException, let SPConnector.OnPointerClick handle that
             CurrentEdge.AddFinishingConnector(connector);
             CurrentEdge = null;
+        }
+
+        public void OnBeginDrag(PointerEventData eventData)
+        {
+            //TODO maybe change cursor
+            //throw new NotImplementedException();
+        }
+
+        public void OnDrag(PointerEventData eventData)
+        {
+            if (eventData.button == PointerEventData.InputButton.Right)
+            {
+                CameraAdjust.Pan(-eventData.delta / gameObject.transform.localScale.x);
+            }
+        }
+
+        public void OnEndDrag(PointerEventData eventData)
+        {
+            //TODO maybe change cursor
+            //throw new NotImplementedException();
         }
 
         public void OnPointerClick(PointerEventData eventData)
