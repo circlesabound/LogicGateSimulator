@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using UnityEngine;
 using UnityEngine.Assertions;
+using UnityEngine.EventSystems;
 
 namespace Assets.Scripts.ScratchPad
 {
@@ -37,6 +38,7 @@ namespace Assets.Scripts.ScratchPad
         protected override void Awake()
         {
             base.Awake();
+
             InConnectors.AddRange(Enumerable.Repeat<SPConnector>(null, 1));
             OutConnectors.AddRange(Enumerable.Repeat<SPConnector>(null, 1));
 
@@ -55,6 +57,19 @@ namespace Assets.Scripts.ScratchPad
 
             LogicComponent = new NotGate();
             Canvas.Circuit.AddComponent(LogicComponent);
+
+        }
+
+        public override void OnPointerEnter(PointerEventData data)
+        {
+            // TODO override with different sprite depending on clock tick
+            base.OnPointerEnter(data);
+        }
+
+        public override void OnPointerExit(PointerEventData data)
+        {
+            // TODO override with different sprite depending on clock tick
+            base.OnPointerExit(data);
         }
     }
 }

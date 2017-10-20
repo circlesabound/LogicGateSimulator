@@ -12,7 +12,7 @@ namespace Assets.Scripts.ScratchPad
     /// <summary>
     /// An abstract class that all scratchpad representations of a logic component must extend.
     /// </summary>
-    public abstract class SPLogicComponent : MonoBehaviour, IPointerClickHandler, IBeginDragHandler, IDragHandler, IEndDragHandler
+    public abstract class SPLogicComponent : MonoBehaviour, IPointerClickHandler, IBeginDragHandler, IDragHandler, IEndDragHandler, IPointerEnterHandler, IPointerExitHandler
     {
         public LogicComponent LogicComponent;
         public SPInConnector SPInConnectorPrefab;
@@ -155,16 +155,18 @@ namespace Assets.Scripts.ScratchPad
         /// <summary>
         /// Linked in Unity inspector
         /// </summary>
-        public virtual void OnBeginHover()
+        public virtual void OnPointerEnter(PointerEventData data)
         {
+            Debug.Log("pointer enter");
             gameObject.GetComponent<SpriteRenderer>().sprite = SelectedSprite;
         }
 
         /// <summary>
         /// Linked in Unity inspector
         /// </summary>
-        public virtual void OnEndHover()
+        public virtual void OnPointerExit(PointerEventData data)
         {
+            Debug.Log("pointer exit");
             gameObject.GetComponent<SpriteRenderer>().sprite = UnselectedSprite;
         }
     }

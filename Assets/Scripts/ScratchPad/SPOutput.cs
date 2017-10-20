@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using UnityEngine;
 using UnityEngine.Assertions;
+using UnityEngine.EventSystems;
 
 namespace Assets.Scripts.ScratchPad
 {
@@ -66,12 +67,12 @@ namespace Assets.Scripts.ScratchPad
             }
         }
 
-        public override void OnBeginHover()
+        public override void OnPointerEnter(PointerEventData data)
         {
             Selected = true;
         }
 
-        public override void OnEndHover()
+        public override void OnPointerExit(PointerEventData data)
         {
             Selected = false;
         }

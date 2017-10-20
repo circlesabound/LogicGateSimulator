@@ -87,16 +87,16 @@ namespace Assets.Scripts.ScratchPad
             //TODO swap sprites depending on clock state
         }
 
-        public override void OnBeginHover()
+        public override void OnPointerEnter(PointerEventData data)
         {
             // TODO override with different sprite depending on clock tick
-            base.OnBeginHover();
+            base.OnPointerEnter(data);
         }
 
-        public override void OnEndHover()
+        public override void OnPointerExit(PointerEventData data)
         {
             // TODO override with different sprite depending on clock tick
-            base.OnEndHover();
+            base.OnPointerExit(data);
         }
     }
 }
