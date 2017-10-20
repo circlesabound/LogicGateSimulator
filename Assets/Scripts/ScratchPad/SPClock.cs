@@ -12,6 +12,9 @@ namespace Assets.Scripts.ScratchPad
         private const uint DEFAULT_CLOCK_RATE = 60;
         private MessageBoxConfig ClockMessageBoxConfig;
         private UIMessageBoxFactory MessageBoxFactory;
+        private SpriteRenderer renderer;
+        private Sprite[] sprites;
+        private int currentSprite;
 
         protected SPClock() : base()
         {
@@ -62,6 +65,11 @@ namespace Assets.Scripts.ScratchPad
             base.Awake();
             OutConnectors.AddRange(Enumerable.Repeat<SPConnector>(null, 1));
 
+            // Set up renderer
+            renderer = gameObject.GetComponent<SpriteRenderer>();
+            sprites = Resources.LoadAll<Sprite>("Sprites");
+            currentSprite = 0;
+
             // Set up connectors
             OutConnector = Instantiate(SPOutConnectorPrefab, gameObject.transform, false);
             Assert.IsNotNull(OutConnector);
@@ -84,6 +92,15 @@ namespace Assets.Scripts.ScratchPad
         protected override void Update()
         {
             base.Update();
+
+            // need to find a way to only update if the circuit is running?
+            Clock clock = LogicComponent as Clock;
+            if (clock.Tick == 1)
+            {
+                currentSprite = (currentSprite + 1) % sprites.Length;
+                renderer.sprite = sprites[currentSprite];
+            }
+
             //TODO swap sprites depending on clock state
         }
 

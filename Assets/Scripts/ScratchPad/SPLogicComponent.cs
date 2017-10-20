@@ -157,7 +157,6 @@ namespace Assets.Scripts.ScratchPad
         /// </summary>
         public virtual void OnPointerEnter(PointerEventData data)
         {
-            Debug.Log("pointer enter");
             gameObject.GetComponent<SpriteRenderer>().sprite = SelectedSprite;
         }
 
@@ -166,7 +165,6 @@ namespace Assets.Scripts.ScratchPad
         /// </summary>
         public virtual void OnPointerExit(PointerEventData data)
         {
-            Debug.Log("pointer exit");
             gameObject.GetComponent<SpriteRenderer>().sprite = UnselectedSprite;
         }
     }
