@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Assets.Scripts.ScratchPad;
+using System;
 using UnityEngine;
+using UnityEngine.Assertions;
 
 namespace Assets.Scripts.Util
 {
@@ -10,16 +12,35 @@ namespace Assets.Scripts.Util
         private static float TargetZoom = 5F; // surely there's a better way to do this
         private static float CurrentTime;
 
-        private static float CurrentZoom
+        public static float CurrentZoom
         {
             get
             {
                 return Camera.main.orthographicSize;
             }
-            set
+            private set
             {
                 Camera.main.orthographicSize = value;
             }
+        }
+
+        public static void Clamp()
+        {
+            var canvas = GameObject.FindObjectOfType<SPCanvas>();
+            Assert.IsNotNull(canvas);
+            var xscale = canvas.gameObject.transform.localScale.x;
+            var yscale = canvas.gameObject.transform.localScale.y;
+
+            // Limit zoom to a sensible amount
+            CurrentZoom = Mathf.Clamp(CurrentZoom, 0, yscale / 2 + Mathf.Sqrt(yscale / 2));
+
+            // Limit panning to the edge of the canvas
+            Camera.main.transform.position = new Vector3
+            {
+                x = Mathf.Clamp(Camera.main.transform.position.x, -xscale / 2, xscale / 2),
+                y = Mathf.Clamp(Camera.main.transform.position.y, -yscale / 2, yscale / 2),
+                z = Camera.main.transform.position.z
+            };
         }
 
         /// <summary>

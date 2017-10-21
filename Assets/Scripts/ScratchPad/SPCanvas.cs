@@ -2,8 +2,8 @@
 using Assets.Scripts.UI;
 using Assets.Scripts.Util;
 using System;
-using System.Linq;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.EventSystems;
@@ -32,22 +32,17 @@ namespace Assets.Scripts.ScratchPad
         public bool Frozen;
         public int LastSavedComponentsHash;
         public bool Running;
-        private int StepsToRunLeft;
-        private UIOverlayControlRunButton RunButton;
         public SPEdge SPEdgePrefab;
         private SPTool _CurrentTool;
         private SPTool _PreviousTool;
+        private SPLogicComponentFactory LogicComponentFactory;
+        private UIOverlayControlRunButton RunButton;
+        private int StepsToRunLeft;
 
-        public float SecondsPerUpdate
+        public Circuit Circuit
         {
-            get
-            {
-                return Time.fixedDeltaTime;
-            }
-            set
-            {
-                Time.fixedDeltaTime = value;
-            }
+            get;
+            private set;
         }
 
         public int ComponentsHash
@@ -56,14 +51,6 @@ namespace Assets.Scripts.ScratchPad
             {
                 return Components.Aggregate(0, (h, c) => h ^ c.GetHashCode());
             }
-        }
-
-        private SPLogicComponentFactory LogicComponentFactory;
-
-        public Circuit Circuit
-        {
-            get;
-            private set;
         }
 
         public SPEdge CurrentEdge
@@ -96,6 +83,18 @@ namespace Assets.Scripts.ScratchPad
             }
         }
 
+        public float SecondsPerUpdate
+        {
+            get
+            {
+                return Time.fixedDeltaTime;
+            }
+            set
+            {
+                Time.fixedDeltaTime = value;
+            }
+        }
+
         public void FinishEdge(SPConnector connector)
         {
             // this may throw ArgumentException, let SPConnector.OnPointerClick handle that
@@ -113,7 +112,9 @@ namespace Assets.Scripts.ScratchPad
         {
             if (eventData.button == PointerEventData.InputButton.Right)
             {
-                CameraAdjust.Pan(-eventData.delta / gameObject.transform.localScale.x);
+                // I have no idea what the right equation should be but this looks close enough
+                CameraAdjust.Pan(-eventData.delta / gameObject.transform.localScale.x * CameraAdjust.CurrentZoom / 2);
+                CameraAdjust.Clamp();
             }
         }
 
@@ -179,17 +180,30 @@ namespace Assets.Scripts.ScratchPad
             this.CurrentTool = this._PreviousTool;
         }
 
+        public void Run()
+        {
+            // If no more steps to run, assume we want to run indefinitely:
+            if (StepsToRunLeft <= 0)
+            {
+                StepsToRunLeft = -1;
+            }
+            SetRunning();
+        }
+
+        public void RunForKSteps(int K)
+        {
+            if (K > 0)
+            {
+                StepsToRunLeft = K;
+                SetRunning();
+            }
+        }
+
         public void StartEdge(SPConnector connector)
         {
             CurrentEdge = Instantiate(SPEdgePrefab, Foreground.transform);
             Assert.IsNotNull(CurrentEdge);
             CurrentEdge.AddStartingConnector(connector);
-        }
-
-        private void SetRunning()
-        {
-            Running = true;
-            RunButton.SetButtonStateToRunning();
         }
 
         public void StopRunning()
@@ -198,27 +212,11 @@ namespace Assets.Scripts.ScratchPad
             RunButton.SetButtonStateToNotRunning();
         }
 
-        public void Run()
-        {
-            // If no more steps to run, assume we want to run indefinitely:
-            if (StepsToRunLeft <= 0) {
-                StepsToRunLeft = -1;
-            }
-            SetRunning();
-        }
-
-        public void RunForKSteps(int K)
-        {
-            if (K > 0) {
-                StepsToRunLeft = K;
-                SetRunning();
-            }
-        }
-
         // Use this for initialization
         private void Awake()
         {
             Assert.IsNotNull(Foreground);
+            Assert.AreEqual(gameObject.transform.localScale.x, gameObject.transform.localScale.y);
             Components = new List<SPLogicComponent>();
             Edges = new List<SPEdge>();
             _CurrentTool = SPTool.Pointer;
@@ -229,13 +227,6 @@ namespace Assets.Scripts.ScratchPad
             Frozen = false;
         }
 
-        private void Start()
-        {
-            this.LogicComponentFactory = new SPLogicComponentFactory(this.Foreground);
-            this.RunButton = FindObjectOfType<UIOverlayControlRunButton>();
-            Assert.IsNotNull(this.RunButton);
-        }
-
         // FixedUpdate is called once every SecondsPerUpdate seconds
         private void FixedUpdate()
         {
@@ -244,14 +235,29 @@ namespace Assets.Scripts.ScratchPad
                 if (Running)
                 {
                     Circuit.Simulate();
-                    if (StepsToRunLeft > 0) {
+                    if (StepsToRunLeft > 0)
+                    {
                         StepsToRunLeft--;
-                        if (StepsToRunLeft == 0) {
+                        if (StepsToRunLeft == 0)
+                        {
                             StopRunning();
                         }
                     }
                 }
             }
+        }
+
+        private void SetRunning()
+        {
+            Running = true;
+            RunButton.SetButtonStateToRunning();
+        }
+
+        private void Start()
+        {
+            this.LogicComponentFactory = new SPLogicComponentFactory(this.Foreground);
+            this.RunButton = FindObjectOfType<UIOverlayControlRunButton>();
+            Assert.IsNotNull(this.RunButton);
         }
 
         // Update is called once per frame
@@ -261,6 +267,7 @@ namespace Assets.Scripts.ScratchPad
             {
                 var scrollDelta = Input.GetAxis("Mouse ScrollWheel");
                 CameraAdjust.SimpleZoom(scrollDelta);
+                CameraAdjust.Clamp();
             }
         }
     }
