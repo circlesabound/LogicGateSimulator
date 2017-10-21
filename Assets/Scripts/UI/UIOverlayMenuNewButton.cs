@@ -56,6 +56,8 @@ namespace Assets.Scripts.UI
             {
                 Canvas.Components[i].Delete();
             }
+            // Reset savefile hash
+            Canvas.LastSavedComponentsHash = Canvas.ComponentsHash;
         }
 
         private void Start()
