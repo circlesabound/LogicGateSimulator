@@ -84,7 +84,7 @@ namespace Assets.Scripts.UI
                 var togglerConfigs = circuitConfig.toggles;
                 var clockConfigs = circuitConfig.clocks;
 
-                Assert.AreEqual(circuitConfig.game_mode, GameMode.ActivateAllOutputsChallenge);
+                Assert.AreNotEqual(circuitConfig.game_mode, GameMode.Sandbox);
 
                 // Clear the canvas
                 for (int i = Canvas.Components.Count - 1; i >= 0; --i)
@@ -138,7 +138,7 @@ namespace Assets.Scripts.UI
                 }
 
                 // Put the canvas into challenge mode
-                Canvas.CurrentMode = GameMode.ActivateAllOutputsChallenge;
+                Canvas.CurrentMode = circuitConfig.game_mode;
                 Canvas.ChallengeCompleted = false;
                 Canvas.SetAsSaved();
             }
