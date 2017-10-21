@@ -11,6 +11,8 @@ namespace Assets.Scripts.UI.MessageBoxes
         public MessageBoxTextInputConfig text_input;
         public MessageBoxNumberSliderConfig number_slider;
         public MessageBoxButtonContainer buttons;
+        public float x_position;
+        public float y_position;
         public bool is_modal;
         public string classname;
 

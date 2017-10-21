@@ -8,20 +8,7 @@
         "hidden": true
     },
     "number_slider": {
-        "min_value": -10,
-        "max_value": 10,
-        "label_left": {
-            "content_type": "static",
-            "static_content": {
-                "label": "Hello"
-            }
-        },
-        "label_right": {
-            "content_type": "dynamic",
-            "dynamic_provider": {
-                "classname": "TestProvider"
-            }
-        }
+        "hidden": true
     },
     "buttons": {
         "positive_button": {

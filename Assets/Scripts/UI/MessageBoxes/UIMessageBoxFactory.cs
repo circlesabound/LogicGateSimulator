@@ -308,6 +308,14 @@ namespace Assets.Scripts.UI.MessageBoxes
             // Attach the trigger target
             mb.TriggerTarget = triggerTarget;
 
+            // Set message box position
+            mb.MessageBox.transform.localPosition = new Vector3
+            {
+                x = config.x_position,
+                y = config.y_position,
+                z = mb.Message.transform.localPosition.z
+            };
+
             return mb;
         }
     }

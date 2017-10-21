@@ -48,7 +48,7 @@ namespace Assets.Scripts.ScratchPad
         public override void OnPointerClick(PointerEventData eventData)
         {
             base.OnPointerClick(eventData);
-            if (eventData.button == PointerEventData.InputButton.Left)
+            if (eventData.button == PointerEventData.InputButton.Left && !eventData.dragging)
             {
                 if (Canvas.CurrentTool == SPTool.Pointer)
                 {
