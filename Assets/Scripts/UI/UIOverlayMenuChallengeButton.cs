@@ -126,6 +126,17 @@ namespace Assets.Scripts.UI
                     Canvas.FinishEdge(guidMap[config.ComponentGuids[1]].OutConnectors[config.connector_ids[1]]);
                 }
 
+                // Set all initial components to immutable
+                foreach (var component in Canvas.Components)
+                {
+                    component.Immutable = true;
+                }
+
+                foreach (var edge in Canvas.Edges)
+                {
+                    edge.Immutable = true;
+                }
+
                 // Put the canvas into challenge mode
                 Canvas.CurrentMode = GameMode.ActivateAllOutputsChallenge;
                 Canvas.ChallengeCompleted = false;

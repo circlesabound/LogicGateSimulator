@@ -22,6 +22,8 @@ namespace Assets.Scripts.ScratchPad
         public List<SPConnector> InConnectors;
         public List<SPConnector> OutConnectors;
 
+        public bool Immutable;
+
         protected SPLogicComponent()
         {
             // Don't do anything here!
@@ -83,7 +85,7 @@ namespace Assets.Scripts.ScratchPad
                 {
                     case SPTool.Pointer:
                         // TODO: make this depend on objects mutability.
-                        if (!Canvas.IsChallenge) Delete();
+                        if (!this.Immutable) Delete();
                         break;
 
                     default:
