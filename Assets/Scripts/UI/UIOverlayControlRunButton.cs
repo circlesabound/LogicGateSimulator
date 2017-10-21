@@ -14,7 +14,6 @@ namespace Assets.Scripts.UI
     public class UIOverlayControlRunButton : MonoBehaviour
     {
         private SPCanvas Canvas;
-        private Text DisplayText;
 
         public Sprite RunButtonSprite;
         public Sprite PauseButtonSprite;
@@ -51,7 +50,6 @@ namespace Assets.Scripts.UI
         public void SetButtonStateToNotRunning()
         {
             ButtonState = UIOverlayControlRunButtonState.RunButton;
-            DisplayText.text = "Run";
             gameObject.GetComponent<Image>().sprite = RunButtonSprite;
 
             // Update canvas state
@@ -61,7 +59,6 @@ namespace Assets.Scripts.UI
         public void SetButtonStateToRunning()
         {
             ButtonState = UIOverlayControlRunButtonState.PauseButton;
-            DisplayText.text = "Pause";
             gameObject.GetComponent<Image>().sprite = PauseButtonSprite;
         }
 
@@ -81,10 +78,6 @@ namespace Assets.Scripts.UI
         {
             Canvas = FindObjectOfType<SPCanvas>();
             Assert.IsNotNull(Canvas);
-            var displayTextTransform = this.gameObject.transform.Find("UIOverlayControlRunButtonText");
-            Assert.IsNotNull(displayTextTransform);
-            DisplayText = displayTextTransform.gameObject.GetComponent<Text>();
-            Assert.IsNotNull(DisplayText);
             SetButtonStateToNotRunning();
         }
 
