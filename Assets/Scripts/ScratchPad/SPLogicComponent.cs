@@ -82,7 +82,7 @@ namespace Assets.Scripts.ScratchPad
                 switch (Canvas.CurrentTool)
                 {
                     case SPTool.Pointer:
-                        Delete();
+                        if (!Canvas.IsChallenge) Delete();
                         break;
 
                     default:

@@ -39,7 +39,7 @@ namespace Assets.Scripts.ScratchPad
             base.OnPointerClick(eventData);
             if (eventData.button == PointerEventData.InputButton.Left && !eventData.dragging)
             {
-                if (Canvas.CurrentTool == SPTool.Pointer)
+                if (Canvas.CurrentTool == SPTool.Pointer && !Canvas.IsChallenge)
                 {
                     MessageBoxFactory.MakeFromConfig(ClockMessageBoxConfig, this);
                 }

@@ -30,11 +30,25 @@ namespace Assets.Scripts.ScratchPad
         public List<SPEdge> Edges;
         public GameObject Foreground;
         public bool Frozen;
-        public int LastSavedComponentsHash;
+        private int LastSavedComponentsHash;
         public bool Running;
         public SPEdge SPEdgePrefab;
         private SPTool _CurrentTool;
         private SPTool _PreviousTool;
+        public bool IsChallenge;
+
+        public bool IsUnsaved
+        {
+            get
+            {
+                return !IsChallenge && ComponentsHash != LastSavedComponentsHash;
+            }
+        }
+
+        public void SetAsSaved()
+        {
+            LastSavedComponentsHash = ComponentsHash;
+        }
 
         private SPLogicComponentFactory LogicComponentFactory;
 
@@ -44,7 +58,7 @@ namespace Assets.Scripts.ScratchPad
             private set;
         }
 
-        public int ComponentsHash
+        private int ComponentsHash
         {
             get
             {
@@ -131,6 +145,9 @@ namespace Assets.Scripts.ScratchPad
 
                 if (eventData.button == PointerEventData.InputButton.Left)
                 {
+                    // Can't build in challenges
+                    if (IsChallenge) return;
+
                     // Build component configuration
                     LogicComponentConfig componentConfig = new LogicComponentConfig(
                         chosenComponentEntry.ComponentClassname,

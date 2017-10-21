@@ -15,7 +15,7 @@ namespace Assets.Scripts.UI
         public void OnButtonClick()
         {
             // Check for unsaved changes
-            if (Canvas.LastSavedComponentsHash != Canvas.ComponentsHash)
+            if (Canvas.IsUnsaved)
             {
                 Canvas.Frozen = true;
                 MessageBoxFactory.MakeFromConfig(UnsavedChangesMessageBoxConfig, this);
@@ -23,6 +23,7 @@ namespace Assets.Scripts.UI
             else
             {
                 ClearCanvas();
+                Canvas.IsChallenge = false;
             }
         }
 

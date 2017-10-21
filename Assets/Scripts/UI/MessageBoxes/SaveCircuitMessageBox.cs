@@ -58,6 +58,37 @@ namespace Assets.Scripts.UI.MessageBoxes
             TriggerTarget.Trigger(triggerData);
         }
 
+        public void OnSaveAsChallengeButtonClick()
+        {
+            string filename = this.TextInput.FindChildGameObject("UIMessageBoxTextInputText").GetComponent<Text>().text;
+            string fullname = filename + ".json";
+            string fullpath = Directories.CHALLENGE_FOLDER_FULL_PATH + "/" + fullname;
+
+            // If file has invalid name, show error dialog
+            if (filename.IndexOfAny(Path.GetInvalidFileNameChars()) != -1 ||
+                String.IsNullOrWhiteSpace(filename))
+            {
+                MessageBoxFactory.MakeFromConfig(SaveBadNameMessageBoxConfig, this);
+                return;
+            }
+
+            // If file already exists, ask for overwrite confirmation
+            if (File.Exists(fullpath))
+            {
+                MessageBoxFactory.MakeFromConfig(SaveOverwriteMessageBoxConfig, this);
+                return;
+            }
+
+            // Run callback to save circuit, close message box, and unfreeze canvas
+            MessageBoxTriggerData triggerData = new MessageBoxTriggerData
+            {
+                ButtonPressed = MessageBoxButtonType.Neutral,
+                Sender = this,
+                TextInput = filename
+            };
+            TriggerTarget.Trigger(triggerData);
+        }
+
         public override void Trigger(MessageBoxTriggerData triggerData)
         {
             if (triggerData.Sender.GetType() == typeof(SimpleMessageBox))

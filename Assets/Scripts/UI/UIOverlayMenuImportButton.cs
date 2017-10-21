@@ -25,6 +25,7 @@ namespace Assets.Scripts.UI
         /// </summary>
         public void OnButtonClick()
         {
+            if (Canvas.IsChallenge) return;
             Canvas.Frozen = true;
             MessageBoxFactory.MakeFromConfig(ImportCircuitMessageBoxConfig, this);
         }
@@ -63,6 +64,8 @@ namespace Assets.Scripts.UI
                 var edgeConfigs = circuitConfig.edges;
                 var togglerConfigs = circuitConfig.toggles;
                 var clockConfigs = circuitConfig.clocks;
+
+                Assert.IsFalse(circuitConfig.is_challenge);
 
                 var logicComponentFactory = new SPLogicComponentFactory(Canvas.Foreground);
 

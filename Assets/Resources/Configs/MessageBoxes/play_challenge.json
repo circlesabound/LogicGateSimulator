@@ -1,0 +1,34 @@
+{
+    "title": "Play challenge",
+    "message": "Choose a challenge to attempt: ",
+    "scroll_view": {
+        "content_type": "dynamic",
+        "dynamic_content": {
+            "item_blueprint": {
+                "classname": "PlayChallengeScrollViewItem",
+                "onclick": "OnItemClick"
+            }
+        }
+    },
+    "text_input": {
+        "hidden": true
+    },
+    "number_slider": {
+        "hidden": true
+    },
+    "buttons": {
+        "positive_button": {
+            "label": "Open",
+            "onclick": "OnOpenButtonClick"
+        },
+        "neutral_button": {
+            "hidden": true
+        },
+        "negative_button": {
+            "label": "Cancel",
+            "onclick": "OnCancelButtonClick"
+        }
+    },
+    "is_modal": true,
+    "classname": "PlayChallengeMessageBox"
+}
