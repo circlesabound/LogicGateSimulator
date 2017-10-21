@@ -82,6 +82,7 @@ namespace Assets.Scripts.ScratchPad
                 switch (Canvas.CurrentTool)
                 {
                     case SPTool.Pointer:
+                        // TODO: make this depend on objects mutability.
                         if (!Canvas.IsChallenge) Delete();
                         break;
 

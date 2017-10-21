@@ -23,7 +23,7 @@ namespace Assets.Scripts.UI
             else
             {
                 ClearCanvas();
-                Canvas.IsChallenge = false;
+                Canvas.CurrentMode = GameMode.Sandbox;
             }
         }
 

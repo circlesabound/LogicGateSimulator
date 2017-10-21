@@ -25,6 +25,12 @@ namespace Assets.Scripts.ScratchPad
         DrawEdge
     }
 
+    public enum GameMode
+    {
+        Sandbox, // The normal, non challenge mode.
+        ActivateAllOutputsChallenge
+    }
+
     public class SPCanvas : MonoBehaviour, IPointerClickHandler, IBeginDragHandler, IDragHandler, IEndDragHandler
     {
         private const string CHALLENGE_COMPLETE_MESSAGE_BOX_CONFIG_RESOURCE = "Configs/MessageBoxes/challenge_complete";
@@ -40,8 +46,16 @@ namespace Assets.Scripts.ScratchPad
         public SPEdge SPEdgePrefab;
         private SPTool _CurrentTool;
         private SPTool _PreviousTool;
-        public bool IsChallenge;
+        public GameMode CurrentMode;
         public bool ChallengeCompleted;
+
+        public bool IsChallenge
+        {
+            get
+            {
+                return CurrentMode != GameMode.Sandbox;
+            }
+        }
 
         public bool IsUnsaved
         {
@@ -152,8 +166,8 @@ namespace Assets.Scripts.ScratchPad
 
                 if (eventData.button == PointerEventData.InputButton.Left)
                 {
-                    // Can't build in challenges
-                    if (IsChallenge) return;
+                    // Can't build in ActivateAllOutputs mode
+                    if (CurrentMode == GameMode.ActivateAllOutputsChallenge) return;
 
                     // Build component configuration
                     LogicComponentConfig componentConfig = new LogicComponentConfig(
@@ -208,6 +222,7 @@ namespace Assets.Scripts.ScratchPad
             Circuit = new Circuit();
             Running = false;
             Frozen = false;
+            CurrentMode = GameMode.Sandbox;
 
             // Load the message box config for open circuit
             TextAsset configAsset = Resources.Load<TextAsset>(CHALLENGE_COMPLETE_MESSAGE_BOX_CONFIG_RESOURCE);

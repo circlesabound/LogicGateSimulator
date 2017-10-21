@@ -84,7 +84,7 @@ namespace Assets.Scripts.UI
                 var togglerConfigs = circuitConfig.toggles;
                 var clockConfigs = circuitConfig.clocks;
 
-                Assert.IsFalse(circuitConfig.is_challenge);
+                Assert.AreEqual(circuitConfig.game_mode, GameMode.Sandbox);
 
                 // Clear the canvas
                 for (int i = Canvas.Components.Count - 1; i >= 0; --i)
@@ -127,7 +127,7 @@ namespace Assets.Scripts.UI
                 }
 
                 // Loading a circuit means the circuit that was just loaded is "saved"
-                Canvas.IsChallenge = false;
+                Canvas.CurrentMode = GameMode.Sandbox;
                 Canvas.SetAsSaved();
             }
 

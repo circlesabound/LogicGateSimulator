@@ -78,7 +78,8 @@ namespace Assets.Scripts.UI
                     componentConfigs,
                     edgeConfigs,
                     toggleConfigs,
-                    clockConfigs);
+                    clockConfigs,
+                    mode: GameMode.Sandbox);
 
 #if DEVELOPMENT_BUILD
                 string saveData = JsonUtility.ToJson(spConfig, prettyPrint: true);
@@ -147,7 +148,7 @@ namespace Assets.Scripts.UI
                     edgeConfigs,
                     toggleConfigs,
                     clockConfigs,
-                    isChallenge: true);
+                    mode: GameMode.ActivateAllOutputsChallenge);
 
 #if DEVELOPMENT_BUILD
                 string saveData = JsonUtility.ToJson(spConfig, prettyPrint: true);

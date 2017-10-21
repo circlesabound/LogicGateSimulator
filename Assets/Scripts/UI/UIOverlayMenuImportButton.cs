@@ -65,7 +65,7 @@ namespace Assets.Scripts.UI
                 var togglerConfigs = circuitConfig.toggles;
                 var clockConfigs = circuitConfig.clocks;
 
-                Assert.IsFalse(circuitConfig.is_challenge);
+                Assert.AreEqual(circuitConfig.game_mode, GameMode.Sandbox);
 
                 var logicComponentFactory = new SPLogicComponentFactory(Canvas.Foreground);
 

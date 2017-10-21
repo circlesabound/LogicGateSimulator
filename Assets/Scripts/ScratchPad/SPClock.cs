@@ -39,7 +39,9 @@ namespace Assets.Scripts.ScratchPad
             base.OnPointerClick(eventData);
             if (eventData.button == PointerEventData.InputButton.Left && !eventData.dragging)
             {
-                if (Canvas.CurrentTool == SPTool.Pointer && !Canvas.IsChallenge)
+                // TODO: Link this to mutability of clock item.
+                if (Canvas.CurrentTool == SPTool.Pointer &&
+                    Canvas.CurrentMode != GameMode.ActivateAllOutputsChallenge)
                 {
                     MessageBoxFactory.MakeFromConfig(ClockMessageBoxConfig, this);
                 }
