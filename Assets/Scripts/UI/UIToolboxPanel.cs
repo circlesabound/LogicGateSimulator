@@ -80,6 +80,8 @@ namespace Assets.Scripts.UI
                 // Set up panel entry
                 newPanelEntry.SimpleName = panelEntryConfig.panel_name;
                 newPanelEntry.SetSprites(activeSprite, inactiveSprite);
+                newPanelEntry.InfoPanelTitle = panelEntryConfig.panel_name;
+                newPanelEntry.InfoPanelText = panelEntryConfig.entry_description;
             }
 
             // Remove the back button
@@ -121,6 +123,8 @@ namespace Assets.Scripts.UI
                 newComponentEntry.SimpleName = componentEntryConfig.component_name;
                 newComponentEntry.SetSprites(activeSprite, inactiveSprite);
                 newComponentEntry.ComponentClassname = componentEntryConfig.component_classname;
+                newComponentEntry.InfoPanelTitle = componentEntryConfig.component_name;
+                newComponentEntry.InfoPanelText = componentEntryConfig.entry_description;
             }
 
             // Finalise panel

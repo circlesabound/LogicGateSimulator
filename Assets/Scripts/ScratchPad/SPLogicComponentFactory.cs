@@ -15,6 +15,7 @@ namespace Assets.Scripts.Savefile
         private GameObject CanvasForeground;
 
         private Dictionary<Type, GameObject> PrefabMapping;
+        private Dictionary<Type, Tuple<string, string>> InfoPanelContentMapping;
 
         public SPLogicComponentFactory(GameObject canvasForeground)
         {
@@ -26,8 +27,9 @@ namespace Assets.Scripts.Savefile
             Assert.IsNotNull(componentListAsset);
             ComponentList componentList = JsonUtility.FromJson<ComponentList>(componentListAsset.text);
 
-            // Populate prefab mapping dictionary
-            this.PrefabMapping = new Dictionary<Type, GameObject>();
+            // Populate mapping dictionaries
+            PrefabMapping = new Dictionary<Type, GameObject>();
+            InfoPanelContentMapping = new Dictionary<Type, Tuple<string, string>>();
             foreach (var componentListElement in componentList.components)
             {
                 // Class names in the config file are not fully qualified, we need to append the namespace
@@ -41,6 +43,10 @@ namespace Assets.Scripts.Savefile
 
                 Assert.IsFalse(this.PrefabMapping.ContainsKey(componentType));
                 this.PrefabMapping.Add(componentType, prefab);
+
+                // Save the base info panel strings
+                Assert.IsFalse(InfoPanelContentMapping.ContainsKey(componentType));
+                InfoPanelContentMapping.Add(componentType, Tuple.Create(componentListElement.name, componentListElement.description));
             }
             Debug.Log("Populated component prefab map with " + PrefabMapping.Count.ToString() + " pairs.");
         }
@@ -67,8 +73,13 @@ namespace Assets.Scripts.Savefile
                 this.CanvasForeground.transform);
             Assert.IsNotNull(newGameObject);
             newGameObject.tag = "SPElement";
+            var logicComponent = (SPLogicComponent)(newGameObject.GetComponent(t));
 
-            return (SPLogicComponent)(newGameObject.GetComponent(t));
+            // Set the base info panel strings
+            logicComponent.InfoPanelTitle = InfoPanelContentMapping[t].Item1;
+            logicComponent.InfoPanelText = InfoPanelContentMapping[t].Item2;
+
+            return logicComponent;
         }
 
         #region Component list serialisation data types
@@ -86,6 +97,8 @@ namespace Assets.Scripts.Savefile
         {
             public string classname;
             public string prefab;
+            public string name;
+            public string description;
         }
 
 #pragma warning restore 0649

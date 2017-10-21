@@ -7,17 +7,38 @@ using System.IO;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Assertions;
+using UnityEngine.EventSystems;
 
 namespace Assets.Scripts.UI
 {
-    public class UIOverlayMenuSaveButton : MonoBehaviour, IMessageBoxTriggerTarget
+    public class UIOverlayMenuSaveButton : MonoBehaviour, IMessageBoxTriggerTarget, IInfoPanelTextProvider, IPointerEnterHandler, IPointerExitHandler
     {
+        private const string SAVE_BUTTON_INFO_PANEL_TITLE = "Save";
+        private const string SAVE_BUTTON_INFO_PANEL_DESCRIPTION = "Save the current circuit to file.";
         private const string SAVE_CIRCUIT_MESSAGE_BOX_CONFIG_RESOURCE = "Configs/MessageBoxes/save";
         private const string SAVE_ERROR_MESSAGE_BOX_CONFIG_RESOURCE = "Configs/MessageBoxes/save_error";
         private SPCanvas Canvas;
         private UIMessageBoxFactory MessageBoxFactory;
         private MessageBoxConfig SaveCircuitMessageBoxConfig;
         private MessageBoxConfig SaveErrorMessageBoxConfig;
+
+        private UIOverlayInfoPanel InfoPanel;
+
+        public string InfoPanelTitle
+        {
+            get
+            {
+                return SAVE_BUTTON_INFO_PANEL_TITLE;
+            }
+        }
+
+        public string InfoPanelText
+        {
+            get
+            {
+                return SAVE_BUTTON_INFO_PANEL_DESCRIPTION;
+            }
+        }
 
         /// <summary>
         /// Linked to button click in Unity inspector
@@ -128,6 +149,19 @@ namespace Assets.Scripts.UI
         {
             Canvas = FindObjectOfType<SPCanvas>();
             Assert.IsNotNull(Canvas);
+            InfoPanel = FindObjectOfType<UIOverlayInfoPanel>();
+            Assert.IsNotNull(InfoPanel);
+        }
+
+        public void OnPointerEnter(PointerEventData eventData)
+        {
+            InfoPanel.SetInfoTarget(this);
+            InfoPanel.Show();
+        }
+
+        public void OnPointerExit(PointerEventData eventData)
+        {
+            InfoPanel.Hide();
         }
     }
 }

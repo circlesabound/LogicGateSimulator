@@ -2,15 +2,36 @@
 using Assets.Scripts.UI.MessageBoxes;
 using UnityEngine;
 using UnityEngine.Assertions;
+using UnityEngine.EventSystems;
 
 namespace Assets.Scripts.UI
 {
-    public class UIOverlayMenuNewButton : MonoBehaviour, IMessageBoxTriggerTarget
+    public class UIOverlayMenuNewButton : MonoBehaviour, IMessageBoxTriggerTarget, IInfoPanelTextProvider, IPointerEnterHandler, IPointerExitHandler
     {
+        private const string NEW_BUTTON_INFO_PANEL_TITLE = "New circuit";
+        private const string NEW_BUTTON_INFO_PANEL_DESCRIPTION = "Create a new circuit.";
         private const string UNSAVED_CHANGES_MESSAGE_BOX_CONFIG_RESOURCE = "Configs/MessageBoxes/unsaved_changes";
         private SPCanvas Canvas;
         private UIMessageBoxFactory MessageBoxFactory;
         private MessageBoxConfig UnsavedChangesMessageBoxConfig;
+
+        private UIOverlayInfoPanel InfoPanel;
+
+        public string InfoPanelTitle
+        {
+            get
+            {
+                return NEW_BUTTON_INFO_PANEL_TITLE;
+            }
+        }
+
+        public string InfoPanelText
+        {
+            get
+            {
+                return NEW_BUTTON_INFO_PANEL_DESCRIPTION;
+            }
+        }
 
         public void OnButtonClick()
         {
@@ -64,6 +85,19 @@ namespace Assets.Scripts.UI
         {
             Canvas = FindObjectOfType<SPCanvas>();
             Assert.IsNotNull(Canvas);
+            InfoPanel = FindObjectOfType<UIOverlayInfoPanel>();
+            Assert.IsNotNull(InfoPanel);
+        }
+
+        public void OnPointerEnter(PointerEventData eventData)
+        {
+            InfoPanel.SetInfoTarget(this);
+            InfoPanel.Show();
+        }
+
+        public void OnPointerExit(PointerEventData eventData)
+        {
+            InfoPanel.Hide();
         }
     }
 }

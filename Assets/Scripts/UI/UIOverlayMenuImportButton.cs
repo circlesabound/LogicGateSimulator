@@ -7,18 +7,40 @@ using System.IO;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Assertions;
+using UnityEngine.EventSystems;
 
 namespace Assets.Scripts.UI
 {
-    public class UIOverlayMenuImportButton : MonoBehaviour, IMessageBoxTriggerTarget
+    public class UIOverlayMenuImportButton : MonoBehaviour, IMessageBoxTriggerTarget, IInfoPanelTextProvider, IPointerEnterHandler, IPointerExitHandler
     {
         private const string IMPORT_CIRCUIT_MESSAGE_BOX_CONFIG_RESOURCE = "Configs/MessageBoxes/import";
         private const string IMPORT_ERROR_MESSAGE_BOX_CONFIG_RESOURCE = "Configs/MessageBoxes/import_error";
+
+        private const string IMPORT_BUTTON_INFO_PANEL_TITLE = "Import circuit";
+        private const string IMPORT_BUTTON_INFO_PANEL_DESCRIPTION = "Import the components of a saved circuit into the current circuit.";
 
         private SPCanvas Canvas;
         private UIMessageBoxFactory MessageBoxFactory;
         private MessageBoxConfig ImportCircuitMessageBoxConfig;
         private MessageBoxConfig ImportErrorMessageBoxConfig;
+
+        private UIOverlayInfoPanel InfoPanel;
+
+        public string InfoPanelTitle
+        {
+            get
+            {
+                return IMPORT_BUTTON_INFO_PANEL_TITLE;
+            }
+        }
+
+        public string InfoPanelText
+        {
+            get
+            {
+                return IMPORT_BUTTON_INFO_PANEL_DESCRIPTION;
+            }
+        }
 
         /// <summary>
         /// Linked to button click in Unity inspector
@@ -122,6 +144,19 @@ namespace Assets.Scripts.UI
         {
             Canvas = FindObjectOfType<SPCanvas>();
             Assert.IsNotNull(Canvas);
+            InfoPanel = FindObjectOfType<UIOverlayInfoPanel>();
+            Assert.IsNotNull(InfoPanel);
+        }
+
+        public void OnPointerEnter(PointerEventData eventData)
+        {
+            InfoPanel.SetInfoTarget(this);
+            InfoPanel.Show();
+        }
+
+        public void OnPointerExit(PointerEventData eventData)
+        {
+            InfoPanel.Hide();
         }
     }
 }

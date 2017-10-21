@@ -2,43 +2,63 @@
     "components": [
         {
             "classname": "SPAndGate",
-            "prefab": "Prefabs/SPAndGate"
+            "prefab": "Prefabs/SPAndGate",
+            "name": "AND gate",
+            "description": "todo"
         },
         {
             "classname": "SPOrGate",
-            "prefab": "Prefabs/SPOrGate"
+            "prefab": "Prefabs/SPOrGate",
+            "name": "OR gate",
+            "description": "todo"
         },
         {
             "classname": "SPNotGate",
-            "prefab": "Prefabs/SPNotGate"
+            "prefab": "Prefabs/SPNotGate",
+            "name": "NOT gate",
+            "description": "todo"
         },
         {
             "classname": "SPXorGate",
-            "prefab": "Prefabs/SPXorGate"
+            "prefab": "Prefabs/SPXorGate",
+            "name": "XOR gate",
+            "description": "todo"
         },
         {
             "classname": "SPTrueConst",
-            "prefab": "Prefabs/SPTrueConst"
+            "prefab": "Prefabs/SPTrueConst",
+            "name": "TRUE constant input",
+            "description": "todo"
         },
         {
             "classname": "SPFalseConst",
-            "prefab": "Prefabs/SPFalseConst"
+            "prefab": "Prefabs/SPFalseConst",
+            "name": "FALSE constant input",
+            "description": "todo"
         },
         {
             "classname": "SPOutput",
-            "prefab": "Prefabs/SPOutput"
+            "prefab": "Prefabs/SPOutput",
+            "name": "Output light",
+            "description": "todo"
         },
         {
             "classname": "SPSplitterComponent",
-            "prefab": "Prefabs/SPSplitterComponent"
+            "prefab": "Prefabs/SPSplitterComponent",
+            "name": "Edge splitter",
+            "description": "todo"
         },
         {
             "classname": "SPInputToggler",
-            "prefab": "Prefabs/SPInputToggler"
+            "prefab": "Prefabs/SPInputToggler",
+            "name": "Switchable input",
+            "description": "todo"
         },
         {
             "classname": "SPClock",
-            "prefab": "Prefabs/SPClock"
+            "prefab": "Prefabs/SPClock",
+            "name": "Clock input",
+            "description": "todo"
         }
     ]
 }

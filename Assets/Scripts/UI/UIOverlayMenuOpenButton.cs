@@ -7,14 +7,20 @@ using System.IO;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Assertions;
+using UnityEngine.EventSystems;
 
 namespace Assets.Scripts.UI
 {
-    public class UIOverlayMenuOpenButton : MonoBehaviour, IMessageBoxTriggerTarget
+    public class UIOverlayMenuOpenButton : MonoBehaviour, IMessageBoxTriggerTarget, IInfoPanelTextProvider, IPointerEnterHandler, IPointerExitHandler
     {
+        private const string OPEN_BUTTON_INFO_PANEL_TITLE = "Open circuit";
+        private const string OPEN_BUTTON_INFO_PANEL_DESCRIPTION = "Open a saved circuit file.";
+
         private const string OPEN_CIRCUIT_MESSAGE_BOX_CONFIG_RESOURCE = "Configs/MessageBoxes/open";
         private const string OPEN_ERROR_MESSAGE_BOX_CONFIG_RESOURCE = "Configs/MessageBoxes/open_error";
         private const string UNSAVED_CHANGES_MESSAGE_BOX_CONFIG_RESOURCE = "Configs/MessageBoxes/unsaved_changes";
+
+        private UIOverlayInfoPanel InfoPanel;
 
         private SPCanvas Canvas;
         private UIMessageBoxFactory MessageBoxFactory;
@@ -22,6 +28,22 @@ namespace Assets.Scripts.UI
         private MessageBoxConfig OpenErrorMessageBoxConfig;
         private MessageBoxConfig UnsavedChangesMessageBoxConfig;
         private Stack<string> SelectedFilenameStash; // to save filename data across confirmation message boxes
+
+        public string InfoPanelTitle
+        {
+            get
+            {
+                return OPEN_BUTTON_INFO_PANEL_TITLE;
+            }
+        }
+
+        public string InfoPanelText
+        {
+            get
+            {
+                return OPEN_BUTTON_INFO_PANEL_DESCRIPTION;
+            }
+        }
 
         /// <summary>
         /// Linked to button click in Unity inspector
@@ -157,6 +179,19 @@ namespace Assets.Scripts.UI
         {
             Canvas = FindObjectOfType<SPCanvas>();
             Assert.IsNotNull(Canvas);
+            InfoPanel = FindObjectOfType<UIOverlayInfoPanel>();
+            Assert.IsNotNull(InfoPanel);
+        }
+
+        public void OnPointerEnter(PointerEventData eventData)
+        {
+            InfoPanel.SetInfoTarget(this);
+            InfoPanel.Show();
+        }
+
+        public void OnPointerExit(PointerEventData eventData)
+        {
+            InfoPanel.Hide();
         }
     }
 }

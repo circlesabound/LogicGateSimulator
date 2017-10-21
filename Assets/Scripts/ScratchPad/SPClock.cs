@@ -122,12 +122,15 @@ namespace Assets.Scripts.ScratchPad
         {
             Hover = true;
             SpriteRenderer.sprite = SelectedClockSprites[CurrentSpriteIndex];
+            InfoPanel.SetInfoTarget(this);
+            InfoPanel.Show();
         }
 
         public override void OnPointerExit(PointerEventData data)
         {
             Hover = false;
             SpriteRenderer.sprite = UnselectedClockSprites[CurrentSpriteIndex];
+            InfoPanel.Hide();
         }
     }
 }
