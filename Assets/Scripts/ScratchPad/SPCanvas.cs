@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.EventSystems;
+using Assets.Scripts.UI.MessageBoxes;
 
 namespace Assets.Scripts.ScratchPad
 {
@@ -26,6 +27,10 @@ namespace Assets.Scripts.ScratchPad
 
     public class SPCanvas : MonoBehaviour, IPointerClickHandler, IBeginDragHandler, IDragHandler, IEndDragHandler
     {
+        private const string CHALLENGE_COMPLETE_MESSAGE_BOX_CONFIG_RESOURCE = "Configs/MessageBoxes/challenge_complete";
+
+        private MessageBoxConfig ChallengeCompleteMessageBoxConfig;
+
         public List<SPLogicComponent> Components;
         public List<SPEdge> Edges;
         public GameObject Foreground;
@@ -36,6 +41,7 @@ namespace Assets.Scripts.ScratchPad
         private SPTool _CurrentTool;
         private SPTool _PreviousTool;
         public bool IsChallenge;
+        public bool ChallengeCompleted;
 
         public bool IsUnsaved
         {
@@ -51,6 +57,7 @@ namespace Assets.Scripts.ScratchPad
         }
 
         private SPLogicComponentFactory LogicComponentFactory;
+        private UIMessageBoxFactory MessageBoxFactory;
 
         public Circuit Circuit
         {
@@ -201,11 +208,17 @@ namespace Assets.Scripts.ScratchPad
             Circuit = new Circuit();
             Running = false;
             Frozen = false;
+
+            // Load the message box config for open circuit
+            TextAsset configAsset = Resources.Load<TextAsset>(CHALLENGE_COMPLETE_MESSAGE_BOX_CONFIG_RESOURCE);
+            Assert.IsNotNull(configAsset);
+            ChallengeCompleteMessageBoxConfig = JsonUtility.FromJson<MessageBoxConfig>(configAsset.text);
         }
 
         private void Start()
         {
-            this.LogicComponentFactory = new SPLogicComponentFactory(this.Foreground);
+            LogicComponentFactory = new SPLogicComponentFactory(Foreground);
+            MessageBoxFactory = new UIMessageBoxFactory();
         }
 
         // Update is called once per frame
@@ -216,6 +229,16 @@ namespace Assets.Scripts.ScratchPad
                 if (Running) Circuit.Simulate();
                 var scrollDelta = Input.GetAxis("Mouse ScrollWheel");
                 CameraAdjust.SimpleZoom(scrollDelta);
+
+                if (IsChallenge && !ChallengeCompleted)
+                {
+                    bool challengeComplete = false; //TODO check with backend
+                    if (challengeComplete)
+                    {
+                        MessageBoxFactory.MakeFromConfig(ChallengeCompleteMessageBoxConfig);
+                        ChallengeCompleted = true;
+                    }
+                }
             }
         }
     }

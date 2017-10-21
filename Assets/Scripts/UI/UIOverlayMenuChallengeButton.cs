@@ -128,6 +128,7 @@ namespace Assets.Scripts.UI
 
                 // Put the canvas into challenge mode
                 Canvas.IsChallenge = true;
+                Canvas.ChallengeCompleted = false;
                 Canvas.SetAsSaved();
             }
 
