@@ -106,7 +106,7 @@ namespace Assets.Scripts.ScratchPad
             Clock clock = LogicComponent as Clock;
             if (Canvas.Running)
             {
-                CurrentSpriteIndex = Mathf.FloorToInt((float)clock.Tick / clock.Period * CLOCK_SPRITES_COUNT);
+                CurrentSpriteIndex = Mathf.FloorToInt((float)clock.Tick / clock.Period * CLOCK_SPRITES_COUNT) % CLOCK_SPRITES_COUNT;
                 if (Hover)
                 {
                     SpriteRenderer.sprite = SelectedClockSprites[CurrentSpriteIndex];
