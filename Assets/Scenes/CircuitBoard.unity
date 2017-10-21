@@ -649,7 +649,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   RunButtonSprite: {fileID: 21300000, guid: afaed262d86956d4b875de6fbf50a78b, type: 3}
-  PauseButtonSprite: {fileID: 21300000, guid: 96aec9e36580bdf41b7b58739bea6aa9, type: 3}
+  PauseButtonSprite: {fileID: 21300000, guid: f553532e528583f4eb12634ac4ba1fd8, type: 3}
 --- !u!1 &402007214
 GameObject:
   m_ObjectHideFlags: 0
