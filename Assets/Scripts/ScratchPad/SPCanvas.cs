@@ -32,16 +32,22 @@ namespace Assets.Scripts.ScratchPad
         public bool Frozen;
         public int LastSavedComponentsHash;
         public bool Running;
+        private int StepsToRunLeft;
+        private UIOverlayControlRunButton RunButton;
         public SPEdge SPEdgePrefab;
         private SPTool _CurrentTool;
         private SPTool _PreviousTool;
 
-        private SPLogicComponentFactory LogicComponentFactory;
-
-        public Circuit Circuit
+        public float SecondsPerUpdate
         {
-            get;
-            private set;
+            get
+            {
+                return Time.fixedDeltaTime;
+            }
+            set
+            {
+                Time.fixedDeltaTime = value;
+            }
         }
 
         public int ComponentsHash
@@ -50,6 +56,14 @@ namespace Assets.Scripts.ScratchPad
             {
                 return Components.Aggregate(0, (h, c) => h ^ c.GetHashCode());
             }
+        }
+
+        private SPLogicComponentFactory LogicComponentFactory;
+
+        public Circuit Circuit
+        {
+            get;
+            private set;
         }
 
         public SPEdge CurrentEdge
@@ -172,6 +186,35 @@ namespace Assets.Scripts.ScratchPad
             CurrentEdge.AddStartingConnector(connector);
         }
 
+        private void SetRunning()
+        {
+            Running = true;
+            RunButton.SetButtonStateToRunning();
+        }
+
+        public void StopRunning()
+        {
+            Running = false;
+            RunButton.SetButtonStateToNotRunning();
+        }
+
+        public void Run()
+        {
+            // If no more steps to run, assume we want to run indefinitely:
+            if (StepsToRunLeft <= 0) {
+                StepsToRunLeft = -1;
+            }
+            SetRunning();
+        }
+
+        public void RunForKSteps(int K)
+        {
+            if (K > 0) {
+                StepsToRunLeft = K;
+                SetRunning();
+            }
+        }
+
         // Use this for initialization
         private void Awake()
         {
@@ -189,6 +232,26 @@ namespace Assets.Scripts.ScratchPad
         private void Start()
         {
             this.LogicComponentFactory = new SPLogicComponentFactory(this.Foreground);
+            this.RunButton = FindObjectOfType<UIOverlayControlRunButton>();
+            Assert.IsNotNull(this.RunButton);
+        }
+
+        // FixedUpdate is called once every SecondsPerUpdate seconds
+        private void FixedUpdate()
+        {
+            if (!Frozen)
+            {
+                if (Running)
+                {
+                    Circuit.Simulate();
+                    if (StepsToRunLeft > 0) {
+                        StepsToRunLeft--;
+                        if (StepsToRunLeft == 0) {
+                            StopRunning();
+                        }
+                    }
+                }
+            }
         }
 
         // Update is called once per frame
@@ -196,7 +259,6 @@ namespace Assets.Scripts.ScratchPad
         {
             if (!Frozen)
             {
-                if (Running) Circuit.Simulate();
                 var scrollDelta = Input.GetAxis("Mouse ScrollWheel");
                 CameraAdjust.SimpleZoom(scrollDelta);
             }
