@@ -116,8 +116,6 @@ namespace Assets.Scripts.ScratchPad
                     SpriteRenderer.sprite = UnselectedClockSprites[CurrentSpriteIndex];
                 }
             }
-
-            //TODO swap sprites depending on clock state
         }
 
         public override void OnPointerEnter(PointerEventData data)
