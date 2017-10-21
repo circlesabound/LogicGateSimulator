@@ -126,7 +126,6 @@ namespace Assets.Scripts.ScratchPad
 
         public void OnPointerClick(PointerEventData eventData)
         {
-            Debug.Log("Canvas| " + this.CurrentTool.ToString() + " | " + eventData.button.ToString() + " click");
             if (CurrentTool == SPTool.Pointer)
             {
                 // do nothing

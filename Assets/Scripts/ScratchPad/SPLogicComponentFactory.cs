@@ -48,7 +48,6 @@ namespace Assets.Scripts.Savefile
                 Assert.IsFalse(InfoPanelContentMapping.ContainsKey(componentType));
                 InfoPanelContentMapping.Add(componentType, Tuple.Create(componentListElement.name, componentListElement.description));
             }
-            Debug.Log("Populated component prefab map with " + PrefabMapping.Count.ToString() + " pairs.");
         }
 
         public SPLogicComponent MakeFromConfig(LogicComponentConfig config)

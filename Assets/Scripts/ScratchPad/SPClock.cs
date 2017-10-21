@@ -63,7 +63,6 @@ namespace Assets.Scripts.ScratchPad
             {
                 Assert.IsTrue(triggerData.NumberInput.HasValue);
                 ((Clock)this.LogicComponent).Period = (uint)triggerData.NumberInput.Value;
-                Debug.Log("Setting clock rate to " + ((Clock)this.LogicComponent).Period.ToString());
             }
             Destroy(triggerData.Sender.gameObject);
         }

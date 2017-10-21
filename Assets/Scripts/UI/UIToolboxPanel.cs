@@ -89,7 +89,6 @@ namespace Assets.Scripts.UI
 
             // Finalise panel
             this.Built = true;
-            Debug.Log("Built '" + this.name + "' as a main panel with " + this.Entries.Count + " entries");
         }
 
         /// <summary>
@@ -129,7 +128,6 @@ namespace Assets.Scripts.UI
 
             // Finalise panel
             this.Built = true;
-            Debug.Log("Built '" + this.name + "' as a sub panel with " + this.Entries.Count + " entries");
         }
 
         public void Hide()
