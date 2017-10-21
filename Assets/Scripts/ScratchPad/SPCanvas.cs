@@ -212,6 +212,11 @@ namespace Assets.Scripts.ScratchPad
             RunButton.SetButtonStateToNotRunning();
         }
 
+        public void ResetCircuit()
+        {
+            Circuit.ResetComponents();
+        }
+
         // Use this for initialization
         private void Awake()
         {
