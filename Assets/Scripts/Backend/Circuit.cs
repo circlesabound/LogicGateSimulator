@@ -61,6 +61,19 @@ public class Circuit {
     }
 
     /// <summary>
+    /// Resets the components of the circuit to some base state
+    /// (not necessarily the default state).
+    /// </summary>
+    public void ResetComponents()
+    {
+        var components = this.graph.Components;
+        foreach (LogicComponent component in components)
+        {
+            component.Reset();
+        }
+    }
+
+    /// <summary>
     /// Simulates one step of the circuit.
     /// </summary>
     public void Simulate()

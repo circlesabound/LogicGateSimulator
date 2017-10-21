@@ -2,8 +2,8 @@
 using Assets.Scripts.UI;
 using Assets.Scripts.Util;
 using System;
-using System.Linq;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.EventSystems;
@@ -42,10 +42,15 @@ namespace Assets.Scripts.ScratchPad
         public GameObject Foreground;
         public bool Frozen;
         private int LastSavedComponentsHash;
+
         public bool Running;
+        private int StepsToRunLeft; // Set to -1 to run indefinitely.
+        private UIOverlayControlRunButton RunButton;
+
         public SPEdge SPEdgePrefab;
         private SPTool _CurrentTool;
         private SPTool _PreviousTool;
+        
         public GameMode CurrentMode;
         public bool ChallengeCompleted;
 
@@ -117,6 +122,18 @@ namespace Assets.Scripts.ScratchPad
             }
         }
 
+        public float SecondsPerUpdate
+        {
+            get
+            {
+                return Time.fixedDeltaTime;
+            }
+            set
+            {
+                Time.fixedDeltaTime = value;
+            }
+        }
+
         public void FinishEdge(SPConnector connector)
         {
             // this may throw ArgumentException, let SPConnector.OnPointerClick handle that
@@ -134,7 +151,9 @@ namespace Assets.Scripts.ScratchPad
         {
             if (eventData.button == PointerEventData.InputButton.Right)
             {
-                CameraAdjust.Pan(-eventData.delta / gameObject.transform.localScale.x);
+                // I have no idea what the right equation should be but this looks close enough
+                CameraAdjust.Pan(-eventData.delta / gameObject.transform.localScale.x * CameraAdjust.CurrentZoom / 2);
+                CameraAdjust.Clamp();
             }
         }
 
@@ -203,6 +222,37 @@ namespace Assets.Scripts.ScratchPad
             this.CurrentTool = this._PreviousTool;
         }
 
+        public void Run()
+        {
+            // If no more steps to run, assume we want to run indefinitely:
+            if (StepsToRunLeft <= 0)
+            {
+                StepsToRunLeft = -1;
+            }
+            SetRunning();
+        }
+
+        public void RunForKSteps(int K)
+        {
+            if (K > 0)
+            {
+                StepsToRunLeft = K;
+                SetRunning();
+            }
+        }
+
+        private void SetRunning()
+        {
+            Running = true;
+            RunButton.SetButtonStateToRunning();
+        }
+
+        public void StopRunning()
+        {
+            Running = false;
+            RunButton.SetButtonStateToNotRunning();
+        }
+
         public void StartEdge(SPConnector connector)
         {
             CurrentEdge = Instantiate(SPEdgePrefab, Foreground.transform);
@@ -210,10 +260,16 @@ namespace Assets.Scripts.ScratchPad
             CurrentEdge.AddStartingConnector(connector);
         }
 
+        public void ResetCircuit()
+        {
+            Circuit.ResetComponents();
+        }
+
         // Use this for initialization
         private void Awake()
         {
             Assert.IsNotNull(Foreground);
+            Assert.AreEqual(gameObject.transform.localScale.x, gameObject.transform.localScale.y);
             Components = new List<SPLogicComponent>();
             Edges = new List<SPEdge>();
             _CurrentTool = SPTool.Pointer;
@@ -230,20 +286,23 @@ namespace Assets.Scripts.ScratchPad
             ChallengeCompleteMessageBoxConfig = JsonUtility.FromJson<MessageBoxConfig>(configAsset.text);
         }
 
-        private void Start()
-        {
-            LogicComponentFactory = new SPLogicComponentFactory(Foreground);
-            MessageBoxFactory = new UIMessageBoxFactory();
-        }
-
-        // Update is called once per frame
-        private void Update()
+        // FixedUpdate is called once every SecondsPerUpdate seconds
+        private void FixedUpdate()
         {
             if (!Frozen)
             {
-                if (Running) Circuit.Simulate();
-                var scrollDelta = Input.GetAxis("Mouse ScrollWheel");
-                CameraAdjust.SimpleZoom(scrollDelta);
+                if (Running)
+                {
+                    Circuit.Simulate();
+                    if (StepsToRunLeft > 0)
+                    {
+                        StepsToRunLeft--;
+                        if (StepsToRunLeft == 0)
+                        {
+                            StopRunning();
+                        }
+                    }
+                }
 
                 if (IsChallenge && !ChallengeCompleted)
                 {
@@ -254,6 +313,25 @@ namespace Assets.Scripts.ScratchPad
                         ChallengeCompleted = true;
                     }
                 }
+            }
+        }
+
+        private void Start()
+        {
+            LogicComponentFactory = new SPLogicComponentFactory(Foreground);
+            MessageBoxFactory = new UIMessageBoxFactory();
+            RunButton = FindObjectOfType<UIOverlayControlRunButton>();
+            Assert.IsNotNull(RunButton);
+        }
+
+        // Update is called once per frame
+        private void Update()
+        {
+            if (!Frozen)
+            {
+                var scrollDelta = Input.GetAxis("Mouse ScrollWheel");
+                CameraAdjust.SimpleZoom(scrollDelta);
+                CameraAdjust.Clamp();
             }
         }
     }

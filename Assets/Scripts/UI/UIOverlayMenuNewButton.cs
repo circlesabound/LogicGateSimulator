@@ -57,6 +57,8 @@ namespace Assets.Scripts.UI
             {
                 Canvas.Components[i].Delete();
             }
+            // Reset savefile hash
+            Canvas.SetAsSaved();
         }
 
         private void Start()

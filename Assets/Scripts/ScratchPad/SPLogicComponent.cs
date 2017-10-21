@@ -12,7 +12,7 @@ namespace Assets.Scripts.ScratchPad
     /// <summary>
     /// An abstract class that all scratchpad representations of a logic component must extend.
     /// </summary>
-    public abstract class SPLogicComponent : MonoBehaviour, IPointerClickHandler, IBeginDragHandler, IDragHandler, IEndDragHandler
+    public abstract class SPLogicComponent : MonoBehaviour, IPointerClickHandler, IBeginDragHandler, IDragHandler, IEndDragHandler, IPointerEnterHandler, IPointerExitHandler
     {
         public LogicComponent LogicComponent;
         public SPInConnector SPInConnectorPrefab;
@@ -23,6 +23,9 @@ namespace Assets.Scripts.ScratchPad
         public List<SPConnector> OutConnectors;
 
         public bool Immutable;
+
+        public Sprite UnselectedSprite;
+        public Sprite SelectedSprite;
 
         protected SPLogicComponent()
         {
@@ -103,6 +106,9 @@ namespace Assets.Scripts.ScratchPad
             Assert.IsNotNull(SPOutConnectorPrefab);
             Assert.raiseExceptions = false;
 
+            Assert.IsNotNull(SelectedSprite);
+            Assert.IsNotNull(UnselectedSprite);
+
             InConnectors = new List<SPConnector>();
             OutConnectors = new List<SPConnector>();
 
@@ -147,6 +153,22 @@ namespace Assets.Scripts.ScratchPad
         public override int GetHashCode()
         {
             return base.GetHashCode() ^ gameObject.transform.position.GetHashCode();
+        }
+
+        /// <summary>
+        /// Linked in Unity inspector
+        /// </summary>
+        public virtual void OnPointerEnter(PointerEventData data)
+        {
+            gameObject.GetComponent<SpriteRenderer>().sprite = SelectedSprite;
+        }
+
+        /// <summary>
+        /// Linked in Unity inspector
+        /// </summary>
+        public virtual void OnPointerExit(PointerEventData data)
+        {
+            gameObject.GetComponent<SpriteRenderer>().sprite = UnselectedSprite;
         }
     }
 }

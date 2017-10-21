@@ -69,6 +69,15 @@ MonoBehaviour:
     type: 2}
   SPOutConnectorPrefab: {fileID: 114551622742925320, guid: 81371ab662730e04fb43f38c4f93901c,
     type: 2}
+  InConnectors: []
+  OutConnectors: []
+  UnselectedSprite: {fileID: 21300000, guid: 1bb06e461e7f00946a76bc8e70822be1, type: 3}
+  SelectedSprite: {fileID: 21300000, guid: ab56ae43706a1e44894eecaab0a5e84b, type: 3}
+  TrueSprite: {fileID: 21300000, guid: f51c009b09766a24f8ff7f5167d59f7c, type: 3}
+  FalseSprite: {fileID: 21300000, guid: 1bb06e461e7f00946a76bc8e70822be1, type: 3}
+  SelectedTrueSprite: {fileID: 21300000, guid: 54edae9ddbe8e624083617706c54622a, type: 3}
+  SelectedFalseSprite: {fileID: 21300000, guid: ab56ae43706a1e44894eecaab0a5e84b,
+    type: 3}
 --- !u!212 &212553927398117024
 SpriteRenderer:
   m_ObjectHideFlags: 1

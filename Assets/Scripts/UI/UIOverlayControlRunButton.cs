@@ -14,7 +14,9 @@ namespace Assets.Scripts.UI
     public class UIOverlayControlRunButton : MonoBehaviour
     {
         private SPCanvas Canvas;
-        private Text DisplayText;
+
+        public Sprite RunButtonSprite;
+        public Sprite PauseButtonSprite;
 
         public UIOverlayControlRunButtonState ButtonState
         {
@@ -30,11 +32,11 @@ namespace Assets.Scripts.UI
         {
             if (ButtonState == UIOverlayControlRunButtonState.PauseButton)
             {
-                SetNotRunning();
+                PauseButtonClick();
             }
             else
             {
-                SetRunning();
+                RunButtonClick();
             }
         }
 
@@ -43,35 +45,40 @@ namespace Assets.Scripts.UI
             //
         }
 
-        private void SetNotRunning()
+        // Used by the Canvas to update the button's state to reflect
+        // whether the canvas is running.
+        public void SetButtonStateToNotRunning()
         {
-            // Swap the button
             ButtonState = UIOverlayControlRunButtonState.RunButton;
-            DisplayText.text = "Run";
+            gameObject.GetComponent<Image>().sprite = RunButtonSprite;
 
             // Update canvas state
             Canvas.Running = false;
         }
 
-        private void SetRunning()
+        public void SetButtonStateToRunning()
         {
-            // Swap the button
             ButtonState = UIOverlayControlRunButtonState.PauseButton;
-            DisplayText.text = "Pause";
+            gameObject.GetComponent<Image>().sprite = PauseButtonSprite;
+        }
 
+        private void PauseButtonClick()
+        {
             // Update canvas state
-            Canvas.Running = true;
+            Canvas.StopRunning();
+        }
+
+        private void RunButtonClick()
+        {
+            // Update canvas state
+            Canvas.Run();
         }
 
         private void Start()
         {
             Canvas = FindObjectOfType<SPCanvas>();
             Assert.IsNotNull(Canvas);
-            var displayTextTransform = this.gameObject.transform.Find("UIOverlayControlRunButtonText");
-            Assert.IsNotNull(displayTextTransform);
-            DisplayText = displayTextTransform.gameObject.GetComponent<Text>();
-            Assert.IsNotNull(DisplayText);
-            SetNotRunning();
+            SetButtonStateToNotRunning();
         }
 
         private void Update()

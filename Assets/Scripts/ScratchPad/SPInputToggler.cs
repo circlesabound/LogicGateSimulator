@@ -7,8 +7,13 @@ namespace Assets.Scripts.ScratchPad
 {
     public class SPInputToggler : SPLogicComponent, IPointerClickHandler
     {
-        private Sprite TrueSprite;
-        private Sprite FalseSprite;
+        public Sprite TrueSprite;
+        public Sprite FalseSprite;
+
+        public Sprite SelectedTrueSprite;
+        public Sprite SelectedFalseSprite;
+
+        private bool Selected;
 
         protected SPConnector OutConnector
         {
@@ -51,9 +56,6 @@ namespace Assets.Scripts.ScratchPad
 
             LogicComponent = new InputComponent();
             Canvas.Circuit.AddComponent(LogicComponent);
-
-            TrueSprite = Resources.Load<Sprite>("Sprites/switchOn");
-            FalseSprite = Resources.Load<Sprite>("Sprites/switchOff");
         }
 
         public override int GetHashCode()
@@ -63,19 +65,35 @@ namespace Assets.Scripts.ScratchPad
 
         public void ToggleValue()
         {
-            Debug.Log("toggling value");
             InputComponent inputComponent = (InputComponent)LogicComponent;
             inputComponent.FlipValue();
+        }
 
-            SpriteRenderer renderer = gameObject.GetComponent<SpriteRenderer>();
+        protected override void Update()
+        {
+            base.Update();
+            InputComponent inputComponent = (InputComponent)LogicComponent;
+            SpriteRenderer spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
             if (inputComponent.value == true)
             {
-                renderer.sprite = TrueSprite;
+                if (Selected) spriteRenderer.sprite = SelectedTrueSprite;
+                else spriteRenderer.sprite = TrueSprite;
             }
             else
             {
-                renderer.sprite = FalseSprite;
+                if (Selected) spriteRenderer.sprite = SelectedFalseSprite;
+                else spriteRenderer.sprite = FalseSprite;
             }
+        }
+
+        public override void OnPointerEnter(PointerEventData data)
+        {
+            Selected = true;
+        }
+
+        public override void OnPointerExit(PointerEventData data)
+        {
+            Selected = false;
         }
     }
 }
