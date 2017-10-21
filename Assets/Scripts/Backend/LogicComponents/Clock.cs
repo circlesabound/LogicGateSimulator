@@ -27,6 +27,12 @@ public class Clock : LogicComponent
         this.Period = period;
     }
 
+    public override void Reset()
+    {
+        this.Outputs[0] = false;
+        this.Tick = 0;
+    }
+
     protected override List<bool> CoreSimulate(IList<bool> inputs)
     {
         this.Tick++;

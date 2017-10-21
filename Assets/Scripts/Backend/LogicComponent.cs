@@ -30,6 +30,11 @@ public abstract class LogicComponent
         this.outputs = Enumerable.Repeat(false, n_outputs).ToList();
     }
 
+    public virtual void Reset()
+    {
+        this.Outputs = Enumerable.Repeat(false, NumOutputs).ToList();
+    }
+
     public List<bool> Simulate(IList<bool> inputs)
     {
         if (inputs.Count != this.NumInputs)

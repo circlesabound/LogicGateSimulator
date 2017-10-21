@@ -69,6 +69,36 @@ MonoBehaviour:
     type: 2}
   SPOutConnectorPrefab: {fileID: 114551622742925320, guid: 81371ab662730e04fb43f38c4f93901c,
     type: 2}
+  InConnectors: []
+  OutConnectors: []
+  UnselectedSprite: {fileID: 21300000, guid: 6f262af077bf2e74981c86f139426461, type: 3}
+  SelectedSprite: {fileID: 21300000, guid: de090d2cf9a9d5e4f9434848742b7c6c, type: 3}
+  UnselectedClockSprites:
+  - {fileID: 21300000, guid: 6f262af077bf2e74981c86f139426461, type: 3}
+  - {fileID: 21300000, guid: 85af010d71e464d46a2968170b859fe5, type: 3}
+  - {fileID: 21300000, guid: b79a20754a674574e90a32d7abc5ad83, type: 3}
+  - {fileID: 21300000, guid: 1652db823ccd3fc42bec2e052b6576e4, type: 3}
+  - {fileID: 21300000, guid: 29c61be75ac94ba4ab4e44b13a6f26eb, type: 3}
+  - {fileID: 21300000, guid: 7df4e287f1664ef47b735312751a179c, type: 3}
+  - {fileID: 21300000, guid: b65501eb20c967840a664e995516ffaa, type: 3}
+  - {fileID: 21300000, guid: b34f87eb537e8dd4f8840675c60b79aa, type: 3}
+  - {fileID: 21300000, guid: 8e6e512f56b09b446a0d4aecaed535f5, type: 3}
+  - {fileID: 21300000, guid: f08d63f594d05bd429ce7b554efa15cd, type: 3}
+  - {fileID: 21300000, guid: 88195eca88ced204f91c784cc0c5699f, type: 3}
+  - {fileID: 21300000, guid: 32542d9f172a31f409e1df025be130d1, type: 3}
+  SelectedClockSprites:
+  - {fileID: 21300000, guid: de090d2cf9a9d5e4f9434848742b7c6c, type: 3}
+  - {fileID: 21300000, guid: f4a3a1fdb9b05614fa07b28fcb05d51f, type: 3}
+  - {fileID: 21300000, guid: ccede4198a37fe244880d39946d44204, type: 3}
+  - {fileID: 21300000, guid: 4e36636773d19884ea7c0dee78303cc5, type: 3}
+  - {fileID: 21300000, guid: b787cca302b9ee943a2b23f2f7466759, type: 3}
+  - {fileID: 21300000, guid: a2962ee278966524ea581458b8353f58, type: 3}
+  - {fileID: 21300000, guid: b93308ac05c6c8049b5453524c1e1912, type: 3}
+  - {fileID: 21300000, guid: 737bd8b59ca73a54380e61d6171c82e7, type: 3}
+  - {fileID: 21300000, guid: 0603d29a09ec4604884108f2784e21b9, type: 3}
+  - {fileID: 21300000, guid: e3e466729cf2516429fcceca005ded51, type: 3}
+  - {fileID: 21300000, guid: 7c28c8fe4faf8d34fb53cd6bd3e92940, type: 3}
+  - {fileID: 21300000, guid: 2a8619c6c96fa92488ef9b1108e23346, type: 3}
 --- !u!212 &212553927398117024
 SpriteRenderer:
   m_ObjectHideFlags: 1
