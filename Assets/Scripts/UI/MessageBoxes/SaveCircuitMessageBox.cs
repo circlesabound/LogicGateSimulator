@@ -16,6 +16,8 @@ namespace Assets.Scripts.UI.MessageBoxes
         private MessageBoxConfig SaveBadNameMessageBoxConfig;
         private MessageBoxConfig SaveOverwriteMessageBoxConfig;
 
+        private MessageBoxButtonType MostRecentButtonType;
+
         public void OnCancelButtonClick()
         {
             // Run callback to close message box and unfreeze canvas
@@ -32,6 +34,8 @@ namespace Assets.Scripts.UI.MessageBoxes
             string filename = this.TextInput.FindChildGameObject("UIMessageBoxTextInputText").GetComponent<Text>().text;
             string fullname = filename + ".json";
             string fullpath = Directories.SAVEFILE_FOLDER_FULL_PATH + "/" + fullname;
+
+            MostRecentButtonType = MessageBoxButtonType.Positive;
 
             // If file has invalid name, show error dialog
             if (filename.IndexOfAny(Path.GetInvalidFileNameChars()) != -1 ||
@@ -63,6 +67,8 @@ namespace Assets.Scripts.UI.MessageBoxes
             string filename = this.TextInput.FindChildGameObject("UIMessageBoxTextInputText").GetComponent<Text>().text;
             string fullname = filename + ".json";
             string fullpath = Directories.CHALLENGE_FOLDER_FULL_PATH + "/" + fullname;
+
+            MostRecentButtonType = MessageBoxButtonType.Neutral;
 
             // If file has invalid name, show error dialog
             if (filename.IndexOfAny(Path.GetInvalidFileNameChars()) != -1 ||
@@ -102,9 +108,10 @@ namespace Assets.Scripts.UI.MessageBoxes
                 if (triggerData.ButtonPressed == MessageBoxButtonType.Positive)
                 {
                     // Confirm overwrite
+
                     MessageBoxTriggerData newTriggerData = new MessageBoxTriggerData
                     {
-                        ButtonPressed = MessageBoxButtonType.Positive,
+                        ButtonPressed = MostRecentButtonType,
                         Sender = this,
                         TextInput = this.TextInput.FindChildGameObject("UIMessageBoxTextInputText").GetComponent<Text>().text
                     };
