@@ -59,17 +59,5 @@ namespace Assets.Scripts.ScratchPad
             Canvas.Circuit.AddComponent(LogicComponent);
 
         }
-
-        public override void OnPointerEnter(PointerEventData data)
-        {
-            // TODO override with different sprite depending on clock tick
-            base.OnPointerEnter(data);
-        }
-
-        public override void OnPointerExit(PointerEventData data)
-        {
-            // TODO override with different sprite depending on clock tick
-            base.OnPointerExit(data);
-        }
     }
 }
