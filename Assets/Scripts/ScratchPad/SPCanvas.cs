@@ -37,7 +37,7 @@ namespace Assets.Scripts.ScratchPad
         private SPTool _PreviousTool;
         private SPLogicComponentFactory LogicComponentFactory;
         private UIOverlayControlRunButton RunButton;
-        private int StepsToRunLeft;
+        private int StepsToRunLeft; // Set to -1 to run indefinitely.
 
         public Circuit Circuit
         {
@@ -199,17 +199,23 @@ namespace Assets.Scripts.ScratchPad
             }
         }
 
-        public void StartEdge(SPConnector connector)
+        private void SetRunning()
         {
-            CurrentEdge = Instantiate(SPEdgePrefab, Foreground.transform);
-            Assert.IsNotNull(CurrentEdge);
-            CurrentEdge.AddStartingConnector(connector);
+            Running = true;
+            RunButton.SetButtonStateToRunning();
         }
 
         public void StopRunning()
         {
             Running = false;
             RunButton.SetButtonStateToNotRunning();
+        }
+
+        public void StartEdge(SPConnector connector)
+        {
+            CurrentEdge = Instantiate(SPEdgePrefab, Foreground.transform);
+            Assert.IsNotNull(CurrentEdge);
+            CurrentEdge.AddStartingConnector(connector);
         }
 
         public void ResetCircuit()
@@ -250,12 +256,6 @@ namespace Assets.Scripts.ScratchPad
                     }
                 }
             }
-        }
-
-        private void SetRunning()
-        {
-            Running = true;
-            RunButton.SetButtonStateToRunning();
         }
 
         private void Start()
