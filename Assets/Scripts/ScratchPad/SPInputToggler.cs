@@ -56,9 +56,6 @@ namespace Assets.Scripts.ScratchPad
 
             LogicComponent = new InputComponent();
             Canvas.Circuit.AddComponent(LogicComponent);
-
-            TrueSprite = Resources.Load<Sprite>("Sprites/switchOn");
-            FalseSprite = Resources.Load<Sprite>("Sprites/switchOff");
         }
 
         public override int GetHashCode()
