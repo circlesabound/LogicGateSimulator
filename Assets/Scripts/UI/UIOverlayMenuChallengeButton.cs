@@ -7,43 +7,21 @@ using System.IO;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Assertions;
-using UnityEngine.EventSystems;
 
 namespace Assets.Scripts.UI
 {
-    public class UIOverlayMenuOpenButton : MonoBehaviour, IMessageBoxTriggerTarget, IInfoPanelTextProvider, IPointerEnterHandler, IPointerExitHandler
+    public class UIOverlayMenuChallengeButton : MonoBehaviour, IMessageBoxTriggerTarget
     {
-        private const string OPEN_BUTTON_INFO_PANEL_TITLE = "Open circuit";
-        private const string OPEN_BUTTON_INFO_PANEL_DESCRIPTION = "Open a saved circuit file.";
-
-        private const string OPEN_CIRCUIT_MESSAGE_BOX_CONFIG_RESOURCE = "Configs/MessageBoxes/open";
+        private const string PLAY_CHALLENGE_MESSAGE_BOX_CONFIG_RESOURCE = "Configs/MessageBoxes/play_challenge";
         private const string OPEN_ERROR_MESSAGE_BOX_CONFIG_RESOURCE = "Configs/MessageBoxes/open_error";
         private const string UNSAVED_CHANGES_MESSAGE_BOX_CONFIG_RESOURCE = "Configs/MessageBoxes/unsaved_changes";
 
-        private UIOverlayInfoPanel InfoPanel;
-
         private SPCanvas Canvas;
         private UIMessageBoxFactory MessageBoxFactory;
-        private MessageBoxConfig OpenCircuitMessageBoxConfig;
+        private MessageBoxConfig PlayChallengeMessageBoxConfig;
         private MessageBoxConfig OpenErrorMessageBoxConfig;
         private MessageBoxConfig UnsavedChangesMessageBoxConfig;
         private Stack<string> SelectedFilenameStash; // to save filename data across confirmation message boxes
-
-        public string InfoPanelTitle
-        {
-            get
-            {
-                return OPEN_BUTTON_INFO_PANEL_TITLE;
-            }
-        }
-
-        public string InfoPanelText
-        {
-            get
-            {
-                return OPEN_BUTTON_INFO_PANEL_DESCRIPTION;
-            }
-        }
 
         /// <summary>
         /// Linked to button click in Unity inspector
@@ -51,13 +29,13 @@ namespace Assets.Scripts.UI
         public void OnButtonClick()
         {
             Canvas.Frozen = true;
-            MessageBoxFactory.MakeFromConfig(OpenCircuitMessageBoxConfig, this);
+            MessageBoxFactory.MakeFromConfig(PlayChallengeMessageBoxConfig, this);
         }
 
         /// <summary>
-        /// Callback to be executed after OpenCircuitMessageBox.
+        /// Callback to be executed after PlayChallengeMessageBox.
         /// Unfreezes the canvas and closes the message box.
-        /// Positive trigger clears the current circuit and loads a saved one from JSON.
+        /// Positive trigger clears the current circuit and loads a challenge from JSON.
         /// </summary>
         /// <param name="triggerData">Data to pass from the trigger source to the trigger target.</param>
         public void Trigger(MessageBoxTriggerData triggerData)
@@ -65,7 +43,7 @@ namespace Assets.Scripts.UI
             if (triggerData.ButtonPressed == UIMessageBox.MessageBoxButtonType.Positive)
             {
                 // Check for unsaved changes
-                if (triggerData.Sender.GetType() == typeof(OpenCircuitMessageBox) &&
+                if (triggerData.Sender.GetType() == typeof(PlayChallengeMessageBox) &&
                     Canvas.IsUnsaved)
                 {
                     // Ask for confirmation of unsaved changes, save filename
@@ -81,7 +59,7 @@ namespace Assets.Scripts.UI
                     SelectedFilenameStash.Clear();
                 }
 
-                string fullpath = Directories.SAVEFILE_FOLDER_FULL_PATH + "/" + triggerData.TextInput + ".json";
+                string fullpath = Directories.CHALLENGE_FOLDER_FULL_PATH + "/" + triggerData.TextInput + ".json";
 
                 // Read from file
                 Debug.Log("Opening circuit from " + fullpath);
@@ -106,7 +84,7 @@ namespace Assets.Scripts.UI
                 var togglerConfigs = circuitConfig.toggles;
                 var clockConfigs = circuitConfig.clocks;
 
-                Assert.AreEqual(circuitConfig.game_mode, GameMode.Sandbox);
+                Assert.AreNotEqual(circuitConfig.game_mode, GameMode.Sandbox);
 
                 // Clear the canvas
                 for (int i = Canvas.Components.Count - 1; i >= 0; --i)
@@ -148,8 +126,20 @@ namespace Assets.Scripts.UI
                     Canvas.FinishEdge(guidMap[config.ComponentGuids[1]].OutConnectors[config.connector_ids[1]]);
                 }
 
-                // Loading a circuit means the circuit that was just loaded is "saved"
-                Canvas.CurrentMode = GameMode.Sandbox;
+                // Set all initial components to immutable
+                foreach (var component in Canvas.Components)
+                {
+                    component.Immutable = true;
+                }
+
+                foreach (var edge in Canvas.Edges)
+                {
+                    edge.Immutable = true;
+                }
+
+                // Put the canvas into challenge mode
+                Canvas.CurrentMode = circuitConfig.game_mode;
+                Canvas.ChallengeCompleted = false;
                 Canvas.SetAsSaved();
             }
 
@@ -163,9 +153,9 @@ namespace Assets.Scripts.UI
             SelectedFilenameStash = new Stack<string>();
 
             // Load the message box config for open circuit
-            TextAsset configAsset = Resources.Load<TextAsset>(OPEN_CIRCUIT_MESSAGE_BOX_CONFIG_RESOURCE);
+            TextAsset configAsset = Resources.Load<TextAsset>(PLAY_CHALLENGE_MESSAGE_BOX_CONFIG_RESOURCE);
             Assert.IsNotNull(configAsset);
-            OpenCircuitMessageBoxConfig = JsonUtility.FromJson<MessageBoxConfig>(configAsset.text);
+            PlayChallengeMessageBoxConfig = JsonUtility.FromJson<MessageBoxConfig>(configAsset.text);
 
             // Load the message box config for open error
             configAsset = Resources.Load<TextAsset>(OPEN_ERROR_MESSAGE_BOX_CONFIG_RESOURCE);
@@ -182,19 +172,6 @@ namespace Assets.Scripts.UI
         {
             Canvas = FindObjectOfType<SPCanvas>();
             Assert.IsNotNull(Canvas);
-            InfoPanel = FindObjectOfType<UIOverlayInfoPanel>();
-            Assert.IsNotNull(InfoPanel);
-        }
-
-        public void OnPointerEnter(PointerEventData eventData)
-        {
-            InfoPanel.SetInfoTarget(this);
-            InfoPanel.Show();
-        }
-
-        public void OnPointerExit(PointerEventData eventData)
-        {
-            InfoPanel.Hide();
         }
     }
 }

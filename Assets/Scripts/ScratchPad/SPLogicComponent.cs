@@ -23,6 +23,8 @@ namespace Assets.Scripts.ScratchPad
         public List<SPConnector> InConnectors;
         public List<SPConnector> OutConnectors;
 
+        public bool Immutable;
+
         public Sprite UnselectedSprite;
         public Sprite SelectedSprite;
 
@@ -114,7 +116,8 @@ namespace Assets.Scripts.ScratchPad
                 switch (Canvas.CurrentTool)
                 {
                     case SPTool.Pointer:
-                        Delete();
+                        // TODO: make this depend on objects mutability.
+                        if (!this.Immutable) Delete();
                         break;
 
                     default:
