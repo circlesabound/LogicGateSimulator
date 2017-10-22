@@ -32,7 +32,7 @@ namespace Assets.Scripts.Util
             var yscale = canvas.gameObject.transform.localScale.y;
 
             // Limit zoom to a sensible amount
-            CurrentZoom = Mathf.Clamp(CurrentZoom, 0, yscale / 2 + Mathf.Sqrt(yscale / 2));
+            CurrentZoom = Mathf.Clamp(CurrentZoom, 0, yscale / 20 + Mathf.Sqrt(yscale / 20));
 
             // Limit panning to the edge of the canvas
             Camera.main.transform.position = new Vector3

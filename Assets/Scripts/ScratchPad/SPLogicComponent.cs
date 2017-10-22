@@ -89,7 +89,7 @@ namespace Assets.Scripts.ScratchPad
 
         public void OnDrag(PointerEventData eventData)
         {
-            if (Canvas.CurrentTool == SPTool.Pointer)
+            if (Canvas.CurrentTool == SPTool.Pointer && eventData.button == PointerEventData.InputButton.Left)
             {
                 this.gameObject.transform.position = Util.Util.MouseWorldCoordinates;
                 //    Enumerable
