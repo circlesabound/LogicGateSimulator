@@ -39,6 +39,14 @@
         {
             "classname": "SPClock",
             "prefab": "Prefabs/SPClock"
+        },
+        {
+            "classname": "SPNumberedInputToggler",
+            "prefab": "Prefabs/SPNumberedInputToggler"
+        },
+        {
+            "classname": "SPNumberedOutput",
+            "prefab": "Prefabs/SPNumberedOutput"
         }
     ]
 }

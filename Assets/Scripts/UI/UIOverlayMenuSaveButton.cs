@@ -63,6 +63,15 @@ namespace Assets.Scripts.UI
                     })
                     .ToList();
 
+                List<InputToggleConfig> numberedToggleConfigs = guidMap
+                    .Where(kvp => kvp.Key.GetType() == typeof(SPNumberedInputToggler))
+                    .Select(kvp => new InputToggleConfig
+                    {
+                        guid_string = kvp.Value.ToString(),
+                        value = ((InputComponent)kvp.Key.LogicComponent).value
+                    })
+                    .ToList();
+
                 // Generate additional configs to save state of clock components
                 List<ClockComponentConfig> clockConfigs = guidMap
                     .Where(kvp => kvp.Key.GetType() == typeof(SPClock))
@@ -78,6 +87,7 @@ namespace Assets.Scripts.UI
                     componentConfigs,
                     edgeConfigs,
                     toggleConfigs,
+                    numberedToggleConfigs,
                     clockConfigs,
                     mode: GameMode.Sandbox);
 
@@ -132,6 +142,16 @@ namespace Assets.Scripts.UI
                     })
                     .ToList();
 
+                List<InputToggleConfig> numberedToggleConfigs = guidMap
+                    .Where(kvp => kvp.Key.GetType() == typeof(SPNumberedInputToggler))
+                    .Select(kvp => new InputToggleConfig
+                    {
+                        guid_string = kvp.Value.ToString(),
+                        value = ((InputComponent)kvp.Key.LogicComponent).value
+                    })
+                    .ToList();
+
+
                 // Generate additional configs to save state of clock components
                 List<ClockComponentConfig> clockConfigs = guidMap
                     .Where(kvp => kvp.Key.GetType() == typeof(SPClock))
@@ -147,6 +167,7 @@ namespace Assets.Scripts.UI
                     componentConfigs,
                     edgeConfigs,
                     toggleConfigs,
+                    numberedToggleConfigs,
                     clockConfigs,
                     mode: GameMode.ActivateAllOutputsChallenge);
 

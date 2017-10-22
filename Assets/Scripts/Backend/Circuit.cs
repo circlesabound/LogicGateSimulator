@@ -1,13 +1,18 @@
-﻿using System.Collections;
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
 public class Circuit {
     private CircuitGraph graph;
+    private Dictionary<uint, InputComponent> NumberedInputs;
+    private Dictionary<uint, Output> NumberedOutputs;
 
     public Circuit()
     {
         graph = new CircuitGraph();
+        NumberedInputs = new Dictionary<uint, InputComponent>();
+        NumberedOutputs = new Dictionary<uint, Output>();
     }
     /// <summary>
     /// Adds a component to the circuit.
@@ -21,13 +26,108 @@ public class Circuit {
     }
 
     /// <summary>
+    /// Adds a numbered component to the circuit.
+    /// The same component can't be added more than once.
+    /// Also 2 components with the same type and id can not exist concurrently.
+    /// </summary>
+    /// <param name="component">The component to add.</param>
+    /// <param name="id">The id of the component to add.</param>
+    /// <exception cref="System.ArgumentException">Thrown if the component has already been added
+    /// or a component with this id already exists
+    /// or the component is not of a type that can be numbered</exception>
+    public void AddNumberedComponent(LogicComponent component, uint id)
+    {
+        var inputComponent = component as InputComponent;
+        var outputComponent = component as Output;
+        if (inputComponent != null)
+        {
+            if (NumberedInputs.ContainsKey(id))
+            {
+                throw new ArgumentException("id already in use");
+            }
+            this.graph.AddNode(component);
+            NumberedInputs.Add(id, inputComponent);
+        }
+        else if (outputComponent != null)
+        {
+            if (NumberedOutputs.ContainsKey(id))
+            {
+                throw new ArgumentException("id already in use");
+            }
+            this.graph.AddNode(component);
+            NumberedOutputs.Add(id, outputComponent);
+        }
+        else
+        {
+            throw new ArgumentException("component is of a type that can't be numbered");
+        }
+    }
+
+/*
+    /// <summary>
+    /// Changes the assigned id of a component.
+    /// Works for both input and output components.
+    /// </summary>
+    /// <param name="component">The component to change the id of.</param>
+    /// <param name="newid">The new id of the component.</param>
+    /// <exception cref="System.ArgumentException">Thrown if the component does not already have an id. </exception>
+    public void RenumberComponent(LogicComponent component, uint newid)
+    {
+        bool found = false;
+        var inputComponent = component as InputComponent;
+        var outputComponent = component as OutputComponent;
+        if (inputComponent != null)
+        {
+            try {
+                // Throws if the component doesn't exist in the dictionary.
+                var item = NumberedInputs.First(kvp => kvp.Value == component);
+                NumberedInputs.Remove(item.Key);
+                NumberedInputs.Add(newid, item.Value);
+                found = true;
+            }
+            catch
+            {
+            }
+        }
+        if (outputComponent != null)
+        {
+            Assert.IsFalse(found);
+            try {
+                // Throws if the component doesn't exist in the dictionary.
+                var item = NumberedOutputs.First(kvp => kvp.Value == component);
+                NumberedOutputs.Remove(item.Key);
+                NumberedOutputs.Add(newid, item.Value);
+                found = true;
+            }
+            catch
+            {
+            }
+        }
+        if (!found)
+        {
+            throw new ArgumentException("component doesn't already have an id");
+        }
+    }
+*/
+
+
+    /// <summary>
     /// Removes a component.
+    /// Will also free its id automatically if it is a numbered component.
     /// </summary>
     /// <param name="component">The component to remove.</param>
     /// <exception cref="System.Collections.Generic.KeyNotFoundException">Thrown if component does not exist</exception>
     public void RemoveComponent(LogicComponent component)
     {
         this.graph.RemoveNode(component);
+        foreach (var item in NumberedInputs.Where(kvp => kvp.Value == component).ToList())
+        {
+            NumberedInputs.Remove(item.Key);
+        }
+        foreach (var item in NumberedOutputs.Where(kvp => kvp.Value == component).ToList())
+        {
+            NumberedOutputs.Remove(item.Key);
+        }
     }
 
     /// <summary>

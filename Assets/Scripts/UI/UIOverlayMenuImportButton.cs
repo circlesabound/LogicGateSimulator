@@ -63,6 +63,7 @@ namespace Assets.Scripts.UI
                 var componentConfigs = circuitConfig.logic_components;
                 var edgeConfigs = circuitConfig.edges;
                 var togglerConfigs = circuitConfig.toggles;
+                var numberedTogglerConfigs = circuitConfig.numbered_toggles;
                 var clockConfigs = circuitConfig.clocks;
 
                 Assert.AreEqual(circuitConfig.game_mode, GameMode.Sandbox);
@@ -80,6 +81,16 @@ namespace Assets.Scripts.UI
                 {
                     Guid guid = Guid.Parse(config.guid_string);
                     SPInputToggler inputToggler = (SPInputToggler)guidMap[guid];
+                    if (((InputComponent)inputToggler.LogicComponent).value != config.value)
+                    {
+                        inputToggler.ToggleValue();
+                    }
+                }
+
+                foreach (var config in numberedTogglerConfigs)
+                {
+                    Guid guid = Guid.Parse(config.guid_string);
+                    SPNumberedInputToggler inputToggler = (SPNumberedInputToggler)guidMap[guid];
                     if (((InputComponent)inputToggler.LogicComponent).value != config.value)
                     {
                         inputToggler.ToggleValue();

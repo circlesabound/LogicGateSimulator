@@ -31,6 +31,13 @@ namespace Assets.Scripts.ScratchPad
         ActivateAllOutputsChallenge
     }
 
+    public class NoMoreIdsException: Exception
+    {
+        public NoMoreIdsException(string message): base(message)
+        {
+        }
+    }
+
     public class SPCanvas : MonoBehaviour, IPointerClickHandler, IBeginDragHandler, IDragHandler, IEndDragHandler
     {
         private const string CHALLENGE_COMPLETE_MESSAGE_BOX_CONFIG_RESOURCE = "Configs/MessageBoxes/challenge_complete";
@@ -119,6 +126,73 @@ namespace Assets.Scripts.ScratchPad
                         this._CurrentTool = value;
                         break;
                 }
+            }
+        }
+
+        // We use the range [1,NUM_IDS]
+        const uint NUM_IDS = 9;
+        public Dictionary<uint, SPNumberedInputToggler> NumberedInputs;
+        public Dictionary<uint, SPNumberedOutput> NumberedOutputs;
+
+        // Adds a numbered component to the circuit.
+        // Throws NoMoreIdsException if there are no more remaining ids.
+        // Else returns the component's id.
+        // The returned id will be in the range [1,NUM_IDS]
+        public uint AddNumberedComponent(SPLogicComponent component)
+        {
+            Debug.Log("Call to add numbered component made\n");
+            var InputComponent = component as SPNumberedInputToggler;
+            var OutputComponent = component as SPNumberedOutput;
+            if (InputComponent != null)
+            {
+                for (uint cid = 1; cid <= NUM_IDS; cid++)
+                {
+                    if (!NumberedInputs.ContainsKey(cid))
+                    {
+                        NumberedInputs.Add(cid, InputComponent);
+                        this.Circuit.AddNumberedComponent(component.LogicComponent, cid);
+                        return cid;
+                    }
+                }
+            }
+            if (OutputComponent != null)
+            {
+                for (uint cid = 1; cid <= NUM_IDS; cid++)
+                {
+                    if (!NumberedOutputs.ContainsKey(cid))
+                    {
+                        NumberedOutputs.Add(cid, OutputComponent);
+                        this.Circuit.AddNumberedComponent(component.LogicComponent, cid);
+                        return cid;
+                    }
+                }
+            }
+            throw new NoMoreIdsException("No more ids for component");
+        }
+
+        // Removes a numbered component from the circuit.
+        public void RemoveNumberedComponent(SPLogicComponent component)
+        {
+            //Debug.Log("RemovedNumberedComponent called");
+            var InputComponent = component as SPNumberedInputToggler;
+            var OutputComponent = component as SPNumberedOutput;
+            if (InputComponent != null)
+            {
+                Assert.IsTrue(InputComponent.id > 0);
+                NumberedInputs.Remove(InputComponent.id);
+                this.Circuit.RemoveComponent(component.LogicComponent);
+            }
+            else if (OutputComponent != null)
+            {
+                Assert.IsTrue(OutputComponent.id > 0);
+                NumberedOutputs.Remove(OutputComponent.id);
+                this.Circuit.RemoveComponent(component.LogicComponent);
+            }
+            else
+            {
+                // Hack for Assert.Fail()
+                Assert.IsTrue((InputComponent != null) || (OutputComponent != null),
+                        "Tried to call remove numbered component on a non numbered component");
             }
         }
 
@@ -279,6 +353,8 @@ namespace Assets.Scripts.ScratchPad
             Running = false;
             Frozen = false;
             CurrentMode = GameMode.Sandbox;
+            NumberedInputs = new Dictionary<uint, SPNumberedInputToggler>();
+            NumberedOutputs = new Dictionary<uint, SPNumberedOutput>();
 
             // Load the message box config for open circuit
             TextAsset configAsset = Resources.Load<TextAsset>(CHALLENGE_COMPLETE_MESSAGE_BOX_CONFIG_RESOURCE);

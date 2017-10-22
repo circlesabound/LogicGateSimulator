@@ -78,6 +78,18 @@
                     "component_classname": "SPClock",
                     "sprite_selected": "Sprites/clockSelection",
                     "sprite_unselected": "Sprites/clock"
+                },
+                {
+                    "component_name": "Numbered Input",
+                    "component_classname": "SPNumberedInputToggler",
+                    "sprite_selected": "Sprites/switchOffSelection",
+                    "sprite_unselected": "Sprites/switchOff"
+                },
+                {
+                    "component_name": "Numbered Output",
+                    "component_classname": "SPNumberedOutput",
+                    "sprite_selected": "Sprites/outSelection",
+                    "sprite_unselected": "Sprites/out"
                 }
             ]
         }
