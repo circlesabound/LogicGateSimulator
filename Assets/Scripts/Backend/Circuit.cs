@@ -224,6 +224,7 @@ public class Circuit {
     public bool ValidateTestCase(IDictionary<uint, bool> inputs,
         IDictionary<uint, bool> outputs, uint k)
     {
+        this.ResetComponents();
         foreach (var input in inputs)
         {
             this.NumberedInputs[input.Key].SetValue(input.Value);
