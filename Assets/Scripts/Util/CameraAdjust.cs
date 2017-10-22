@@ -54,7 +54,7 @@ namespace Assets.Scripts.Util
 
         public static void Pan(Vector2 delta)
         {
-            Camera.main.transform.Translate(delta);
+            Camera.main.transform.position += (Vector3)delta;
         }
 
         /// <summary>

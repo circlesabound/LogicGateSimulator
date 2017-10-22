@@ -50,7 +50,7 @@ namespace Assets.Scripts.ScratchPad
         public SPEdge SPEdgePrefab;
         private SPTool _CurrentTool;
         private SPTool _PreviousTool;
-        
+
         public GameMode CurrentMode;
         public bool ChallengeCompleted;
 
@@ -151,14 +151,22 @@ namespace Assets.Scripts.ScratchPad
             {
                 eventData.pointerDrag = null;
             }
+            else
+            {
+                Previous = Util.Util.MouseWorldCoordinates;
+            }
         }
+
+        private static Vector3 Previous;
 
         public void OnDrag(PointerEventData eventData)
         {
             if (eventData.button == PointerEventData.InputButton.Left)
             {
                 // I have no idea what the right equation should be but this looks close enough
-                CameraAdjust.Pan(-eventData.delta / gameObject.transform.localScale.x * CameraAdjust.CurrentZoom / 2);
+                // CameraAdjust.Pan(-eventData.delta / gameObject.transform.localScale.x * CameraAdjust.CurrentZoom / 2);
+                var delta = Previous - (Vector3)Util.Util.MouseWorldCoordinates;
+                CameraAdjust.Pan(delta);
                 CameraAdjust.Clamp();
             }
         }
