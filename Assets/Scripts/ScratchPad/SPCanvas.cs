@@ -65,7 +65,7 @@ namespace Assets.Scripts.ScratchPad
         public List<TestCaseConfig> TestCases;
         // Number of steps to run to verify a test case.
         // TODO: MAKE THIS IN CONFIG NOT HERE.
-        private const uint TestCaseStepsRun = 15;
+        public const uint TestCaseStepsRun = 20;
 
         private bool IsDraggable;
 
