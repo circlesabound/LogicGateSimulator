@@ -2588,6 +2588,7 @@ MonoBehaviour:
   CurrentMode: 0
   ChallengeCompleted: 0
   TestCases: []
+  TestCaseStepsRun: 0
 --- !u!23 &1475706230
 MeshRenderer:
   m_ObjectHideFlags: 0
