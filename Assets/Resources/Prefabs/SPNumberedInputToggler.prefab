@@ -80,49 +80,49 @@ MonoBehaviour:
   SelectedFalseSprite: {fileID: 21300000, guid: c5f2513ebf92ca946b24832ee0c9486a,
     type: 3}
   UnselectedTrueSprites:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 21300000, guid: 8c6d57f3709140549856d57f683c03cb, type: 3}
+  - {fileID: 21300000, guid: 78f34f456cb43fd44a415d6429ce7bd2, type: 3}
+  - {fileID: 21300000, guid: 96aec9e36580bdf41b7b58739bea6aa9, type: 3}
+  - {fileID: 21300000, guid: 6b1dd3dcc4a78cd499ad4017f9f4e327, type: 3}
+  - {fileID: 21300000, guid: 217d0f1ebbc92a04d97644504c0fbcbe, type: 3}
+  - {fileID: 21300000, guid: 1eefe1291aada404ea957d5fc7661ca2, type: 3}
+  - {fileID: 21300000, guid: 6030457a897824c41ad3de65e7d91c50, type: 3}
+  - {fileID: 21300000, guid: 9e67b001d95f7a84f8df77b233a9abd0, type: 3}
+  - {fileID: 21300000, guid: 9249cf4247d17264bbe88937920ec44f, type: 3}
+  - {fileID: 21300000, guid: c5bfb5c262ffb1b4da37761790273dc7, type: 3}
   SelectedTrueSprites:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 21300000, guid: 0b1cbe00cd68e004c9b299e5d49e5c4a, type: 3}
+  - {fileID: 21300000, guid: 025d2fc069df0874aa6afa8f03eedec2, type: 3}
+  - {fileID: 21300000, guid: 4e46457ce50475c46a7b02d090512067, type: 3}
+  - {fileID: 21300000, guid: 857a63d17a5ac33449d38fe42f43886e, type: 3}
+  - {fileID: 21300000, guid: f6e34356f46c3984ebe63808c4309cd0, type: 3}
+  - {fileID: 21300000, guid: 2aefbff105934f046b8e93cd3c06bb7e, type: 3}
+  - {fileID: 21300000, guid: 753e229d306dbab4d9ae1a948a3bbc9a, type: 3}
+  - {fileID: 21300000, guid: 23c87f8b6ca24ca4895b9fc36962c67e, type: 3}
+  - {fileID: 21300000, guid: b9cb979ec29da264aa18758a3ae7764c, type: 3}
+  - {fileID: 21300000, guid: 5878da317a15ad64f874117f475e8750, type: 3}
   UnselectedFalseSprites:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 21300000, guid: 8940cc1b1f35e484ba4918e07016c1e9, type: 3}
+  - {fileID: 21300000, guid: 0600de8ffa54c2041ab9015ad7eff99d, type: 3}
+  - {fileID: 21300000, guid: 84df101d025e1c5489d7add4f9c09e8b, type: 3}
+  - {fileID: 21300000, guid: b8408752f39f2ad40a86563118bdb765, type: 3}
+  - {fileID: 21300000, guid: 4c69576d005ca454690b4fa87784dddd, type: 3}
+  - {fileID: 21300000, guid: bbd946d18e6d81240a8de0b387fe2dbb, type: 3}
+  - {fileID: 21300000, guid: 3efed63bac68ec647a471d6ea591499a, type: 3}
+  - {fileID: 21300000, guid: ee26128cf0b9779428a5e47fb12a1fcc, type: 3}
+  - {fileID: 21300000, guid: c5eb8bd695d86dd4293ed0106d4d2870, type: 3}
+  - {fileID: 21300000, guid: 98a462ae31a94d643af02bbc09787dcc, type: 3}
   SelectedFalseSprites:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 21300000, guid: c5f2513ebf92ca946b24832ee0c9486a, type: 3}
+  - {fileID: 21300000, guid: e5125206d7c9ef54c89a97ca5518606d, type: 3}
+  - {fileID: 21300000, guid: 0c72f5c6421471f4d8d91cd1d7776b1a, type: 3}
+  - {fileID: 21300000, guid: 3348a85f2e23959428e7b6bd529298f5, type: 3}
+  - {fileID: 21300000, guid: 94dadbdea9d2e4b43b97e7af4adb2d0b, type: 3}
+  - {fileID: 21300000, guid: c26885e544453254c91917bab9bdf4a2, type: 3}
+  - {fileID: 21300000, guid: 66cf540be361d17409b832d40ed7108a, type: 3}
+  - {fileID: 21300000, guid: 17bfcc8e3ec09204baceefaca4e9896d, type: 3}
+  - {fileID: 21300000, guid: 9e286a5df9853e04488d0d47d59c3b58, type: 3}
+  - {fileID: 21300000, guid: 3cdc2ad6072cf8a46a9c37454fae1530, type: 3}
   id: 0
 --- !u!212 &212385211898578614
 SpriteRenderer:
