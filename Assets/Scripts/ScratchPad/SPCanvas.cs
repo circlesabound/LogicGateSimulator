@@ -1,5 +1,6 @@
 ﻿using Assets.Scripts.Savefile;
 using Assets.Scripts.UI;
+using Assets.Scripts.UI.MessageBoxes;
 using Assets.Scripts.Util;
 using System;
 using System.Collections.Generic;
@@ -7,7 +8,6 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.EventSystems;
-using Assets.Scripts.UI.MessageBoxes;
 
 namespace Assets.Scripts.ScratchPad
 {
@@ -43,6 +43,8 @@ namespace Assets.Scripts.ScratchPad
         public bool Frozen;
         private int LastSavedComponentsHash;
 
+        private Vector3 PreviousPanPosition;
+
         public bool Running;
         private int StepsToRunLeft; // Set to -1 to run indefinitely.
         private UIOverlayControlRunButton RunButton;
@@ -50,7 +52,7 @@ namespace Assets.Scripts.ScratchPad
         public SPEdge SPEdgePrefab;
         private SPTool _CurrentTool;
         private SPTool _PreviousTool;
-        
+
         public GameMode CurrentMode;
         public bool ChallengeCompleted;
 
@@ -151,14 +153,18 @@ namespace Assets.Scripts.ScratchPad
             {
                 eventData.pointerDrag = null;
             }
+            else
+            {
+                PreviousPanPosition = Util.Util.MouseWorldCoordinates;
+            }
         }
 
         public void OnDrag(PointerEventData eventData)
         {
             if (eventData.button == PointerEventData.InputButton.Left)
             {
-                // I have no idea what the right equation should be but this looks close enough
-                CameraAdjust.Pan(-eventData.delta / gameObject.transform.localScale.x * CameraAdjust.CurrentZoom / 2);
+                var delta = PreviousPanPosition - (Vector3)Util.Util.MouseWorldCoordinates;
+                CameraAdjust.Pan(delta);
                 CameraAdjust.Clamp();
             }
         }
@@ -348,8 +354,11 @@ namespace Assets.Scripts.ScratchPad
             if (!Frozen)
             {
                 var scrollDelta = Input.GetAxis("Mouse ScrollWheel");
-                CameraAdjust.SimpleZoom(scrollDelta);
-                CameraAdjust.Clamp();
+                if (scrollDelta != 0)
+                {
+                    CameraAdjust.Zoom(scrollDelta, Util.Util.MouseWorldCoordinates);
+                    CameraAdjust.Clamp();
+                }
             }
         }
     }
