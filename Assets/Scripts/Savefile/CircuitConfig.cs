@@ -16,8 +16,9 @@ namespace Assets.Scripts.Savefile
         public GameMode game_mode;
         public String title_text;
         public String body_text;
+        public uint test_case_steps_run;
 
-        public CircuitConfig(List<LogicComponentConfig> componentConfigs, List<EdgeConfig> edgeConfigs, List<InputToggleConfig> toggleConfigs, List<InputToggleConfig> numbered_toggleConfigs, List<ClockComponentConfig> clockConfigs, List<TestCaseConfig> testCaseConfigs, GameMode mode, String titleText = "", String bodyText = "")
+        public CircuitConfig(List<LogicComponentConfig> componentConfigs, List<EdgeConfig> edgeConfigs, List<InputToggleConfig> toggleConfigs, List<InputToggleConfig> numbered_toggleConfigs, List<ClockComponentConfig> clockConfigs, List<TestCaseConfig> testCaseConfigs, GameMode mode, String titleText = "", String bodyText = "", uint testCaseStepsRun=20)
         {
             logic_components = componentConfigs;
             edges = edgeConfigs;
@@ -28,6 +29,7 @@ namespace Assets.Scripts.Savefile
             game_mode = mode;
             title_text = titleText;
             body_text = bodyText;
+            test_case_steps_run = testCaseStepsRun;
         }
     }
 }

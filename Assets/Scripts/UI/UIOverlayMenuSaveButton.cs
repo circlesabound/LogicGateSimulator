@@ -205,7 +205,7 @@ namespace Assets.Scripts.UI
 
                 // Generate default title strings.
                 String titleText = "Objective";
-                String bodyText = "Your aim is to turn all the lights on.";
+                String bodyText = "Your aim is to turn all the lights on.\nYou can not delete pre-placed components.\nAll components placed must use all endpoints and contribute to at least one output light.";
 
                 // Build savefile
                 CircuitConfig spConfig = new CircuitConfig(

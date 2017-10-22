@@ -107,6 +107,7 @@ namespace Assets.Scripts.UI
                 var clockConfigs = circuitConfig.clocks;
                 var titleText = circuitConfig.title_text;
                 var bodyText = circuitConfig.body_text;
+                var testCaseStepsRun = circuitConfig.test_case_steps_run;
 
                 Assert.AreNotEqual(circuitConfig.game_mode, GameMode.Sandbox);
 
@@ -187,6 +188,9 @@ namespace Assets.Scripts.UI
                 // Load the test cases into SPCanvas
                 Canvas.TestCases = testCaseConfigs;
 
+                // Load how many test case steps to run:
+                Canvas.TestCaseStepsRun = testCaseStepsRun;
+
                 // Put the canvas into challenge mode
                 Canvas.CurrentMode = circuitConfig.game_mode;
                 Canvas.ChallengeCompleted = false;
@@ -197,6 +201,7 @@ namespace Assets.Scripts.UI
                     y = 40
                 };
 
+                // Set the Info Panel information.
                 Canvas.InfoPanelTitle = titleText;
                 Canvas.InfoPanelText = bodyText;
                 InfoPanel.SetInfoTarget(Canvas);

@@ -79,7 +79,7 @@ namespace Assets.Scripts.UI
                         }
                         challengeComplete = Canvas.Circuit.ValidateTestCase(testCase.GetAllInputs(),
                                                                             testCase.GetAllOutputs(),
-                                                                            SPCanvas.TestCaseStepsRun);
+                                                                            Canvas.TestCaseStepsRun);
                     }
                     Canvas.Circuit.ResetComponents();
                     if (challengeComplete)
