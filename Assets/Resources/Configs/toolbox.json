@@ -104,14 +104,14 @@
                     "component_name": "Identifiable Switch",
                     "entry_description": "Select to place on your circuit. Has an ID for challenge creation purposes",
                     "component_classname": "SPNumberedInputToggler",
-                    "sprite_selected": "Sprites/switchOffHashSelection",
+                    "sprite_selected": "Sprites/switchOffHashSelected",
                     "sprite_unselected": "Sprites/switchOffHash"
                 },
                 {
                     "component_name": "Identifiable Output",
                     "entry_description": "Select to place on your circuit. Has an ID for challenge creation purposes",
                     "component_classname": "SPNumberedOutput",
-                    "sprite_selected": "Sprites/outHashSelection",
+                    "sprite_selected": "Sprites/outHashSelected",
                     "sprite_unselected": "Sprites/outHash"
                 }
             ]
