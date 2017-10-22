@@ -177,8 +177,23 @@ namespace Assets.Scripts.UI
                     .ToList();
 
                 // Generate an empty test cases config:
-                // TODO: MAKE THIS NOT EMPTY.
+                // TODO: NOT SURE WHAT TO DO BUT ATM JUST SET IT TO SOMETHING.
                 List<TestCaseConfig> testCaseConfigs = new List<TestCaseConfig>();
+
+                // Generate one based on Circuit:
+                // Just a dummy one so you have a template on how to modify it.
+                testCase = new TestCaseConfig();
+                foreach (var kvp in Canvas.NumberedInputs)
+                {
+                    InputComponent inputComponent = kvp.Value.LogicComponent as InputComponent;
+                    testCase.SetInput(kvp.Key, inputComponent.value);
+                }
+                foreach (var kvp in Canvas.NumberedOutputs)
+                {
+                    Output output = kvp.Value.LogicComponent as Output;
+                    testCase.SetOutput(kvp.Key, output.Value);
+                }
+                testCaseConfigs.Add(testCase);
 
                 // Generate additional configs to save state of clock components
                 List<ClockComponentConfig> clockConfigs = guidMap
