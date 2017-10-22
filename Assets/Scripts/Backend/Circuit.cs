@@ -220,4 +220,20 @@ public class Circuit {
         }
         return contributers.Count == this.graph.Components.Count;
     }
+
+    public bool ValidateTestCase(IDictionary<uint, bool> inputs,
+        IDictionary<uint, bool> outputs, uint k)
+    {
+        foreach (var input in inputs)
+        {
+            this.NumberedInputs[input.Key].SetValue(input.Value);
+        }
+
+        for (int i = 0; i < k; i++)
+        {
+            this.Simulate();
+        }
+
+        return outputs.All(output => this.NumberedOutputs[output.Key].Value == output.Value);
+    }
 }
