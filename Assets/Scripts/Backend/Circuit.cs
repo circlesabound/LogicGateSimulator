@@ -93,4 +93,30 @@ public class Circuit {
             component.Outputs = result_map[component];
         }
     }
+
+    public bool Validate()
+    {
+        var stack = new Stack<LogicComponent>();
+        var contributers = new HashSet<LogicComponent>();
+        foreach (LogicComponent component in this.graph.Components)
+        {
+            Output output = component as Output;
+            if (output == null) continue;
+            if (!output.Value) return false;
+            stack.Push(component);
+        }
+        while (stack.Count > 0)
+        {
+            var component = stack.Pop();
+            contributers.Add(component);
+            var inputs = this.graph.GetInputs(component).Select(
+                output => output.Component);
+            foreach (var input in inputs)
+            {
+                if (contributers.Contains(input)) continue;
+                stack.Push(input);
+            }
+        }
+        return contributers.Count == this.graph.Components.Count;
+    }
 }
