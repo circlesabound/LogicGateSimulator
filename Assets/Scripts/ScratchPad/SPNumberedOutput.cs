@@ -10,6 +10,7 @@ namespace Assets.Scripts.ScratchPad
     {
         // sprites linked in unity inspector
         public List<Sprite> UnselectedTrueSprites;
+
         public List<Sprite> SelectedTrueSprites;
 
         public List<Sprite> UnselectedFalseSprites;
@@ -130,6 +131,7 @@ namespace Assets.Scripts.ScratchPad
         public override void OnPointerExit(PointerEventData data)
         {
             Selected = false;
+            InfoPanel.Hide();
         }
     }
 }
