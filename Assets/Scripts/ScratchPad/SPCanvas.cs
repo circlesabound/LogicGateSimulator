@@ -32,9 +32,9 @@ namespace Assets.Scripts.ScratchPad
         MatchTestcasesChallenge
     }
 
-    public class NoMoreIdsException: Exception
+    public class NoMoreIdsException : Exception
     {
-        public NoMoreIdsException(string message): base(message)
+        public NoMoreIdsException(string message) : base(message)
         {
         }
     }
@@ -58,11 +58,12 @@ namespace Assets.Scripts.ScratchPad
         public SPEdge SPEdgePrefab;
         private SPTool _CurrentTool;
         private SPTool _PreviousTool;
-        
+
         public GameMode CurrentMode;
         public bool ChallengeCompleted;
 
         public List<TestCaseConfig> TestCases;
+
         // Number of steps to run to verify a test case.
         // TODO: MAKE THIS IN CONFIG NOT HERE.
         public const uint TestCaseStepsRun = 20;
@@ -138,7 +139,8 @@ namespace Assets.Scripts.ScratchPad
         }
 
         // We use the range [1,NUM_IDS]
-        const uint NUM_IDS = 9;
+        private const uint NUM_IDS = 9;
+
         public Dictionary<uint, SPNumberedInputToggler> NumberedInputs;
         public Dictionary<uint, SPNumberedOutput> NumberedOutputs;
 
@@ -384,6 +386,13 @@ namespace Assets.Scripts.ScratchPad
             TextAsset configAsset = Resources.Load<TextAsset>(CHALLENGE_COMPLETE_MESSAGE_BOX_CONFIG_RESOURCE);
             Assert.IsNotNull(configAsset);
             ChallengeCompleteMessageBoxConfig = JsonUtility.FromJson<MessageBoxConfig>(configAsset.text);
+
+            // "Hide" challenge verify button
+            FindObjectOfType<UIOverlayControlVerifyChallengeButton>().GetComponent<RectTransform>().sizeDelta = new Vector2
+            {
+                x = 0,
+                y = 0
+            };
         }
 
         // FixedUpdate is called once every SecondsPerUpdate seconds

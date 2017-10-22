@@ -189,6 +189,11 @@ namespace Assets.Scripts.UI
                 Canvas.CurrentMode = circuitConfig.game_mode;
                 Canvas.ChallengeCompleted = false;
                 Canvas.SetAsSaved();
+                FindObjectOfType<UIOverlayControlVerifyChallengeButton>().GetComponent<RectTransform>().sizeDelta = new Vector2
+                {
+                    x = 40,
+                    y = 40
+                };
             }
 
             Canvas.Frozen = false;

@@ -162,6 +162,11 @@ namespace Assets.Scripts.UI
                 // Loading a circuit means the circuit that was just loaded is "saved"
                 Canvas.CurrentMode = GameMode.Sandbox;
                 Canvas.SetAsSaved();
+                FindObjectOfType<UIOverlayControlVerifyChallengeButton>().GetComponent<RectTransform>().sizeDelta = new Vector2
+                {
+                    x = 0,
+                    y = 0
+                };
             }
 
             Canvas.Frozen = false;

@@ -25,7 +25,7 @@ namespace Assets.Scripts.UI
         private const string MATCH_TEST_CASES_INCOMPLETE_CONFIG_RESOURCE = "Configs/MessageBoxes/challenge_incomplete_matchtestcases";
 
         private const string VERIFY_BUTTON_INFO_PANEL_TITLE = "Verify challenge";
-        private const string VERIFY_BUTTON_INFO_PANEL_DESCRIPTION = "Verifies the challenge has been completed. Only available in Challenge mode.";
+        private const string VERIFY_BUTTON_INFO_PANEL_DESCRIPTION = "Verifies the challenge has been completed.";
 
         public string InfoPanelTitle
         {
@@ -130,7 +130,6 @@ namespace Assets.Scripts.UI
             Assert.IsNotNull(configAsset);
             MatchTestCases_IncompleteMessageBoxConfig = JsonUtility.FromJson<MessageBoxConfig>(configAsset.text);
         }
- 
 
         private void Start()
         {
