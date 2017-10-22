@@ -10,16 +10,26 @@ namespace Assets.Scripts.Savefile
         public List<LogicComponentConfig> logic_components;
         public List<EdgeConfig> edges;
         public List<InputToggleConfig> toggles;
+        public List<InputToggleConfig> numbered_toggles;
         public List<ClockComponentConfig> clocks;
+        public List<TestCaseConfig> test_cases;
         public GameMode game_mode;
+        public String title_text;
+        public String body_text;
+        public uint test_case_steps_run;
 
-        public CircuitConfig(List<LogicComponentConfig> componentConfigs, List<EdgeConfig> edgeConfigs, List<InputToggleConfig> toggleConfigs, List<ClockComponentConfig> clockConfigs, GameMode mode)
+        public CircuitConfig(List<LogicComponentConfig> componentConfigs, List<EdgeConfig> edgeConfigs, List<InputToggleConfig> toggleConfigs, List<InputToggleConfig> numbered_toggleConfigs, List<ClockComponentConfig> clockConfigs, List<TestCaseConfig> testCaseConfigs, GameMode mode, String titleText = "", String bodyText = "", uint testCaseStepsRun=20)
         {
             logic_components = componentConfigs;
             edges = edgeConfigs;
             toggles = toggleConfigs;
+            numbered_toggles = numbered_toggleConfigs;
             clocks = clockConfigs;
+            test_cases = testCaseConfigs;
             game_mode = mode;
+            title_text = titleText;
+            body_text = bodyText;
+            test_case_steps_run = testCaseStepsRun;
         }
     }
 }

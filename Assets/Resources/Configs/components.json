@@ -51,7 +51,7 @@
         {
             "classname": "SPInputToggler",
             "prefab": "Prefabs/SPInputToggler",
-            "name": "Switchable input",
+            "name": "Switch",
             "description": "Generates a TRUE or FALSE value depending on the state of the switch. Click to toggle."
         },
         {
@@ -59,6 +59,18 @@
             "prefab": "Prefabs/SPClock",
             "name": "Clock input",
             "description": "Generates a value which changes between TRUE and FALSE in a cycle. Click to configure cycle duration."
+        },
+        {
+            "classname": "SPNumberedInputToggler",
+            "prefab": "Prefabs/SPNumberedInputToggler",
+            "name": "Identifiable Switch",
+            "description": "Like a Switchable input but has an identifier for challenge purposes"
+        },
+        {
+            "classname": "SPNumberedOutput",
+            "prefab": "Prefabs/SPNumberedOutput",
+            "name": "Identifiable Output",
+            "description": "Like an Output but has an identifier for challenge purposes"
         }
     ]
 }

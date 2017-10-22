@@ -102,7 +102,12 @@ namespace Assets.Scripts.UI
                 var componentConfigs = circuitConfig.logic_components;
                 var edgeConfigs = circuitConfig.edges;
                 var togglerConfigs = circuitConfig.toggles;
+                var numberedTogglerConfigs = circuitConfig.numbered_toggles;
+                var testCaseConfigs = circuitConfig.test_cases;
                 var clockConfigs = circuitConfig.clocks;
+                var titleText = circuitConfig.title_text;
+                var bodyText = circuitConfig.body_text;
+                var testCaseStepsRun = circuitConfig.test_case_steps_run;
 
                 Assert.AreNotEqual(circuitConfig.game_mode, GameMode.Sandbox);
 
@@ -125,6 +130,16 @@ namespace Assets.Scripts.UI
                 {
                     Guid guid = Guid.Parse(config.guid_string);
                     SPInputToggler inputToggler = (SPInputToggler)guidMap[guid];
+                    if (((InputComponent)inputToggler.LogicComponent).value != config.value)
+                    {
+                        inputToggler.ToggleValue();
+                    }
+                }
+
+                foreach (var config in numberedTogglerConfigs)
+                {
+                    Guid guid = Guid.Parse(config.guid_string);
+                    SPNumberedInputToggler inputToggler = (SPNumberedInputToggler)guidMap[guid];
                     if (((InputComponent)inputToggler.LogicComponent).value != config.value)
                     {
                         inputToggler.ToggleValue();
@@ -157,10 +172,40 @@ namespace Assets.Scripts.UI
                     edge.Immutable = true;
                 }
 
+                // TODO: USE THE TEST CASES GENERATED.
+                foreach (TestCaseConfig testCase in testCaseConfigs)
+                {
+                    foreach (KeyValuePair<uint, bool> kvp in testCase.GetAllInputs())
+                    {
+                        Debug.Log("Input: " + kvp.Key.ToString() + ": " + kvp.Value.ToString());
+                    }
+                    foreach (KeyValuePair<uint, bool> kvp in testCase.GetAllOutputs())
+                    {
+                        Debug.Log("Output: " + kvp.Key.ToString() + ": " + kvp.Value.ToString());
+                    }
+                }
+
+                // Load the test cases into SPCanvas
+                Canvas.TestCases = testCaseConfigs;
+
+                // Load how many test case steps to run:
+                Canvas.TestCaseStepsRun = testCaseStepsRun;
+
                 // Put the canvas into challenge mode
                 Canvas.CurrentMode = circuitConfig.game_mode;
                 Canvas.ChallengeCompleted = false;
                 Canvas.SetAsSaved();
+                FindObjectOfType<UIOverlayControlVerifyChallengeButton>().GetComponent<RectTransform>().sizeDelta = new Vector2
+                {
+                    x = 40,
+                    y = 40
+                };
+
+                // Set the Info Panel information.
+                Canvas.InfoPanelTitle = titleText;
+                Canvas.InfoPanelText = bodyText;
+                InfoPanel.SetInfoTarget(Canvas);
+                InfoPanel.Show();
             }
 
             Canvas.Frozen = false;

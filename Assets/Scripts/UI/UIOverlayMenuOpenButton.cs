@@ -104,6 +104,7 @@ namespace Assets.Scripts.UI
                 var componentConfigs = circuitConfig.logic_components;
                 var edgeConfigs = circuitConfig.edges;
                 var togglerConfigs = circuitConfig.toggles;
+                var numberedTogglerConfigs = circuitConfig.numbered_toggles;
                 var clockConfigs = circuitConfig.clocks;
 
                 Assert.AreEqual(circuitConfig.game_mode, GameMode.Sandbox);
@@ -133,6 +134,16 @@ namespace Assets.Scripts.UI
                     }
                 }
 
+                foreach (var config in numberedTogglerConfigs)
+                {
+                    Guid guid = Guid.Parse(config.guid_string);
+                    SPNumberedInputToggler inputToggler = (SPNumberedInputToggler)guidMap[guid];
+                    if (((InputComponent)inputToggler.LogicComponent).value != config.value)
+                    {
+                        inputToggler.ToggleValue();
+                    }
+                }
+
                 // Restore state for clock components
                 foreach (var config in clockConfigs)
                 {
@@ -151,6 +162,11 @@ namespace Assets.Scripts.UI
                 // Loading a circuit means the circuit that was just loaded is "saved"
                 Canvas.CurrentMode = GameMode.Sandbox;
                 Canvas.SetAsSaved();
+                FindObjectOfType<UIOverlayControlVerifyChallengeButton>().GetComponent<RectTransform>().sizeDelta = new Vector2
+                {
+                    x = 0,
+                    y = 0
+                };
             }
 
             Canvas.Frozen = false;

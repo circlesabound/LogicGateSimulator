@@ -45,6 +45,11 @@ namespace Assets.Scripts.UI
             {
                 ClearCanvas();
                 Canvas.CurrentMode = GameMode.Sandbox;
+                FindObjectOfType<UIOverlayControlVerifyChallengeButton>().GetComponent<RectTransform>().sizeDelta = new Vector2
+                {
+                    x = 0,
+                    y = 0
+                };
             }
         }
 

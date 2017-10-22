@@ -28,10 +28,18 @@ namespace Assets.Scripts.ScratchPad
     public enum GameMode
     {
         Sandbox, // The normal, non challenge mode.
-        ActivateAllOutputsChallenge
+        ActivateAllOutputsChallenge,
+        MatchTestcasesChallenge
     }
 
-    public class SPCanvas : MonoBehaviour, IPointerClickHandler, IBeginDragHandler, IDragHandler, IEndDragHandler
+    public class NoMoreIdsException : Exception
+    {
+        public NoMoreIdsException(string message) : base(message)
+        {
+        }
+    }
+
+    public class SPCanvas : MonoBehaviour, IPointerClickHandler, IBeginDragHandler, IDragHandler, IEndDragHandler, IInfoPanelTextProvider
     {
         private const string CHALLENGE_COMPLETE_MESSAGE_BOX_CONFIG_RESOURCE = "Configs/MessageBoxes/challenge_complete";
 
@@ -56,6 +64,12 @@ namespace Assets.Scripts.ScratchPad
         public GameMode CurrentMode;
         public bool ChallengeCompleted;
 
+        public List<TestCaseConfig> TestCases;
+
+        // Number of steps to run to verify a test case.
+        // TODO: MAKE THIS IN CONFIG NOT HERE.
+        public uint TestCaseStepsRun;
+
         private bool IsDraggable;
 
         public bool IsChallenge
@@ -78,6 +92,9 @@ namespace Assets.Scripts.ScratchPad
         {
             LastSavedComponentsHash = ComponentsHash;
         }
+
+        public string InfoPanelTitle { get; set; }
+        public string InfoPanelText { get; set; }
 
         private SPLogicComponentFactory LogicComponentFactory;
         private UIMessageBoxFactory MessageBoxFactory;
@@ -123,6 +140,74 @@ namespace Assets.Scripts.ScratchPad
                         this._CurrentTool = value;
                         break;
                 }
+            }
+        }
+
+        // We use the range [1,NUM_IDS]
+        private const uint NUM_IDS = 9;
+
+        public Dictionary<uint, SPNumberedInputToggler> NumberedInputs;
+        public Dictionary<uint, SPNumberedOutput> NumberedOutputs;
+
+        // Adds a numbered component to the circuit.
+        // Throws NoMoreIdsException if there are no more remaining ids.
+        // Else returns the component's id.
+        // The returned id will be in the range [1,NUM_IDS]
+        public uint AddNumberedComponent(SPLogicComponent component)
+        {
+            Debug.Log("Call to add numbered component made\n");
+            var InputComponent = component as SPNumberedInputToggler;
+            var OutputComponent = component as SPNumberedOutput;
+            if (InputComponent != null)
+            {
+                for (uint cid = 1; cid <= NUM_IDS; cid++)
+                {
+                    if (!NumberedInputs.ContainsKey(cid))
+                    {
+                        NumberedInputs.Add(cid, InputComponent);
+                        this.Circuit.AddNumberedComponent(component.LogicComponent, cid);
+                        return cid;
+                    }
+                }
+            }
+            if (OutputComponent != null)
+            {
+                for (uint cid = 1; cid <= NUM_IDS; cid++)
+                {
+                    if (!NumberedOutputs.ContainsKey(cid))
+                    {
+                        NumberedOutputs.Add(cid, OutputComponent);
+                        this.Circuit.AddNumberedComponent(component.LogicComponent, cid);
+                        return cid;
+                    }
+                }
+            }
+            throw new NoMoreIdsException("No more ids for component");
+        }
+
+        // Removes a numbered component from the circuit.
+        public void RemoveNumberedComponent(SPLogicComponent component)
+        {
+            //Debug.Log("RemovedNumberedComponent called");
+            var InputComponent = component as SPNumberedInputToggler;
+            var OutputComponent = component as SPNumberedOutput;
+            if (InputComponent != null)
+            {
+                Assert.IsTrue(InputComponent.id > 0);
+                NumberedInputs.Remove(InputComponent.id);
+                this.Circuit.RemoveComponent(component.LogicComponent);
+            }
+            else if (OutputComponent != null)
+            {
+                Assert.IsTrue(OutputComponent.id > 0);
+                NumberedOutputs.Remove(OutputComponent.id);
+                this.Circuit.RemoveComponent(component.LogicComponent);
+            }
+            else
+            {
+                // Hack for Assert.Fail()
+                Assert.IsTrue((InputComponent != null) || (OutputComponent != null),
+                        "Tried to call remove numbered component on a non numbered component");
             }
         }
 
@@ -301,13 +386,22 @@ namespace Assets.Scripts.ScratchPad
             Circuit = new Circuit();
             Running = false;
             Frozen = false;
-            CurrentMode = GameMode.Sandbox;
             IsDraggable = true;
+            CurrentMode = GameMode.Sandbox;
+            NumberedInputs = new Dictionary<uint, SPNumberedInputToggler>();
+            NumberedOutputs = new Dictionary<uint, SPNumberedOutput>();
 
             // Load the message box config for open circuit
             TextAsset configAsset = Resources.Load<TextAsset>(CHALLENGE_COMPLETE_MESSAGE_BOX_CONFIG_RESOURCE);
             Assert.IsNotNull(configAsset);
             ChallengeCompleteMessageBoxConfig = JsonUtility.FromJson<MessageBoxConfig>(configAsset.text);
+
+            // "Hide" challenge verify button
+            FindObjectOfType<UIOverlayControlVerifyChallengeButton>().GetComponent<RectTransform>().sizeDelta = new Vector2
+            {
+                x = 0,
+                y = 0
+            };
         }
 
         // FixedUpdate is called once every SecondsPerUpdate seconds
@@ -330,11 +424,14 @@ namespace Assets.Scripts.ScratchPad
 
                 if (IsChallenge && !ChallengeCompleted)
                 {
-                    bool challengeComplete = Circuit.Validate();
-                    if (challengeComplete)
+                    if (CurrentMode == GameMode.ActivateAllOutputsChallenge)
                     {
-                        MessageBoxFactory.MakeFromConfig(ChallengeCompleteMessageBoxConfig);
-                        ChallengeCompleted = true;
+                        bool challengeComplete = Circuit.Validate();
+                        if (challengeComplete)
+                        {
+                            MessageBoxFactory.MakeFromConfig(ChallengeCompleteMessageBoxConfig);
+                            ChallengeCompleted = true;
+                        }
                     }
                 }
             }

@@ -84,6 +84,15 @@ namespace Assets.Scripts.UI
                     })
                     .ToList();
 
+                List<InputToggleConfig> numberedToggleConfigs = guidMap
+                    .Where(kvp => kvp.Key.GetType() == typeof(SPNumberedInputToggler))
+                    .Select(kvp => new InputToggleConfig
+                    {
+                        guid_string = kvp.Value.ToString(),
+                        value = ((InputComponent)kvp.Key.LogicComponent).value
+                    })
+                    .ToList();
+
                 // Generate additional configs to save state of clock components
                 List<ClockComponentConfig> clockConfigs = guidMap
                     .Where(kvp => kvp.Key.GetType() == typeof(SPClock))
@@ -94,12 +103,17 @@ namespace Assets.Scripts.UI
                     })
                     .ToList();
 
+                // Generate an empty test cases config:
+                List<TestCaseConfig> testCaseConfigs = new List<TestCaseConfig>();
+
                 // Build savefile
                 CircuitConfig spConfig = new CircuitConfig(
                     componentConfigs,
                     edgeConfigs,
                     toggleConfigs,
+                    numberedToggleConfigs,
                     clockConfigs,
+                    testCaseConfigs,
                     mode: GameMode.Sandbox);
 
 #if DEVELOPMENT_BUILD
@@ -153,6 +167,32 @@ namespace Assets.Scripts.UI
                     })
                     .ToList();
 
+                List<InputToggleConfig> numberedToggleConfigs = guidMap
+                    .Where(kvp => kvp.Key.GetType() == typeof(SPNumberedInputToggler))
+                    .Select(kvp => new InputToggleConfig
+                    {
+                        guid_string = kvp.Value.ToString(),
+                        value = ((InputComponent)kvp.Key.LogicComponent).value
+                    })
+                    .ToList();
+
+                // Generate test cases config:
+                List<TestCaseConfig> testCaseConfigs = new List<TestCaseConfig>();
+                // Generate one based on Circuit:
+                // Just a dummy one so you have a template on how to modify it.
+                TestCaseConfig testCase = new TestCaseConfig();
+                foreach (var kvp in Canvas.NumberedInputs)
+                {
+                    InputComponent inputComponent = kvp.Value.LogicComponent as InputComponent;
+                    testCase.SetInput(kvp.Key, inputComponent.value);
+                }
+                foreach (var kvp in Canvas.NumberedOutputs)
+                {
+                    Output output = kvp.Value.LogicComponent as Output;
+                    testCase.SetOutput(kvp.Key, output.Value);
+                }
+                testCaseConfigs.Add(testCase);
+
                 // Generate additional configs to save state of clock components
                 List<ClockComponentConfig> clockConfigs = guidMap
                     .Where(kvp => kvp.Key.GetType() == typeof(SPClock))
@@ -163,13 +203,21 @@ namespace Assets.Scripts.UI
                     })
                     .ToList();
 
+                // Generate default title strings.
+                String titleText = "Objective";
+                String bodyText = "Your aim is to turn all the lights on.\nYou can not delete pre-placed components.\nAll components placed must use all endpoints and contribute to at least one output light.";
+
                 // Build savefile
                 CircuitConfig spConfig = new CircuitConfig(
                     componentConfigs,
                     edgeConfigs,
                     toggleConfigs,
+                    numberedToggleConfigs,
                     clockConfigs,
-                    mode: GameMode.ActivateAllOutputsChallenge);
+                    testCaseConfigs,
+                    GameMode.ActivateAllOutputsChallenge,
+                    titleText: titleText,
+                    bodyText: bodyText);
 
 #if DEVELOPMENT_BUILD
                 string saveData = JsonUtility.ToJson(spConfig, prettyPrint: true);

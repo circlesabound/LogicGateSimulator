@@ -63,7 +63,7 @@ namespace Assets.Scripts.ScratchPad
             // Initialisation happens in Start()
         }
 
-        public void Delete()
+        public virtual void Delete()
         {
             // Delete any incoming/outgoing edges
             var edgeList = Enumerable
