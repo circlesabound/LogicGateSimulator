@@ -28,7 +28,8 @@ namespace Assets.Scripts.ScratchPad
     public enum GameMode
     {
         Sandbox, // The normal, non challenge mode.
-        ActivateAllOutputsChallenge
+        ActivateAllOutputsChallenge,
+        MatchTestcasesChallenge
     }
 
     public class NoMoreIdsException: Exception
@@ -60,6 +61,11 @@ namespace Assets.Scripts.ScratchPad
         
         public GameMode CurrentMode;
         public bool ChallengeCompleted;
+
+        public List<TestCaseConfig> TestCases;
+        // Number of steps to run to verify a test case.
+        // TODO: MAKE THIS IN CONFIG NOT HERE.
+        private const uint TestCaseStepsRun = 15;
 
         private bool IsDraggable;
 
@@ -396,15 +402,43 @@ namespace Assets.Scripts.ScratchPad
                             StopRunning();
                         }
                     }
+                    if (IsChallenge && !ChallengeCompleted)
+                    {
+                        if (CurrentMode == GameMode.MatchTestcasesChallenge)
+                        {
+                            bool challengeComplete = true;
+                            // TODO: MOVE THIS ELSEWHERE.
+                            foreach (TestCaseConfig testCase in TestCases)
+                            {
+                                if (!challengeComplete)
+                                {
+                                    break;
+                                }
+                                challengeComplete = Circuit.ValidateTestCase(testCase.GetAllInputs(),
+                                                                             testCase.GetAllOutputs(),
+                                                                             TestCaseStepsRun);
+                            }
+                            Circuit.ResetComponents();
+                            if (challengeComplete)
+                            {
+                                MessageBoxFactory.MakeFromConfig(ChallengeCompleteMessageBoxConfig);
+                                ChallengeCompleted = true;
+                            }
+                        }
+                    }
                 }
+                // TODO: FIGURE OUT WHERE EACH OF THESE 2 SHOULD BE
 
                 if (IsChallenge && !ChallengeCompleted)
                 {
-                    bool challengeComplete = Circuit.Validate();
-                    if (challengeComplete)
+                    if (CurrentMode == GameMode.ActivateAllOutputsChallenge)
                     {
-                        MessageBoxFactory.MakeFromConfig(ChallengeCompleteMessageBoxConfig);
-                        ChallengeCompleted = true;
+                        bool challengeComplete = Circuit.Validate();
+                        if (challengeComplete)
+                        {
+                            MessageBoxFactory.MakeFromConfig(ChallengeCompleteMessageBoxConfig);
+                            ChallengeCompleted = true;
+                        }
                     }
                 }
             }

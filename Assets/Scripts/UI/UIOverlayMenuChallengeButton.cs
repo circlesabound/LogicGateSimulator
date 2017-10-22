@@ -170,6 +170,20 @@ namespace Assets.Scripts.UI
                 }
 
                 // TODO: USE THE TEST CASES GENERATED.
+                foreach (TestCaseConfig testCase in testCaseConfigs)
+                {
+                    foreach (KeyValuePair<uint, bool> kvp in testCase.GetAllInputs())
+                    {
+                        Debug.Log("Input: " + kvp.Key.ToString() + ": " + kvp.Value.ToString());
+                    }
+                    foreach (KeyValuePair<uint, bool> kvp in testCase.GetAllOutputs())
+                    {
+                        Debug.Log("Output: " + kvp.Key.ToString() + ": " + kvp.Value.ToString());
+                    }
+                }
+
+                // Load the test cases into SPCanvas
+                Canvas.TestCases = testCaseConfigs;
 
                 // Put the canvas into challenge mode
                 Canvas.CurrentMode = circuitConfig.game_mode;
