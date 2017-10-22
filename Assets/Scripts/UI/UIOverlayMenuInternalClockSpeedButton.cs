@@ -2,18 +2,41 @@ using Assets.Scripts.ScratchPad;
 using Assets.Scripts.UI.MessageBoxes;
 using UnityEngine;
 using UnityEngine.Assertions;
+using UnityEngine.EventSystems;
 
 namespace Assets.Scripts.UI
 {
-    public class UIOverlayMenuInternalClockSpeedButton : MonoBehaviour, IMessageBoxTriggerTarget
+    public class UIOverlayMenuInternalClockSpeedButton : MonoBehaviour, IMessageBoxTriggerTarget, IInfoPanelTextProvider, IPointerEnterHandler, IPointerExitHandler
     {
         private SPCanvas Canvas;
         private UIMessageBoxFactory MessageBoxFactory;
+
+        private UIOverlayInfoPanel InfoPanel;
+
         public float FramesPerSecond
         {
             get;
             private set;
         }
+
+        public string InfoPanelTitle
+        {
+            get
+            {
+                return SETTINGS_BUTTON_INFO_PANEL_TITLE;
+            }
+        }
+
+        public string InfoPanelText
+        {
+            get
+            {
+                return SETTINGS_BUTTON_INFO_PANEL_DESCRIPTION;
+            }
+        }
+
+        private const string SETTINGS_BUTTON_INFO_PANEL_TITLE = "Settings";
+        private const string SETTINGS_BUTTON_INFO_PANEL_DESCRIPTION = "Configure application settings.";
 
         private const string INTERNAL_CLOCK_MESSAGE_BOX_CONFIG_RESOURCE = "Configs/MessageBoxes/internal_clock";
         private MessageBoxConfig InternalClockMessageBoxConfig;
@@ -65,7 +88,20 @@ namespace Assets.Scripts.UI
         {
             Canvas = FindObjectOfType<SPCanvas>();
             Assert.IsNotNull(Canvas);
+            InfoPanel = FindObjectOfType<UIOverlayInfoPanel>();
+            Assert.IsNotNull(InfoPanel);
             FramesPerSecond = 1 / Canvas.SecondsPerUpdate;
+        }
+
+        public void OnPointerEnter(PointerEventData eventData)
+        {
+            InfoPanel.SetInfoTarget(this);
+            InfoPanel.Show();
+        }
+
+        public void OnPointerExit(PointerEventData eventData)
+        {
+            InfoPanel.Hide();
         }
     }
 }

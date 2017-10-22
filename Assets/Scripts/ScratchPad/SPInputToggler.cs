@@ -33,7 +33,6 @@ namespace Assets.Scripts.ScratchPad
 
         public override void OnPointerClick(PointerEventData eventData)
         {
-            Debug.Log(this.GetType().Name + "| " + Canvas.CurrentTool.ToString() + " | " + eventData.button.ToString() + " click");
             if (eventData.button == PointerEventData.InputButton.Left && !eventData.dragging)
             {
                 ToggleValue();
@@ -89,11 +88,14 @@ namespace Assets.Scripts.ScratchPad
         public override void OnPointerEnter(PointerEventData data)
         {
             Selected = true;
+            InfoPanel.SetInfoTarget(this);
+            InfoPanel.Show();
         }
 
         public override void OnPointerExit(PointerEventData data)
         {
             Selected = false;
+            InfoPanel.Hide();
         }
     }
 }

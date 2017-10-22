@@ -1,5 +1,5 @@
 {
-    "title": "Adjust clock rate",
+    "title": "Adjust clock cycle",
     "scroll_view": {
         "hidden": true
     },
@@ -13,7 +13,7 @@
         "label_left": {
             "content_type": "static",
             "static_content": {
-                "label": "Ticks per clock"
+                "label": "Update ticks per cycle"
             }
         },
         "label_right": {

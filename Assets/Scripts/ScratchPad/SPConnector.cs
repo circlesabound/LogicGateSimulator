@@ -51,7 +51,6 @@ namespace Assets.Scripts.ScratchPad
 
         public virtual void OnPointerClick(PointerEventData eventData)
         {
-            Debug.Log(ConnectorType.ToString() + "| " + Canvas.CurrentTool.ToString() + " | " + eventData.button.ToString() + " click");
             // if somehow there ends up being more than two connector types
             // it might be better to refactor this functionality into the sub classes
             if (eventData.button == PointerEventData.InputButton.Left)

@@ -80,6 +80,8 @@ namespace Assets.Scripts.UI
                 // Set up panel entry
                 newPanelEntry.SimpleName = panelEntryConfig.panel_name;
                 newPanelEntry.SetSprites(activeSprite, inactiveSprite);
+                newPanelEntry.InfoPanelTitle = panelEntryConfig.panel_name;
+                newPanelEntry.InfoPanelText = panelEntryConfig.entry_description;
             }
 
             // Remove the back button
@@ -87,7 +89,6 @@ namespace Assets.Scripts.UI
 
             // Finalise panel
             this.Built = true;
-            Debug.Log("Built '" + this.name + "' as a main panel with " + this.Entries.Count + " entries");
         }
 
         /// <summary>
@@ -121,11 +122,12 @@ namespace Assets.Scripts.UI
                 newComponentEntry.SimpleName = componentEntryConfig.component_name;
                 newComponentEntry.SetSprites(activeSprite, inactiveSprite);
                 newComponentEntry.ComponentClassname = componentEntryConfig.component_classname;
+                newComponentEntry.InfoPanelTitle = componentEntryConfig.component_name;
+                newComponentEntry.InfoPanelText = componentEntryConfig.entry_description;
             }
 
             // Finalise panel
             this.Built = true;
-            Debug.Log("Built '" + this.name + "' as a sub panel with " + this.Entries.Count + " entries");
         }
 
         public void Hide()

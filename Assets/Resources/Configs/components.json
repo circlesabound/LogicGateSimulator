@@ -2,51 +2,75 @@
     "components": [
         {
             "classname": "SPAndGate",
-            "prefab": "Prefabs/SPAndGate"
+            "prefab": "Prefabs/SPAndGate",
+            "name": "AND gate",
+            "description": "Outputs a TRUE value only if both its inputs are TRUE."
         },
         {
             "classname": "SPOrGate",
-            "prefab": "Prefabs/SPOrGate"
+            "prefab": "Prefabs/SPOrGate",
+            "name": "OR gate",
+            "description": "Outputs a TRUE value if either of its inputs are TRUE."
         },
         {
             "classname": "SPNotGate",
-            "prefab": "Prefabs/SPNotGate"
+            "prefab": "Prefabs/SPNotGate",
+            "name": "NOT gate",
+            "description": "Outputs the opposite value of its input."
         },
         {
             "classname": "SPXorGate",
-            "prefab": "Prefabs/SPXorGate"
+            "prefab": "Prefabs/SPXorGate",
+            "name": "XOR gate",
+            "description": "Outputs a TRUE value if and only if exactly one of its inputs are TRUE."
         },
         {
             "classname": "SPTrueConst",
-            "prefab": "Prefabs/SPTrueConst"
+            "prefab": "Prefabs/SPTrueConst",
+            "name": "TRUE constant input",
+            "description": "Generates a constant TRUE value."
         },
         {
             "classname": "SPFalseConst",
-            "prefab": "Prefabs/SPFalseConst"
+            "prefab": "Prefabs/SPFalseConst",
+            "name": "FALSE constant input",
+            "description": "Generates a constant FALSE value."
         },
         {
             "classname": "SPOutput",
-            "prefab": "Prefabs/SPOutput"
+            "prefab": "Prefabs/SPOutput",
+            "name": "Output light",
+            "description": "Lights up if its input is TRUE."
         },
         {
             "classname": "SPSplitterComponent",
-            "prefab": "Prefabs/SPSplitterComponent"
+            "prefab": "Prefabs/SPSplitterComponent",
+            "name": "Edge splitter",
+            "description": "Splits a connector into two, preserving its value."
         },
         {
             "classname": "SPInputToggler",
-            "prefab": "Prefabs/SPInputToggler"
+            "prefab": "Prefabs/SPInputToggler",
+            "name": "Switchable input",
+            "description": "Generates a TRUE or FALSE value depending on the state of the switch. Click to toggle."
         },
         {
             "classname": "SPClock",
-            "prefab": "Prefabs/SPClock"
+            "prefab": "Prefabs/SPClock",
+            "name": "Clock input",
+            "description": "Generates a value which changes between TRUE and FALSE in a cycle. Click to configure cycle duration."
         },
         {
             "classname": "SPNumberedInputToggler",
-            "prefab": "Prefabs/SPNumberedInputToggler"
+            "prefab": "Prefabs/SPNumberedInputToggler",
+            "name": "Identifiable Switchable input",
+            "description": "Like a Switchable input but has an identifier for challenge purposes"
         },
         {
             "classname": "SPNumberedOutput",
-            "prefab": "Prefabs/SPNumberedOutput"
+            "prefab": "Prefabs/SPNumberedOutput",
+            "name": "Identifiable Output",
+            "description": "Like an Output but has an identifier for challenge purposes"
         }
     ]
 }

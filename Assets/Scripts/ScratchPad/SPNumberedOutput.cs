@@ -121,6 +121,9 @@ namespace Assets.Scripts.ScratchPad
             // TODO: Delete this:
             Debug.Log("id is: " + id.ToString());
             Selected = true;
+            // TODO: Configure output based on id?
+            InfoPanel.SetInfoTarget(this);
+            InfoPanel.Show();
         }
 
         public override void OnPointerExit(PointerEventData data)

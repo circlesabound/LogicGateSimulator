@@ -2,17 +2,39 @@ using Assets.Scripts.ScratchPad;
 using Assets.Scripts.UI.MessageBoxes;
 using UnityEngine;
 using UnityEngine.Assertions;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace Assets.Scripts.UI
 {
-    public class UIOverlayControlMultistepButton : MonoBehaviour, IMessageBoxTriggerTarget
+    public class UIOverlayControlMultistepButton : MonoBehaviour, IMessageBoxTriggerTarget, IInfoPanelTextProvider, IPointerEnterHandler, IPointerExitHandler
     {
         private SPCanvas Canvas;
         private UIMessageBoxFactory MessageBoxFactory;
 
+        private UIOverlayInfoPanel InfoPanel;
+
+        private const string MULTISTEP_BUTTON_INFO_PANEL_TITLE = "Multi-step";
+        private const string MULTISTEP_BUTTON_INFO_PANEL_DESCRIPTION = "Run the circuit simulation for any number of steps.";
+
         private const string SET_MULTISTEP_MESSAGE_BOX_CONFIG_RESOURCE = "Configs/MessageBoxes/set_multistep";
         private MessageBoxConfig SetMultistepMessageBoxConfig;
+
+        public string InfoPanelTitle
+        {
+            get
+            {
+                return MULTISTEP_BUTTON_INFO_PANEL_TITLE;
+            }
+        }
+
+        public string InfoPanelText
+        {
+            get
+            {
+                return MULTISTEP_BUTTON_INFO_PANEL_DESCRIPTION;
+            }
+        }
 
         /// <summary>
         /// Creates window for setting how many steps to run.
@@ -35,7 +57,7 @@ namespace Assets.Scripts.UI
             if (triggerData.ButtonPressed == UIMessageBox.MessageBoxButtonType.Positive)
             {
                 Assert.IsTrue(triggerData.NumberInput.HasValue);
-                int StepsToRun = (int) triggerData.NumberInput.Value;
+                int StepsToRun = (int)triggerData.NumberInput.Value;
                 Canvas.RunForKSteps(StepsToRun);
             }
 
@@ -57,11 +79,24 @@ namespace Assets.Scripts.UI
         {
             Canvas = FindObjectOfType<SPCanvas>();
             Assert.IsNotNull(Canvas);
+            InfoPanel = FindObjectOfType<UIOverlayInfoPanel>();
+            Assert.IsNotNull(InfoPanel);
         }
 
         private void Update()
         {
             //
+        }
+
+        public void OnPointerEnter(PointerEventData eventData)
+        {
+            InfoPanel.SetInfoTarget(this);
+            InfoPanel.Show();
+        }
+
+        public void OnPointerExit(PointerEventData eventData)
+        {
+            InfoPanel.Hide();
         }
     }
 }

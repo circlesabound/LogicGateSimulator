@@ -61,6 +61,8 @@ namespace Assets.Scripts.ScratchPad
         public GameMode CurrentMode;
         public bool ChallengeCompleted;
 
+        private bool IsDraggable;
+
         public bool IsChallenge
         {
             get
@@ -219,11 +221,15 @@ namespace Assets.Scripts.ScratchPad
         {
             //TODO maybe change cursor
             //throw new NotImplementedException();
+            if (!IsDraggable)
+            {
+                eventData.pointerDrag = null;
+            }
         }
 
         public void OnDrag(PointerEventData eventData)
         {
-            if (eventData.button == PointerEventData.InputButton.Right)
+            if (eventData.button == PointerEventData.InputButton.Left)
             {
                 // I have no idea what the right equation should be but this looks close enough
                 CameraAdjust.Pan(-eventData.delta / gameObject.transform.localScale.x * CameraAdjust.CurrentZoom / 2);
@@ -237,9 +243,21 @@ namespace Assets.Scripts.ScratchPad
             //throw new NotImplementedException();
         }
 
+        public void OnMouseDown()
+        {
+            if (CurrentTool == SPTool.NewComponent)
+            {
+                // Disable dragging
+                IsDraggable = false;
+            }
+            else
+            {
+                IsDraggable = true;
+            }
+        }
+
         public void OnPointerClick(PointerEventData eventData)
         {
-            Debug.Log("Canvas| " + this.CurrentTool.ToString() + " | " + eventData.button.ToString() + " click");
             if (CurrentTool == SPTool.Pointer)
             {
                 // do nothing
@@ -271,7 +289,6 @@ namespace Assets.Scripts.ScratchPad
                     // Pass config to factory
                     var newComponent = LogicComponentFactory.MakeFromConfig(componentConfig);
 
-                    // will this memory leak?
                     Components.Add(newComponent);
                 }
                 else if (eventData.button == PointerEventData.InputButton.Right)
@@ -352,6 +369,7 @@ namespace Assets.Scripts.ScratchPad
             Circuit = new Circuit();
             Running = false;
             Frozen = false;
+            IsDraggable = true;
             CurrentMode = GameMode.Sandbox;
             NumberedInputs = new Dictionary<uint, SPNumberedInputToggler>();
             NumberedOutputs = new Dictionary<uint, SPNumberedOutput>();
@@ -382,7 +400,7 @@ namespace Assets.Scripts.ScratchPad
 
                 if (IsChallenge && !ChallengeCompleted)
                 {
-                    bool challengeComplete = false; //TODO check with backend
+                    bool challengeComplete = Circuit.Validate();
                     if (challengeComplete)
                     {
                         MessageBoxFactory.MakeFromConfig(ChallengeCompleteMessageBoxConfig);
