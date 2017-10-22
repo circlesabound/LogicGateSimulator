@@ -113,6 +113,7 @@ public class Circuit {
                 output => output.Component);
             foreach (var input in inputs)
             {
+                if (input == null) continue;
                 if (contributers.Contains(input)) continue;
                 stack.Push(input);
             }
