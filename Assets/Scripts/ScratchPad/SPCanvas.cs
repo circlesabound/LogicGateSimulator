@@ -402,32 +402,7 @@ namespace Assets.Scripts.ScratchPad
                             StopRunning();
                         }
                     }
-                    if (IsChallenge && !ChallengeCompleted)
-                    {
-                        if (CurrentMode == GameMode.MatchTestcasesChallenge)
-                        {
-                            bool challengeComplete = true;
-                            // TODO: MOVE THIS ELSEWHERE.
-                            foreach (TestCaseConfig testCase in TestCases)
-                            {
-                                if (!challengeComplete)
-                                {
-                                    break;
-                                }
-                                challengeComplete = Circuit.ValidateTestCase(testCase.GetAllInputs(),
-                                                                             testCase.GetAllOutputs(),
-                                                                             TestCaseStepsRun);
-                            }
-                            Circuit.ResetComponents();
-                            if (challengeComplete)
-                            {
-                                MessageBoxFactory.MakeFromConfig(ChallengeCompleteMessageBoxConfig);
-                                ChallengeCompleted = true;
-                            }
-                        }
-                    }
                 }
-                // TODO: FIGURE OUT WHERE EACH OF THESE 2 SHOULD BE
 
                 if (IsChallenge && !ChallengeCompleted)
                 {
