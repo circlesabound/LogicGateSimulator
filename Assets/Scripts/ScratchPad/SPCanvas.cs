@@ -356,8 +356,11 @@ namespace Assets.Scripts.ScratchPad
             if (!Frozen)
             {
                 var scrollDelta = Input.GetAxis("Mouse ScrollWheel");
-                CameraAdjust.SimpleZoom(scrollDelta);
-                CameraAdjust.Clamp();
+                if (scrollDelta != 0)
+                {
+                    CameraAdjust.SimpleZoomWithAnchor(scrollDelta, Util.Util.MouseWorldCoordinates);
+                    CameraAdjust.Clamp();
+                }
             }
         }
     }

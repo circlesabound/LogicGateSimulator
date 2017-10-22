@@ -43,13 +43,35 @@ namespace Assets.Scripts.Util
             };
         }
 
+        public static void SimpleZoomWithAnchor(float zoomLevelDelta, Vector2 anchor)
+        {
+            // The spec for zooming with an anchor is that the position of the anchor in
+            // screen coordinates before the zoom must be equal to the position of the
+            // anchor in screen coordinates after the zoom.
+
+            // Here's the math:
+            // 1. Save the position of the anchor in screen coordinates.
+            // 2. Do a regular zoom anchored on the origin.
+            // 3. Convert the saved screen coordinates back to world coordinates,
+            //    using the modified camera coordinate frame.
+            // 4. Calculate the difference between the anchor and the converted
+            //    coordinates.
+            // 5. Shift the camera by this difference.
+
+            Vector2 originalPosition = Camera.main.WorldToScreenPoint(anchor);
+            CurrentZoom = Mathf.Pow(Mathf.Sqrt(CurrentZoom) - Mathf.Sqrt(Math.Abs(zoomLevelDelta)) * Math.Sign(zoomLevelDelta), 2);
+            Vector2 convertedPosition = Camera.main.ScreenToWorldPoint(originalPosition);
+            Vector2 delta = anchor - convertedPosition;
+            Camera.main.transform.position += (Vector3)delta;
+        }
+
         /// <summary>
         /// Non-smooth zooming
         /// </summary>
         /// <param name="zoomLevelDelta"></param>
         public static void SimpleZoom(float zoomLevelDelta)
         {
-            CurrentZoom = (float)Math.Pow(Math.Sqrt(CurrentZoom) - Math.Sqrt(Math.Abs(zoomLevelDelta)) * Math.Sign(zoomLevelDelta), 2);
+            SimpleZoomWithAnchor(zoomLevelDelta, Camera.main.transform.position);
         }
 
         public static void Pan(Vector2 delta)
