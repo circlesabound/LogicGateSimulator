@@ -182,7 +182,7 @@ namespace Assets.Scripts.UI
 
                 // Generate one based on Circuit:
                 // Just a dummy one so you have a template on how to modify it.
-                testCase = new TestCaseConfig();
+                TestCaseConfig testCase = new TestCaseConfig();
                 foreach (var kvp in Canvas.NumberedInputs)
                 {
                     InputComponent inputComponent = kvp.Value.LogicComponent as InputComponent;
