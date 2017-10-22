@@ -39,7 +39,7 @@ namespace Assets.Scripts.ScratchPad
         }
     }
 
-    public class SPCanvas : MonoBehaviour, IPointerClickHandler, IBeginDragHandler, IDragHandler, IEndDragHandler
+    public class SPCanvas : MonoBehaviour, IPointerClickHandler, IBeginDragHandler, IDragHandler, IEndDragHandler, IInfoPanelTextProvider
     {
         private const string CHALLENGE_COMPLETE_MESSAGE_BOX_CONFIG_RESOURCE = "Configs/MessageBoxes/challenge_complete";
 
@@ -90,6 +90,9 @@ namespace Assets.Scripts.ScratchPad
         {
             LastSavedComponentsHash = ComponentsHash;
         }
+
+        public string InfoPanelTitle { get; set; }
+        public string InfoPanelText { get; set; }
 
         private SPLogicComponentFactory LogicComponentFactory;
         private UIMessageBoxFactory MessageBoxFactory;

@@ -105,6 +105,8 @@ namespace Assets.Scripts.UI
                 var numberedTogglerConfigs = circuitConfig.numbered_toggles;
                 var testCaseConfigs = circuitConfig.test_cases;
                 var clockConfigs = circuitConfig.clocks;
+                var titleText = circuitConfig.title_text;
+                var bodyText = circuitConfig.body_text;
 
                 Assert.AreNotEqual(circuitConfig.game_mode, GameMode.Sandbox);
 
@@ -194,6 +196,11 @@ namespace Assets.Scripts.UI
                     x = 40,
                     y = 40
                 };
+
+                Canvas.InfoPanelTitle = titleText;
+                Canvas.InfoPanelText = bodyText;
+                InfoPanel.SetInfoTarget(Canvas);
+                InfoPanel.Show();
             }
 
             Canvas.Frozen = false;

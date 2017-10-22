@@ -176,10 +176,8 @@ namespace Assets.Scripts.UI
                     })
                     .ToList();
 
-                // Generate an empty test cases config:
-                // TODO: NOT SURE WHAT TO DO BUT ATM JUST SET IT TO SOMETHING.
+                // Generate test cases config:
                 List<TestCaseConfig> testCaseConfigs = new List<TestCaseConfig>();
-
                 // Generate one based on Circuit:
                 // Just a dummy one so you have a template on how to modify it.
                 TestCaseConfig testCase = new TestCaseConfig();
@@ -205,6 +203,10 @@ namespace Assets.Scripts.UI
                     })
                     .ToList();
 
+                // Generate default title strings.
+                String titleText = "Objective";
+                String bodyText = "Your aim is to turn all the lights on.";
+
                 // Build savefile
                 CircuitConfig spConfig = new CircuitConfig(
                     componentConfigs,
@@ -213,7 +215,9 @@ namespace Assets.Scripts.UI
                     numberedToggleConfigs,
                     clockConfigs,
                     testCaseConfigs,
-                    mode: GameMode.ActivateAllOutputsChallenge);
+                    GameMode.ActivateAllOutputsChallenge,
+                    titleText: titleText,
+                    bodyText: bodyText);
 
 #if DEVELOPMENT_BUILD
                 string saveData = JsonUtility.ToJson(spConfig, prettyPrint: true);
