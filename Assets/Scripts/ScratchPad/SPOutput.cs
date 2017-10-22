@@ -70,11 +70,14 @@ namespace Assets.Scripts.ScratchPad
         public override void OnPointerEnter(PointerEventData data)
         {
             Selected = true;
+            InfoPanel.SetInfoTarget(this);
+            InfoPanel.Show();
         }
 
         public override void OnPointerExit(PointerEventData data)
         {
             Selected = false;
+            InfoPanel.Hide();
         }
     }
 }

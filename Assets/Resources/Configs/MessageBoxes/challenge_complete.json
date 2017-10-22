@@ -1,0 +1,27 @@
+{
+    "title": "Congratulations!",
+    "message": "You have successfully completed this challenge.",
+    "scroll_view": {
+        "hidden": true
+    },
+    "text_input": {
+        "hidden": true
+    },
+    "number_slider": {
+        "hidden": true
+    },
+    "buttons": {
+        "positive_button": {
+            "hidden": true
+        },
+        "neutral_button": {
+            "label": "Okay",
+            "onclick": "OnOkayButtonClick"
+        },
+        "negative_button": {
+            "hidden": true
+        }
+    },
+    "is_modal": true,
+    "classname": "SimpleMessageBox"
+}

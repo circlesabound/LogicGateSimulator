@@ -7,6 +7,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.EventSystems;
+using Assets.Scripts.UI.MessageBoxes;
 
 namespace Assets.Scripts.ScratchPad
 {
@@ -24,20 +25,58 @@ namespace Assets.Scripts.ScratchPad
         DrawEdge
     }
 
+    public enum GameMode
+    {
+        Sandbox, // The normal, non challenge mode.
+        ActivateAllOutputsChallenge
+    }
+
     public class SPCanvas : MonoBehaviour, IPointerClickHandler, IBeginDragHandler, IDragHandler, IEndDragHandler
     {
+        private const string CHALLENGE_COMPLETE_MESSAGE_BOX_CONFIG_RESOURCE = "Configs/MessageBoxes/challenge_complete";
+
+        private MessageBoxConfig ChallengeCompleteMessageBoxConfig;
+
         public List<SPLogicComponent> Components;
         public List<SPEdge> Edges;
         public GameObject Foreground;
         public bool Frozen;
-        public int LastSavedComponentsHash;
+        private int LastSavedComponentsHash;
+
         public bool Running;
+        private int StepsToRunLeft; // Set to -1 to run indefinitely.
+        private UIOverlayControlRunButton RunButton;
+
         public SPEdge SPEdgePrefab;
         private SPTool _CurrentTool;
         private SPTool _PreviousTool;
+        
+        public GameMode CurrentMode;
+        public bool ChallengeCompleted;
+
+        public bool IsChallenge
+        {
+            get
+            {
+                return CurrentMode != GameMode.Sandbox;
+            }
+        }
+
+        public bool IsUnsaved
+        {
+            get
+            {
+                return !IsChallenge && ComponentsHash != LastSavedComponentsHash;
+            }
+        }
+
+        public void SetAsSaved()
+        {
+            LastSavedComponentsHash = ComponentsHash;
+        }
+
         private SPLogicComponentFactory LogicComponentFactory;
-        private UIOverlayControlRunButton RunButton;
-        private int StepsToRunLeft; // Set to -1 to run indefinitely.
+        private UIMessageBoxFactory MessageBoxFactory;
 
         public Circuit Circuit
         {
@@ -45,7 +84,7 @@ namespace Assets.Scripts.ScratchPad
             private set;
         }
 
-        public int ComponentsHash
+        private int ComponentsHash
         {
             get
             {
@@ -126,7 +165,6 @@ namespace Assets.Scripts.ScratchPad
 
         public void OnPointerClick(PointerEventData eventData)
         {
-            Debug.Log("Canvas| " + this.CurrentTool.ToString() + " | " + eventData.button.ToString() + " click");
             if (CurrentTool == SPTool.Pointer)
             {
                 // do nothing
@@ -146,6 +184,9 @@ namespace Assets.Scripts.ScratchPad
 
                 if (eventData.button == PointerEventData.InputButton.Left)
                 {
+                    // Can't build in ActivateAllOutputs mode
+                    if (CurrentMode == GameMode.ActivateAllOutputsChallenge) return;
+
                     // Build component configuration
                     LogicComponentConfig componentConfig = new LogicComponentConfig(
                         chosenComponentEntry.ComponentClassname,
@@ -236,6 +277,12 @@ namespace Assets.Scripts.ScratchPad
             Circuit = new Circuit();
             Running = false;
             Frozen = false;
+            CurrentMode = GameMode.Sandbox;
+
+            // Load the message box config for open circuit
+            TextAsset configAsset = Resources.Load<TextAsset>(CHALLENGE_COMPLETE_MESSAGE_BOX_CONFIG_RESOURCE);
+            Assert.IsNotNull(configAsset);
+            ChallengeCompleteMessageBoxConfig = JsonUtility.FromJson<MessageBoxConfig>(configAsset.text);
         }
 
         // FixedUpdate is called once every SecondsPerUpdate seconds
@@ -255,14 +302,25 @@ namespace Assets.Scripts.ScratchPad
                         }
                     }
                 }
+
+                if (IsChallenge && !ChallengeCompleted)
+                {
+                    bool challengeComplete = false; //TODO check with backend
+                    if (challengeComplete)
+                    {
+                        MessageBoxFactory.MakeFromConfig(ChallengeCompleteMessageBoxConfig);
+                        ChallengeCompleted = true;
+                    }
+                }
             }
         }
 
         private void Start()
         {
-            this.LogicComponentFactory = new SPLogicComponentFactory(this.Foreground);
-            this.RunButton = FindObjectOfType<UIOverlayControlRunButton>();
-            Assert.IsNotNull(this.RunButton);
+            LogicComponentFactory = new SPLogicComponentFactory(Foreground);
+            MessageBoxFactory = new UIMessageBoxFactory();
+            RunButton = FindObjectOfType<UIOverlayControlRunButton>();
+            Assert.IsNotNull(RunButton);
         }
 
         // Update is called once per frame

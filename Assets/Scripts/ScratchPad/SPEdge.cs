@@ -16,6 +16,8 @@ namespace Assets.Scripts.ScratchPad
 
         private Connection BackendConnection;
         private SPCanvas Canvas;
+
+        public bool Immutable;
         private bool Hover;
         private bool Visible;
 
@@ -196,8 +198,10 @@ namespace Assets.Scripts.ScratchPad
                 }
                 else
                 {
-                    // Delete edge
-                    Delete();
+                    if (!this.Immutable) {
+                        // Delete edge
+                        Delete();
+                    }
                 }
             }
         }

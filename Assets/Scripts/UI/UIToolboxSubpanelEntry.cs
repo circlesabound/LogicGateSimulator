@@ -28,7 +28,6 @@ namespace Assets.Scripts.UI
         public override void OnPointerClick(PointerEventData eventData)
         {
             base.OnPointerClick(eventData);
-            Debug.Log("Switching current panel to '" + this.ReferencedPanel.name + "'");
             GameObject.FindObjectOfType<UIToolboxContainer>().CurrentPanel = this.ReferencedPanel;
         }
 

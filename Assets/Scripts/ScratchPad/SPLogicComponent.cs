@@ -1,4 +1,5 @@
 ﻿using Assets.Scripts.Savefile;
+using Assets.Scripts.UI;
 using Assets.Scripts.Util;
 using System;
 using System.Collections.Generic;
@@ -12,7 +13,7 @@ namespace Assets.Scripts.ScratchPad
     /// <summary>
     /// An abstract class that all scratchpad representations of a logic component must extend.
     /// </summary>
-    public abstract class SPLogicComponent : MonoBehaviour, IPointerClickHandler, IBeginDragHandler, IDragHandler, IEndDragHandler, IPointerEnterHandler, IPointerExitHandler
+    public abstract class SPLogicComponent : MonoBehaviour, IPointerClickHandler, IBeginDragHandler, IDragHandler, IEndDragHandler, IPointerEnterHandler, IPointerExitHandler, IInfoPanelTextProvider
     {
         public LogicComponent LogicComponent;
         public SPInConnector SPInConnectorPrefab;
@@ -22,8 +23,39 @@ namespace Assets.Scripts.ScratchPad
         public List<SPConnector> InConnectors;
         public List<SPConnector> OutConnectors;
 
+        public bool Immutable;
+
         public Sprite UnselectedSprite;
         public Sprite SelectedSprite;
+
+        protected UIOverlayInfoPanel InfoPanel;
+
+        private string _InfoPanelTitle;
+        private string _InfoPanelBaseText;
+
+        public string InfoPanelTitle
+        {
+            get
+            {
+                return _InfoPanelTitle;
+            }
+            set
+            {
+                _InfoPanelTitle = value;
+            }
+        }
+
+        public string InfoPanelText
+        {
+            get
+            {
+                return _InfoPanelBaseText;
+            }
+            set
+            {
+                _InfoPanelBaseText = value;
+            }
+        }
 
         protected SPLogicComponent()
         {
@@ -75,7 +107,6 @@ namespace Assets.Scripts.ScratchPad
 
         public virtual void OnPointerClick(PointerEventData eventData)
         {
-            Debug.Log(this.GetType().Name + "| " + Canvas.CurrentTool.ToString() + " | " + eventData.button.ToString() + " click");
             if (eventData.button == PointerEventData.InputButton.Left)
             {
                 //
@@ -85,7 +116,8 @@ namespace Assets.Scripts.ScratchPad
                 switch (Canvas.CurrentTool)
                 {
                     case SPTool.Pointer:
-                        Delete();
+                        // TODO: make this depend on objects mutability.
+                        if (!this.Immutable) Delete();
                         break;
 
                     default:
@@ -112,6 +144,9 @@ namespace Assets.Scripts.ScratchPad
             // We can probably assume canvas is ready by this point
             Canvas = FindObjectOfType<SPCanvas>();
             Assert.IsNotNull(Canvas);
+
+            InfoPanel = FindObjectOfType<UIOverlayInfoPanel>();
+            Assert.IsNotNull(InfoPanel);
         }
 
         // Use this for initialisation
@@ -158,6 +193,8 @@ namespace Assets.Scripts.ScratchPad
         public virtual void OnPointerEnter(PointerEventData data)
         {
             gameObject.GetComponent<SpriteRenderer>().sprite = SelectedSprite;
+            InfoPanel.SetInfoTarget(this);
+            InfoPanel.Show();
         }
 
         /// <summary>
@@ -166,6 +203,7 @@ namespace Assets.Scripts.ScratchPad
         public virtual void OnPointerExit(PointerEventData data)
         {
             gameObject.GetComponent<SpriteRenderer>().sprite = UnselectedSprite;
+            InfoPanel.Hide();
         }
     }
 }

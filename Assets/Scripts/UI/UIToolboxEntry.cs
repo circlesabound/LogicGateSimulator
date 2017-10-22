@@ -8,9 +8,12 @@ namespace Assets.Scripts.UI
     /// <summary>
     /// An entry in a toolbox panel
     /// </summary>
-    public abstract class UIToolboxEntry : MonoBehaviour, IPointerClickHandler, IPointerDownHandler, IPointerUpHandler
+    public abstract class UIToolboxEntry : MonoBehaviour, IPointerClickHandler, IPointerDownHandler, IPointerUpHandler, IInfoPanelTextProvider, IPointerEnterHandler, IPointerExitHandler
     {
+        private UIOverlayInfoPanel InfoPanel;
         protected UIToolboxPanel ToolboxPanel;
+        private string _InfoPanelName;
+        private string _InfoPanelText;
 
         public Sprite ActiveSprite
         {
@@ -24,6 +27,30 @@ namespace Assets.Scripts.UI
             private set;
         }
 
+        public string InfoPanelTitle
+        {
+            get
+            {
+                return _InfoPanelName;
+            }
+            set
+            {
+                _InfoPanelName = value;
+            }
+        }
+
+        public string InfoPanelText
+        {
+            get
+            {
+                return _InfoPanelText;
+            }
+            set
+            {
+                _InfoPanelText = value;
+            }
+        }
+
         public virtual void OnPointerClick(PointerEventData eventData)
         {
             this.ToolboxPanel.ToggleSelectedEntry(this);
@@ -32,6 +59,17 @@ namespace Assets.Scripts.UI
         public virtual void OnPointerDown(PointerEventData eventData)
         {
             this.ToolboxPanel.ToggleSelectedEntry(this);
+        }
+
+        public void OnPointerEnter(PointerEventData eventData)
+        {
+            InfoPanel.SetInfoTarget(this);
+            InfoPanel.Show();
+        }
+
+        public void OnPointerExit(PointerEventData eventData)
+        {
+            InfoPanel.Hide();
         }
 
         public virtual void OnPointerUp(PointerEventData eventData)
@@ -50,6 +88,8 @@ namespace Assets.Scripts.UI
             this.ToolboxPanel = this.GetComponentInParent<UIToolboxPanel>();
             this.gameObject.GetComponent<Image>().sprite = this.InactiveSprite;
             Assert.IsNotNull(this.ToolboxPanel);
+            InfoPanel = FindObjectOfType<UIOverlayInfoPanel>();
+            Assert.IsNotNull(InfoPanel);
         }
     }
 }

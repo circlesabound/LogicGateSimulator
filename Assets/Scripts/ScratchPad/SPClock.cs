@@ -50,7 +50,8 @@ namespace Assets.Scripts.ScratchPad
             base.OnPointerClick(eventData);
             if (eventData.button == PointerEventData.InputButton.Left && !eventData.dragging)
             {
-                if (Canvas.CurrentTool == SPTool.Pointer)
+                // TODO: Link this to mutability of clock item.
+                if (Canvas.CurrentTool == SPTool.Pointer && !this.Immutable)
                 {
                     MessageBoxFactory.MakeFromConfig(ClockMessageBoxConfig, this);
                 }
@@ -63,7 +64,6 @@ namespace Assets.Scripts.ScratchPad
             {
                 Assert.IsTrue(triggerData.NumberInput.HasValue);
                 ((Clock)this.LogicComponent).Period = (uint)triggerData.NumberInput.Value;
-                Debug.Log("Setting clock rate to " + ((Clock)this.LogicComponent).Period.ToString());
             }
             Destroy(triggerData.Sender.gameObject);
         }
@@ -122,12 +122,15 @@ namespace Assets.Scripts.ScratchPad
         {
             Hover = true;
             SpriteRenderer.sprite = SelectedClockSprites[CurrentSpriteIndex];
+            InfoPanel.SetInfoTarget(this);
+            InfoPanel.Show();
         }
 
         public override void OnPointerExit(PointerEventData data)
         {
             Hover = false;
             SpriteRenderer.sprite = UnselectedClockSprites[CurrentSpriteIndex];
+            InfoPanel.Hide();
         }
     }
 }

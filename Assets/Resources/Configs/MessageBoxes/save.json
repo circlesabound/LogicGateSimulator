@@ -16,7 +16,8 @@
             "onclick": "OnSaveButtonClick"
         },
         "neutral_button": {
-            "hidden": true
+            "label": "Export Challenge",
+            "onclick": "OnSaveAsChallengeButtonClick"
         },
         "negative_button": {
             "label": "Cancel",
