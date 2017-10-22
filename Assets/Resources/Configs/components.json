@@ -51,7 +51,7 @@
         {
             "classname": "SPInputToggler",
             "prefab": "Prefabs/SPInputToggler",
-            "name": "Switchable input",
+            "name": "Switch",
             "description": "Generates a TRUE or FALSE value depending on the state of the switch. Click to toggle."
         },
         {
@@ -63,7 +63,7 @@
         {
             "classname": "SPNumberedInputToggler",
             "prefab": "Prefabs/SPNumberedInputToggler",
-            "name": "Identifiable Switchable input",
+            "name": "Identifiable Switch",
             "description": "Like a Switchable input but has an identifier for challenge purposes"
         },
         {
