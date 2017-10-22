@@ -324,7 +324,7 @@ namespace Assets.Scripts.ScratchPad
 
                 if (IsChallenge && !ChallengeCompleted)
                 {
-                    bool challengeComplete = false; //TODO check with backend
+                    bool challengeComplete = Circuit.Validate();
                     if (challengeComplete)
                     {
                         MessageBoxFactory.MakeFromConfig(ChallengeCompleteMessageBoxConfig);
