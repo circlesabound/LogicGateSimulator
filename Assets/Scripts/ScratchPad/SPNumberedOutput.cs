@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Assertions;
@@ -7,12 +8,20 @@ namespace Assets.Scripts.ScratchPad
 {
     public class SPNumberedOutput : SPLogicComponent
     {
+        // TODO: DELETE THESE AFTER LINKING THE BELOW.
         public Sprite TrueSprite;
         public Sprite FalseSprite;
 
         public Sprite SelectedTrueSprite;
         public Sprite SelectedFalseSprite;
         
+        // sprites linked in unity inspector
+        public List<Sprite> UnselectedTrueSprites;
+        public List<Sprite> SelectedTrueSprites;
+
+        public List<Sprite> UnselectedFalseSprites;
+        public List<Sprite> SelectedFalseSprites;
+
         // The id of this component.
         // id == 0 means that it's not a numbered component
         public uint id;

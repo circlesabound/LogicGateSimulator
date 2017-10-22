@@ -23,7 +23,7 @@ GameObject:
   - component: {fileID: 114763623975407948}
   - component: {fileID: 65868349767110484}
   m_Layer: 0
-  m_Name: SPOutput
+  m_Name: SPNumberedOutput
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

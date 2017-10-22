@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Assertions;
@@ -7,11 +8,19 @@ namespace Assets.Scripts.ScratchPad
 {
     public class SPNumberedInputToggler : SPLogicComponent, IPointerClickHandler
     {
+        // TODO: DELETE THESE AFTER LINKING THE BELOW.
         public Sprite TrueSprite;
         public Sprite FalseSprite;
 
         public Sprite SelectedTrueSprite;
         public Sprite SelectedFalseSprite;
+
+        // sprites linked in unity inspector
+        public List<Sprite> UnselectedTrueSprites;
+        public List<Sprite> SelectedTrueSprites;
+
+        public List<Sprite> UnselectedFalseSprites;
+        public List<Sprite> SelectedFalseSprites;
 
         private bool Selected;
         // The id of this component.
