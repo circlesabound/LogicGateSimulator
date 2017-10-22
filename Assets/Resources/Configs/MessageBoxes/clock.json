@@ -1,0 +1,41 @@
+{
+    "title": "Adjust clock cycle",
+    "scroll_view": {
+        "hidden": true
+    },
+    "text_input": {
+        "hidden": true
+    },
+    "number_slider": {
+        "min_value": 1,
+        "max_value": 300,
+        "use_integer_values": true,
+        "label_left": {
+            "content_type": "static",
+            "static_content": {
+                "label": "Update ticks per cycle"
+            }
+        },
+        "label_right": {
+            "content_type": "dynamic",
+            "dynamic_provider": {
+                "classname": "NumberSliderRightLabel"
+            }
+        }
+    },
+    "buttons": {
+        "positive_button": {
+            "label": "Confirm",
+            "onclick": "OnConfirmButtonClick"
+        },
+        "neutral_button": {
+            "hidden": true
+        },
+        "negative_button": {
+            "label": "Cancel",
+            "onclick": "OnCancelButtonClick"
+        }
+    },
+    "is_modal": true,
+    "classname": "ClockMessageBox"
+}

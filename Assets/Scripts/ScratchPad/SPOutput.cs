@@ -1,11 +1,22 @@
 ﻿using System.Linq;
 using UnityEngine;
 using UnityEngine.Assertions;
+using UnityEngine.EventSystems;
 
 namespace Assets.Scripts.ScratchPad
 {
     public class SPOutput : SPLogicComponent
     {
+        public Sprite TrueSprite;
+        public Sprite FalseSprite;
+
+        public Sprite SelectedTrueSprite;
+        public Sprite SelectedFalseSprite;
+
+        private SpriteRenderer spriteRenderer;
+
+        private bool Selected;
+
         protected SPOutput() : base()
         {
         }
@@ -36,6 +47,37 @@ namespace Assets.Scripts.ScratchPad
 
             LogicComponent = new Output();
             Canvas.Circuit.AddComponent(LogicComponent);
+
+            spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
+        }
+
+        protected override void Update()
+        {
+            base.Update();
+            Output outputComponent = (Output)LogicComponent;
+            if (outputComponent.Value == true)
+            {
+                if (Selected) spriteRenderer.sprite = SelectedTrueSprite;
+                else spriteRenderer.sprite = TrueSprite;
+            }
+            else
+            {
+                if (Selected) spriteRenderer.sprite = SelectedFalseSprite;
+                else spriteRenderer.sprite = FalseSprite;
+            }
+        }
+
+        public override void OnPointerEnter(PointerEventData data)
+        {
+            Selected = true;
+            InfoPanel.SetInfoTarget(this);
+            InfoPanel.Show();
+        }
+
+        public override void OnPointerExit(PointerEventData data)
+        {
+            Selected = false;
+            InfoPanel.Hide();
         }
     }
 }

@@ -1,9 +1,10 @@
 ﻿using Assets.Scripts.Savefile;
 using Assets.Scripts.UI;
+using Assets.Scripts.UI.MessageBoxes;
 using Assets.Scripts.Util;
 using System;
-using System.Linq;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.EventSystems;
@@ -24,33 +25,92 @@ namespace Assets.Scripts.ScratchPad
         DrawEdge
     }
 
-    public class SPCanvas : MonoBehaviour, IPointerClickHandler
+    public enum GameMode
     {
+        Sandbox, // The normal, non challenge mode.
+        ActivateAllOutputsChallenge,
+        MatchTestcasesChallenge
+    }
+
+    public class NoMoreIdsException : Exception
+    {
+        public NoMoreIdsException(string message) : base(message)
+        {
+        }
+    }
+
+    public class SPCanvas : MonoBehaviour, IPointerClickHandler, IBeginDragHandler, IDragHandler, IEndDragHandler, IInfoPanelTextProvider
+    {
+        private const string CHALLENGE_COMPLETE_MESSAGE_BOX_CONFIG_RESOURCE = "Configs/MessageBoxes/challenge_complete";
+
+        private MessageBoxConfig ChallengeCompleteMessageBoxConfig;
+
         public List<SPLogicComponent> Components;
         public List<SPEdge> Edges;
         public GameObject Foreground;
         public bool Frozen;
+        private int LastSavedComponentsHash;
+
+        private Vector3 PreviousPanPosition;
+
         public bool Running;
+        private int StepsToRunLeft; // Set to -1 to run indefinitely.
+        private UIOverlayControlRunButton RunButton;
+
         public SPEdge SPEdgePrefab;
         private SPTool _CurrentTool;
         private SPTool _PreviousTool;
 
-        public int ComponentsHash
+        public GameMode CurrentMode;
+        public bool ChallengeCompleted;
+
+        public List<TestCaseConfig> TestCases;
+
+        // Number of steps to run to verify a test case.
+        // TODO: MAKE THIS IN CONFIG NOT HERE.
+        public uint TestCaseStepsRun;
+
+        private bool IsDraggable;
+
+        public bool IsChallenge
         {
             get
             {
-                return Components.Aggregate(0, (h, c) => h ^ c.GetHashCode());
+                return CurrentMode != GameMode.Sandbox;
             }
         }
 
-        public int LastSavedComponentsHash;
+        public bool IsUnsaved
+        {
+            get
+            {
+                return !IsChallenge && ComponentsHash != LastSavedComponentsHash;
+            }
+        }
+
+        public void SetAsSaved()
+        {
+            LastSavedComponentsHash = ComponentsHash;
+        }
+
+        public string InfoPanelTitle { get; set; }
+        public string InfoPanelText { get; set; }
 
         private SPLogicComponentFactory LogicComponentFactory;
+        private UIMessageBoxFactory MessageBoxFactory;
 
         public Circuit Circuit
         {
             get;
             private set;
+        }
+
+        private int ComponentsHash
+        {
+            get
+            {
+                return Components.Aggregate(0, (h, c) => h ^ c.GetHashCode());
+            }
         }
 
         public SPEdge CurrentEdge
@@ -83,18 +143,138 @@ namespace Assets.Scripts.ScratchPad
             }
         }
 
+        // We use the range [1,NUM_IDS]
+        private const uint NUM_IDS = 9;
+
+        public Dictionary<uint, SPNumberedInputToggler> NumberedInputs;
+        public Dictionary<uint, SPNumberedOutput> NumberedOutputs;
+
+        // Adds a numbered component to the circuit.
+        // Throws NoMoreIdsException if there are no more remaining ids.
+        // Else returns the component's id.
+        // The returned id will be in the range [1,NUM_IDS]
+        public uint AddNumberedComponent(SPLogicComponent component)
+        {
+            Debug.Log("Call to add numbered component made\n");
+            var InputComponent = component as SPNumberedInputToggler;
+            var OutputComponent = component as SPNumberedOutput;
+            if (InputComponent != null)
+            {
+                for (uint cid = 1; cid <= NUM_IDS; cid++)
+                {
+                    if (!NumberedInputs.ContainsKey(cid))
+                    {
+                        NumberedInputs.Add(cid, InputComponent);
+                        this.Circuit.AddNumberedComponent(component.LogicComponent, cid);
+                        return cid;
+                    }
+                }
+            }
+            if (OutputComponent != null)
+            {
+                for (uint cid = 1; cid <= NUM_IDS; cid++)
+                {
+                    if (!NumberedOutputs.ContainsKey(cid))
+                    {
+                        NumberedOutputs.Add(cid, OutputComponent);
+                        this.Circuit.AddNumberedComponent(component.LogicComponent, cid);
+                        return cid;
+                    }
+                }
+            }
+            throw new NoMoreIdsException("No more ids for component");
+        }
+
+        // Removes a numbered component from the circuit.
+        public void RemoveNumberedComponent(SPLogicComponent component)
+        {
+            //Debug.Log("RemovedNumberedComponent called");
+            var InputComponent = component as SPNumberedInputToggler;
+            var OutputComponent = component as SPNumberedOutput;
+            if (InputComponent != null)
+            {
+                Assert.IsTrue(InputComponent.id > 0);
+                NumberedInputs.Remove(InputComponent.id);
+                this.Circuit.RemoveComponent(component.LogicComponent);
+            }
+            else if (OutputComponent != null)
+            {
+                Assert.IsTrue(OutputComponent.id > 0);
+                NumberedOutputs.Remove(OutputComponent.id);
+                this.Circuit.RemoveComponent(component.LogicComponent);
+            }
+            else
+            {
+                // Hack for Assert.Fail()
+                Assert.IsTrue((InputComponent != null) || (OutputComponent != null),
+                        "Tried to call remove numbered component on a non numbered component");
+            }
+        }
+
+        public float SecondsPerUpdate
+        {
+            get
+            {
+                return Time.fixedDeltaTime;
+            }
+            set
+            {
+                Time.fixedDeltaTime = value;
+            }
+        }
+
         public void FinishEdge(SPConnector connector)
         {
             // this may throw ArgumentException, let SPConnector.OnPointerClick handle that
-            CurrentEdge.AddConnector(connector);
-
-            CurrentEdge.Finalise();
+            CurrentEdge.AddFinishingConnector(connector);
             CurrentEdge = null;
+        }
+
+        public void OnBeginDrag(PointerEventData eventData)
+        {
+            //TODO maybe change cursor
+            //throw new NotImplementedException();
+            if (!IsDraggable)
+            {
+                eventData.pointerDrag = null;
+            }
+            else
+            {
+                PreviousPanPosition = Util.Util.MouseWorldCoordinates;
+            }
+        }
+
+        public void OnDrag(PointerEventData eventData)
+        {
+            if (eventData.button == PointerEventData.InputButton.Left)
+            {
+                var delta = PreviousPanPosition - (Vector3)Util.Util.MouseWorldCoordinates;
+                CameraAdjust.Pan(delta);
+                CameraAdjust.Clamp();
+            }
+        }
+
+        public void OnEndDrag(PointerEventData eventData)
+        {
+            //TODO maybe change cursor
+            //throw new NotImplementedException();
+        }
+
+        public void OnMouseDown()
+        {
+            if (CurrentTool == SPTool.NewComponent)
+            {
+                // Disable dragging
+                IsDraggable = false;
+            }
+            else
+            {
+                IsDraggable = true;
+            }
         }
 
         public void OnPointerClick(PointerEventData eventData)
         {
-            Debug.Log("Canvas| " + this.CurrentTool.ToString() + " | " + eventData.button.ToString() + " click");
             if (CurrentTool == SPTool.Pointer)
             {
                 // do nothing
@@ -114,6 +294,9 @@ namespace Assets.Scripts.ScratchPad
 
                 if (eventData.button == PointerEventData.InputButton.Left)
                 {
+                    // Can't build in ActivateAllOutputs mode
+                    if (CurrentMode == GameMode.ActivateAllOutputsChallenge) return;
+
                     // Build component configuration
                     LogicComponentConfig componentConfig = new LogicComponentConfig(
                         chosenComponentEntry.ComponentClassname,
@@ -123,7 +306,6 @@ namespace Assets.Scripts.ScratchPad
                     // Pass config to factory
                     var newComponent = LogicComponentFactory.MakeFromConfig(componentConfig);
 
-                    // will this memory leak?
                     Components.Add(newComponent);
                 }
                 else if (eventData.button == PointerEventData.InputButton.Right)
@@ -148,17 +330,54 @@ namespace Assets.Scripts.ScratchPad
             this.CurrentTool = this._PreviousTool;
         }
 
+        public void Run()
+        {
+            // If no more steps to run, assume we want to run indefinitely:
+            if (StepsToRunLeft <= 0)
+            {
+                StepsToRunLeft = -1;
+            }
+            SetRunning();
+        }
+
+        public void RunForKSteps(int K)
+        {
+            if (K > 0)
+            {
+                StepsToRunLeft = K;
+                SetRunning();
+            }
+        }
+
+        private void SetRunning()
+        {
+            Running = true;
+            RunButton.SetButtonStateToRunning();
+        }
+
+        public void StopRunning()
+        {
+            Running = false;
+            RunButton.SetButtonStateToNotRunning();
+        }
+
         public void StartEdge(SPConnector connector)
         {
             CurrentEdge = Instantiate(SPEdgePrefab, Foreground.transform);
             Assert.IsNotNull(CurrentEdge);
-            CurrentEdge.AddConnector(connector);
+            CurrentEdge.AddStartingConnector(connector);
+        }
+
+        public void ResetCircuit()
+        {
+            Circuit.ResetComponents();
         }
 
         // Use this for initialization
         private void Awake()
         {
             Assert.IsNotNull(Foreground);
+            Assert.AreEqual(gameObject.transform.localScale.x, gameObject.transform.localScale.y);
             Components = new List<SPLogicComponent>();
             Edges = new List<SPEdge>();
             _CurrentTool = SPTool.Pointer;
@@ -167,11 +386,63 @@ namespace Assets.Scripts.ScratchPad
             Circuit = new Circuit();
             Running = false;
             Frozen = false;
+            IsDraggable = true;
+            CurrentMode = GameMode.Sandbox;
+            NumberedInputs = new Dictionary<uint, SPNumberedInputToggler>();
+            NumberedOutputs = new Dictionary<uint, SPNumberedOutput>();
+
+            // Load the message box config for open circuit
+            TextAsset configAsset = Resources.Load<TextAsset>(CHALLENGE_COMPLETE_MESSAGE_BOX_CONFIG_RESOURCE);
+            Assert.IsNotNull(configAsset);
+            ChallengeCompleteMessageBoxConfig = JsonUtility.FromJson<MessageBoxConfig>(configAsset.text);
+
+            // "Hide" challenge verify button
+            FindObjectOfType<UIOverlayControlVerifyChallengeButton>().GetComponent<RectTransform>().sizeDelta = new Vector2
+            {
+                x = 0,
+                y = 0
+            };
+        }
+
+        // FixedUpdate is called once every SecondsPerUpdate seconds
+        private void FixedUpdate()
+        {
+            if (!Frozen)
+            {
+                if (Running)
+                {
+                    Circuit.Simulate();
+                    if (StepsToRunLeft > 0)
+                    {
+                        StepsToRunLeft--;
+                        if (StepsToRunLeft == 0)
+                        {
+                            StopRunning();
+                        }
+                    }
+                }
+
+                if (IsChallenge && !ChallengeCompleted)
+                {
+                    if (CurrentMode == GameMode.ActivateAllOutputsChallenge)
+                    {
+                        bool challengeComplete = Circuit.Validate();
+                        if (challengeComplete)
+                        {
+                            MessageBoxFactory.MakeFromConfig(ChallengeCompleteMessageBoxConfig);
+                            ChallengeCompleted = true;
+                        }
+                    }
+                }
+            }
         }
 
         private void Start()
         {
-            this.LogicComponentFactory = new SPLogicComponentFactory(this.Foreground);
+            LogicComponentFactory = new SPLogicComponentFactory(Foreground);
+            MessageBoxFactory = new UIMessageBoxFactory();
+            RunButton = FindObjectOfType<UIOverlayControlRunButton>();
+            Assert.IsNotNull(RunButton);
         }
 
         // Update is called once per frame
@@ -179,9 +450,12 @@ namespace Assets.Scripts.ScratchPad
         {
             if (!Frozen)
             {
-                if (Running) Circuit.Simulate();
                 var scrollDelta = Input.GetAxis("Mouse ScrollWheel");
-                CameraAdjust.SimpleZoom(scrollDelta);
+                if (scrollDelta != 0)
+                {
+                    CameraAdjust.Zoom(scrollDelta, Util.Util.MouseWorldCoordinates);
+                    CameraAdjust.Clamp();
+                }
             }
         }
     }

@@ -7,13 +7,17 @@
     "text_input": {
         "placeholder": "Circuit name"
     },
+    "number_slider": {
+        "hidden": true
+    },
     "buttons": {
         "positive_button": {
             "label": "Save",
             "onclick": "OnSaveButtonClick"
         },
         "neutral_button": {
-            "hidden": true
+            "label": "Export Challenge",
+            "onclick": "OnSaveAsChallengeButtonClick"
         },
         "negative_button": {
             "label": "Cancel",

@@ -7,14 +7,20 @@ using System.IO;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Assertions;
+using UnityEngine.EventSystems;
 
 namespace Assets.Scripts.UI
 {
-    public class UIOverlayMenuOpenButton : MonoBehaviour, IMessageBoxTriggerTarget
+    public class UIOverlayMenuOpenButton : MonoBehaviour, IMessageBoxTriggerTarget, IInfoPanelTextProvider, IPointerEnterHandler, IPointerExitHandler
     {
+        private const string OPEN_BUTTON_INFO_PANEL_TITLE = "Open circuit";
+        private const string OPEN_BUTTON_INFO_PANEL_DESCRIPTION = "Open a saved circuit file.";
+
         private const string OPEN_CIRCUIT_MESSAGE_BOX_CONFIG_RESOURCE = "Configs/MessageBoxes/open";
         private const string OPEN_ERROR_MESSAGE_BOX_CONFIG_RESOURCE = "Configs/MessageBoxes/open_error";
         private const string UNSAVED_CHANGES_MESSAGE_BOX_CONFIG_RESOURCE = "Configs/MessageBoxes/unsaved_changes";
+
+        private UIOverlayInfoPanel InfoPanel;
 
         private SPCanvas Canvas;
         private UIMessageBoxFactory MessageBoxFactory;
@@ -22,6 +28,22 @@ namespace Assets.Scripts.UI
         private MessageBoxConfig OpenErrorMessageBoxConfig;
         private MessageBoxConfig UnsavedChangesMessageBoxConfig;
         private Stack<string> SelectedFilenameStash; // to save filename data across confirmation message boxes
+
+        public string InfoPanelTitle
+        {
+            get
+            {
+                return OPEN_BUTTON_INFO_PANEL_TITLE;
+            }
+        }
+
+        public string InfoPanelText
+        {
+            get
+            {
+                return OPEN_BUTTON_INFO_PANEL_DESCRIPTION;
+            }
+        }
 
         /// <summary>
         /// Linked to button click in Unity inspector
@@ -44,7 +66,7 @@ namespace Assets.Scripts.UI
             {
                 // Check for unsaved changes
                 if (triggerData.Sender.GetType() == typeof(OpenCircuitMessageBox) &&
-                    Canvas.LastSavedComponentsHash != Canvas.ComponentsHash)
+                    Canvas.IsUnsaved)
                 {
                     // Ask for confirmation of unsaved changes, save filename
                     SelectedFilenameStash.Push(triggerData.TextInput);
@@ -82,6 +104,10 @@ namespace Assets.Scripts.UI
                 var componentConfigs = circuitConfig.logic_components;
                 var edgeConfigs = circuitConfig.edges;
                 var togglerConfigs = circuitConfig.toggles;
+                var numberedTogglerConfigs = circuitConfig.numbered_toggles;
+                var clockConfigs = circuitConfig.clocks;
+
+                Assert.AreEqual(circuitConfig.game_mode, GameMode.Sandbox);
 
                 // Clear the canvas
                 for (int i = Canvas.Components.Count - 1; i >= 0; --i)
@@ -102,11 +128,28 @@ namespace Assets.Scripts.UI
                 {
                     Guid guid = Guid.Parse(config.guid_string);
                     SPInputToggler inputToggler = (SPInputToggler)guidMap[guid];
-                    while (((InputComponent)inputToggler.LogicComponent).value != config.value)
+                    if (((InputComponent)inputToggler.LogicComponent).value != config.value)
                     {
-                        // this better not infinite loop
                         inputToggler.ToggleValue();
                     }
+                }
+
+                foreach (var config in numberedTogglerConfigs)
+                {
+                    Guid guid = Guid.Parse(config.guid_string);
+                    SPNumberedInputToggler inputToggler = (SPNumberedInputToggler)guidMap[guid];
+                    if (((InputComponent)inputToggler.LogicComponent).value != config.value)
+                    {
+                        inputToggler.ToggleValue();
+                    }
+                }
+
+                // Restore state for clock components
+                foreach (var config in clockConfigs)
+                {
+                    Guid guid = Guid.Parse(config.guid_string);
+                    SPClock clock = (SPClock)guidMap[guid];
+                    ((Clock)clock.LogicComponent).Period = config.period;
                 }
 
                 // Build edges using GUID map
@@ -116,14 +159,14 @@ namespace Assets.Scripts.UI
                     Canvas.FinishEdge(guidMap[config.ComponentGuids[1]].OutConnectors[config.connector_ids[1]]);
                 }
 
-                // Edges don't show without forcing an update
-                foreach (var edge in Canvas.Edges)
-                {
-                    edge.UpdatePosition();
-                }
-
                 // Loading a circuit means the circuit that was just loaded is "saved"
-                Canvas.LastSavedComponentsHash = Canvas.ComponentsHash;
+                Canvas.CurrentMode = GameMode.Sandbox;
+                Canvas.SetAsSaved();
+                FindObjectOfType<UIOverlayControlVerifyChallengeButton>().GetComponent<RectTransform>().sizeDelta = new Vector2
+                {
+                    x = 0,
+                    y = 0
+                };
             }
 
             Canvas.Frozen = false;
@@ -155,6 +198,19 @@ namespace Assets.Scripts.UI
         {
             Canvas = FindObjectOfType<SPCanvas>();
             Assert.IsNotNull(Canvas);
+            InfoPanel = FindObjectOfType<UIOverlayInfoPanel>();
+            Assert.IsNotNull(InfoPanel);
+        }
+
+        public void OnPointerEnter(PointerEventData eventData)
+        {
+            InfoPanel.SetInfoTarget(this);
+            InfoPanel.Show();
+        }
+
+        public void OnPointerExit(PointerEventData eventData)
+        {
+            InfoPanel.Hide();
         }
     }
 }

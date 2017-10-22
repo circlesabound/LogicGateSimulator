@@ -16,6 +16,8 @@ namespace Assets.Scripts.UI.MessageBoxes
         private MessageBoxConfig SaveBadNameMessageBoxConfig;
         private MessageBoxConfig SaveOverwriteMessageBoxConfig;
 
+        private MessageBoxButtonType MostRecentButtonType;
+
         public void OnCancelButtonClick()
         {
             // Run callback to close message box and unfreeze canvas
@@ -32,6 +34,8 @@ namespace Assets.Scripts.UI.MessageBoxes
             string filename = this.TextInput.FindChildGameObject("UIMessageBoxTextInputText").GetComponent<Text>().text;
             string fullname = filename + ".json";
             string fullpath = Directories.SAVEFILE_FOLDER_FULL_PATH + "/" + fullname;
+
+            MostRecentButtonType = MessageBoxButtonType.Positive;
 
             // If file has invalid name, show error dialog
             if (filename.IndexOfAny(Path.GetInvalidFileNameChars()) != -1 ||
@@ -58,6 +62,39 @@ namespace Assets.Scripts.UI.MessageBoxes
             TriggerTarget.Trigger(triggerData);
         }
 
+        public void OnSaveAsChallengeButtonClick()
+        {
+            string filename = this.TextInput.FindChildGameObject("UIMessageBoxTextInputText").GetComponent<Text>().text;
+            string fullname = filename + ".json";
+            string fullpath = Directories.CHALLENGE_FOLDER_FULL_PATH + "/" + fullname;
+
+            MostRecentButtonType = MessageBoxButtonType.Neutral;
+
+            // If file has invalid name, show error dialog
+            if (filename.IndexOfAny(Path.GetInvalidFileNameChars()) != -1 ||
+                String.IsNullOrWhiteSpace(filename))
+            {
+                MessageBoxFactory.MakeFromConfig(SaveBadNameMessageBoxConfig, this);
+                return;
+            }
+
+            // If file already exists, ask for overwrite confirmation
+            if (File.Exists(fullpath))
+            {
+                MessageBoxFactory.MakeFromConfig(SaveOverwriteMessageBoxConfig, this);
+                return;
+            }
+
+            // Run callback to save circuit, close message box, and unfreeze canvas
+            MessageBoxTriggerData triggerData = new MessageBoxTriggerData
+            {
+                ButtonPressed = MessageBoxButtonType.Neutral,
+                Sender = this,
+                TextInput = filename
+            };
+            TriggerTarget.Trigger(triggerData);
+        }
+
         public override void Trigger(MessageBoxTriggerData triggerData)
         {
             if (triggerData.Sender.GetType() == typeof(SimpleMessageBox))
@@ -71,9 +108,10 @@ namespace Assets.Scripts.UI.MessageBoxes
                 if (triggerData.ButtonPressed == MessageBoxButtonType.Positive)
                 {
                     // Confirm overwrite
+
                     MessageBoxTriggerData newTriggerData = new MessageBoxTriggerData
                     {
-                        ButtonPressed = MessageBoxButtonType.Positive,
+                        ButtonPressed = MostRecentButtonType,
                         Sender = this,
                         TextInput = this.TextInput.FindChildGameObject("UIMessageBoxTextInputText").GetComponent<Text>().text
                     };
