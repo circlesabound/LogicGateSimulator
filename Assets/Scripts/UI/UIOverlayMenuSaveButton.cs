@@ -103,6 +103,9 @@ namespace Assets.Scripts.UI
                     })
                     .ToList();
 
+                // Generate an empty test cases config:
+                List<TestCaseConfig> testCaseConfigs = new List<TestCaseConfig>();
+
                 // Build savefile
                 CircuitConfig spConfig = new CircuitConfig(
                     componentConfigs,
@@ -110,6 +113,7 @@ namespace Assets.Scripts.UI
                     toggleConfigs,
                     numberedToggleConfigs,
                     clockConfigs,
+                    testCaseConfigs,
                     mode: GameMode.Sandbox);
 
 #if DEVELOPMENT_BUILD
@@ -172,6 +176,9 @@ namespace Assets.Scripts.UI
                     })
                     .ToList();
 
+                // Generate an empty test cases config:
+                // TODO: MAKE THIS NOT EMPTY.
+                List<TestCaseConfig> testCaseConfigs = new List<TestCaseConfig>();
 
                 // Generate additional configs to save state of clock components
                 List<ClockComponentConfig> clockConfigs = guidMap
@@ -190,6 +197,7 @@ namespace Assets.Scripts.UI
                     toggleConfigs,
                     numberedToggleConfigs,
                     clockConfigs,
+                    testCaseConfigs,
                     mode: GameMode.ActivateAllOutputsChallenge);
 
 #if DEVELOPMENT_BUILD

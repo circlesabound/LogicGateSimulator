@@ -103,6 +103,7 @@ namespace Assets.Scripts.UI
                 var edgeConfigs = circuitConfig.edges;
                 var togglerConfigs = circuitConfig.toggles;
                 var numberedTogglerConfigs = circuitConfig.numbered_toggles;
+                var testCaseConfigs = circuitConfig.test_cases;
                 var clockConfigs = circuitConfig.clocks;
 
                 Assert.AreNotEqual(circuitConfig.game_mode, GameMode.Sandbox);
@@ -167,6 +168,8 @@ namespace Assets.Scripts.UI
                 {
                     edge.Immutable = true;
                 }
+
+                // TODO: USE THE TEST CASES GENERATED.
 
                 // Put the canvas into challenge mode
                 Canvas.CurrentMode = circuitConfig.game_mode;
