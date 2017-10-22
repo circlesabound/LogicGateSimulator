@@ -8,13 +8,6 @@ namespace Assets.Scripts.ScratchPad
 {
     public class SPNumberedOutput : SPLogicComponent
     {
-        // TODO: DELETE THESE AFTER LINKING THE BELOW.
-        public Sprite TrueSprite;
-        public Sprite FalseSprite;
-
-        public Sprite SelectedTrueSprite;
-        public Sprite SelectedFalseSprite;
-        
         // sprites linked in unity inspector
         public List<Sprite> UnselectedTrueSprites;
         public List<Sprite> SelectedTrueSprites;
@@ -109,19 +102,18 @@ namespace Assets.Scripts.ScratchPad
 
         protected override void Update()
         {
-            // TODO: ADD MULTIPLE SPRITES BASED ON id.
             base.Update();
             Output outputComponent = (Output)LogicComponent;
             SpriteRenderer spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
             if (outputComponent.Value == true)
             {
-                if (Selected) spriteRenderer.sprite = SelectedTrueSprite;
-                else spriteRenderer.sprite = TrueSprite;
+                if (Selected) spriteRenderer.sprite = SelectedTrueSprites[(int)id];
+                else spriteRenderer.sprite = UnselectedTrueSprites[(int)id];
             }
             else
             {
-                if (Selected) spriteRenderer.sprite = SelectedFalseSprite;
-                else spriteRenderer.sprite = FalseSprite;
+                if (Selected) spriteRenderer.sprite = SelectedFalseSprites[(int)id];
+                else spriteRenderer.sprite = UnselectedFalseSprites[(int)id];
             }
         }
 
